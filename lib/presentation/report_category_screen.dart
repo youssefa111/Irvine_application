@@ -123,14 +123,18 @@ class ReportCategoryScreen extends StatelessWidget {
             Row(
               children: <Widget>[
                 Expanded(
-                  child: TextField(),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'search',
+                    ),
+                  ),
                 ),
                 SizedBox(
                   width: 25,
                 ),
                 TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Theme.of(context).primaryColor,
                   ),
                   onPressed: () {},
                   child: FittedBox(

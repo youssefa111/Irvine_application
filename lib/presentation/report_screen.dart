@@ -1,8 +1,8 @@
-import 'dart:io';
-
+import 'package:first_task/business_logic/cubit/home_screen_cubit.dart';
+import 'package:first_task/componants/homescreen_componants/new_report_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ReportScreen extends StatefulWidget {
   final IconData iconData;
@@ -17,29 +17,63 @@ class ReportScreen extends StatefulWidget {
 }
 
 class _ReportScreenState extends State<ReportScreen> {
-  File? _image = null;
-  final picker = ImagePicker();
-  Future getImageFromGallery() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  var reportTextEditing = TextEditingController();
 
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
+  @override
+  void dispose() {
+    reportTextEditing.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BlocBuilder<HomeScreenCubit, HomeScreenState>(
+          builder: (context, state) {
+            return IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+              ),
+              onPressed: () {
+                HomeScreenCubit.get(context).imagesList = [];
+                HomeScreenCubit.get(context).image = null;
+                Navigator.of(context).pop();
+              },
+            );
+          },
+        ),
         centerTitle: true,
         title: Text('Report an issue'),
         actions: [
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              reportTextEditing.text.isEmpty
+                  ? null
+                  : HomeScreenCubit.get(context)
+                      .addReport(NewReportContainer(
+                          reporterName: 'youssef hussien',
+                          reportContent: reportTextEditing.text,
+                          reportImage: HomeScreenCubit.get(context).imagesList,
+                          reportName: widget.reportCategoryName,
+                          reportLocation: '100 Main Street Lrvine',
+                          reporterLetter: 'Y'))
+                      .then(
+                        (value) => ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            duration: Duration(seconds: 2),
+                            content: Text('The Report is added Sucessfully!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        ),
+                      )
+                      .then((value) {
+                      Future.delayed(Duration(seconds: 3)).then((value) {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      });
+                    });
+            },
             child: Text(
               'Submit',
               style: TextStyle(color: Colors.white),
@@ -88,6 +122,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 height: 10,
               ),
               TextField(
+                controller: reportTextEditing,
                 maxLines: 5,
                 decoration: InputDecoration(
                     hintText: 'Enter Issue Description...',
@@ -123,38 +158,124 @@ class _ReportScreenState extends State<ReportScreen> {
               SizedBox(
                 height: 10,
               ),
-              _image == null
-                  ? InkWell(
-                      onTap: getImageFromGallery,
-                      child: Container(
-                          child: Center(
-                        child: Column(children: <Widget>[
-                          FaIcon(
-                            FontAwesomeIcons.camera,
-                            color: Colors.grey[400],
-                          ),
-                          SizedBox(
-                            height: 15,
-                          ),
-                          Text('Add photos and vidoes'),
-                        ]),
-                      )),
-                    )
-                  : Center(
-                      child: Container(
-                        height: 200,
-                        width: 400,
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: Image.file(
-                          _image!,
-                          fit: BoxFit.fill,
-                        ),
+              BlocBuilder<HomeScreenCubit, HomeScreenState>(
+                  builder: (context, state) {
+                var bloc = HomeScreenCubit.get(context);
+                if (bloc.imagesList.isEmpty) {
+                  return InkWell(
+                    onTap: bloc.getImageFromGallery,
+                    child: Container(
+                        child: Center(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            FaIcon(
+                              FontAwesomeIcons.camera,
+                              color: Colors.grey[400],
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Text('Add photos and vidoes'),
+                          ]),
+                    )),
+                  );
+                } else {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: bloc.imagesList.map((e) {
+                          if (e == bloc.imagesList.last) {
+                            return Wrap(
+                              children: <Widget>[
+                                ImageContainer(
+                                  e: e,
+                                  index: bloc.imagesList.indexOf(e),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  height: 100,
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(),
+                                  ),
+                                  child: Center(
+                                    child: IconButton(
+                                      onPressed: bloc.getImageFromGallery,
+                                      icon: Icon(Icons.add),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                          return ImageContainer(
+                            e: e,
+                            index: bloc.imagesList.indexOf(e),
+                          );
+                        }).toList(),
                       ),
-                    ),
+                    ],
+                  );
+                }
+              })
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class ImageContainer extends StatelessWidget {
+  final e;
+  final index;
+
+  const ImageContainer({Key? key, this.e, this.index}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HomeScreenCubit, HomeScreenState>(
+      builder: (context, state) {
+        return Container(
+          height: 100,
+          width: 100,
+          decoration: BoxDecoration(border: Border.all()),
+          child: Stack(
+            children: [
+              Container(
+                height: 100,
+                width: 100,
+                decoration: BoxDecoration(border: Border.all()),
+                child: Image.file(
+                  e,
+                  fit: BoxFit.fill,
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                widthFactor: 0.9,
+                child: IconButton(
+                  onPressed: () {
+                    HomeScreenCubit.get(context).removeImage(index);
+                  },
+                  icon: FaIcon(
+                    FontAwesomeIcons.timesCircle,
+                    color: Colors.white,
+                    size: 32,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

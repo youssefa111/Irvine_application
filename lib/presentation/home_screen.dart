@@ -1,7 +1,11 @@
-import 'package:first_task/componants.dart';
+import 'package:first_task/business_logic/cubit/home_screen_cubit.dart';
+import 'package:first_task/componants/homescreen_componants/filter_dialog.dart';
+import 'package:first_task/componants/homescreen_componants/top_container.dart';
 import 'package:first_task/presentation/report_category_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,20 +15,56 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Irvine'),
+        title: const Text('Irvine'),
       ),
       drawer: Drawer(
         child: Container(
-          color: Colors.blue,
+          color: Theme.of(context).primaryColor,
           child: Column(),
         ),
       ),
       body: HomeBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => ReportCategoryScreen())),
-        child: FittedBox(child: Text('Report')),
-        backgroundColor: Colors.green,
+      floatingActionButton: Align(
+        alignment: Alignment.topRight,
+        heightFactor: 2,
+        child: FloatingActionButton(
+          onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => ReportCategoryScreen())),
+          child: const FittedBox(child: Text('Report')),
+          backgroundColor: HexColor('#a99e71'),
+        ),
+      ),
+      bottomSheet: Row(
+        children: <Widget>[
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Search for Information',
+                  isDense: true,
+                ),
+              ),
+            ),
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).primaryColor,
+            ),
+            onPressed: () {},
+            child: FittedBox(
+              child: Text(
+                'Find',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 15,
+          ),
+        ],
       ),
     );
   }
@@ -35,7 +75,7 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: const EdgeInsets.all(8.0), child: ViewSection());
+    return Padding(padding: const EdgeInsets.all(0), child: ViewSection());
   }
 }
 
@@ -79,38 +119,49 @@ class ViewSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
-    return ListView(
-      children: [
+    return Column(
+      children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             TopContainer(
-                height: 140,
+                height: 100,
                 width: screenWidth / 4,
                 imagePath: 'assets/forbidden.jpg',
                 title: 'Report Hate Crime'),
             TopContainer(
-                height: 140,
+                height: 100,
                 width: screenWidth / 4,
                 imagePath: 'assets/map1.jpg',
                 title: 'Report an issue'),
             TopContainer(
-                height: 140,
+                height: 100,
                 width: screenWidth / 4,
                 imagePath: 'assets/map2.jpg',
                 title: 'Neighborhood Activity'),
           ],
         ),
+        SizedBox(
+          height: 10,
+        ),
         Row(
           children: <Widget>[
+            SizedBox(
+              width: 5,
+            ),
             Text(
               'Alerts & New',
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline5!
+                  .copyWith(fontWeight: FontWeight.bold),
             ),
             Spacer(),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                    context: context, builder: (context) => FilterDialog());
+              },
               icon: FaIcon(
                 FontAwesomeIcons.slidersH,
               ),
@@ -120,43 +171,18 @@ class ViewSection extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        NewsContainer(
-          reporterName: 'Public information office Linda Fontos',
-          newsTitle: 'Mayor Khan Discusses the New Covid-19 and he talks about',
-          newsContent:
-              'Mayor Farrah N.Khan discuess a few of the actions she taken in her first few weeks as irvine s mayor - the creation the the of the COVID-19 Task Force and Business',
-          newsDate: '21 Dec',
-          iconLetter: 'I',
-          isAgency: true,
-          newsThanks: 1,
-          newsReplies: 0,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        NewsContainer(
-          reporterName: 'Jas NewMn WoodBUD SouthLake',
-          newsTitle: 'Natinal Law Enforcement Appreciation Day',
-          newsContent:
-              'I did no make it up, i watch EVERY council meeting and she stated prior to being Mayor that she wanted to defunt the Irvine Police Department. I believe it was at a council.',
-          newsDate: '17 Jan',
-          iconLetter: 'I',
-          isAgency: false,
-          newsThanks: 147,
-          newsReplies: 41,
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        ReportContainer(
-          reporterName: 'James Wine Portota Springo',
-          reportContent:
-              'Hi Neighbors, Does anyone Know who i need to contact to get this grafitti removed? Location is at Bridge',
-          reportImage: 'assets/grifatti.jpg',
-          reportName: 'Reported Grafitti',
-          reportLocation: '1.2 miles away',
-          reporterLetter: 'J',
-        ),
+        Expanded(child: BlocBuilder<HomeScreenCubit, HomeScreenState>(
+          builder: (context, state) {
+            return ListView.separated(
+                itemBuilder: (context, index) => state is FilteredSucessfully
+                    ? HomeScreenCubit.get(context).filterList[index]
+                    : HomeScreenCubit.get(context).dataList[index],
+                separatorBuilder: (context, index) => SizedBox(),
+                itemCount: state is FilteredSucessfully
+                    ? HomeScreenCubit.get(context).filterList.length
+                    : HomeScreenCubit.get(context).dataList.length);
+          },
+        )),
       ],
     );
   }
