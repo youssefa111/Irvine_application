@@ -18,7 +18,7 @@ samples, guidance on mobile development, and a full API reference.
 
 # Screenshots
 
-<img src = "screenshots/1.png" height="400" width="200">  <img src = "screenshots/2.png" height="400" width="200">  <img src = "screenshots/3.png" height="400" width="200"> 
+<img src = "screenshots/1.PNG" height="400" width="200">  <img src = "screenshots/2.PNG" height="400" width="200">  <img src = "screenshots/3.PNG" height="400" width="200"> 
 
 
 <img src = "screenshots/4.jpeg" height="400" width="200">  <img src = "screenshots/5.jpeg" height="400" width="200">  <img src = "screenshots/6.jpeg" height="400" width="200">
