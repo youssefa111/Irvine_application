@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:first_task/presentation/authentication_screens/login_screen.dart';
+import 'package:first_task/presentation/home_screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,7 +64,14 @@ class MyApp extends StatelessWidget {
                     ),
               ),
             ),
-            nextScreen: LoginScreen(),
+            nextScreen: StreamBuilder(
+                stream: FirebaseAuth.instance.authStateChanges(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return HomeScreen();
+                  }
+                  return LoginScreen();
+                }),
             splashTransition: SplashTransition.fadeTransition,
             backgroundColor: Colors.transparent,
           ),

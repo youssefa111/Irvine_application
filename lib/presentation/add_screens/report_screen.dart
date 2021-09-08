@@ -1,3 +1,4 @@
+import 'package:first_task/business_logic/cubit/add_process_cubit/cubit/add_cubit.dart';
 import 'package:first_task/business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import 'package:first_task/helper/componants/homescreen_componants/new_report_container.dart';
 import 'package:flutter/material.dart';
@@ -27,207 +28,217 @@ class _ReportScreenState extends State<ReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        leading: BlocBuilder<HomeScreenCubit, HomeScreenState>(
-          builder: (context, state) {
-            return IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-              ),
-              onPressed: () {
-                HomeScreenCubit.get(context).imagesList = [];
-                HomeScreenCubit.get(context).image = null;
-                Navigator.of(context).pop();
-              },
-            );
-          },
-        ),
-        centerTitle: true,
-        title: Text('Report an issue'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              reportTextEditing.text.isEmpty
-                  // ignore: unnecessary_statements
-                  ? null
-                  : HomeScreenCubit.get(context)
-                      .addReport(NewReportContainer(
-                          reporterName: 'youssef hussien',
-                          reportContent: reportTextEditing.text,
-                          reportImage: HomeScreenCubit.get(context).imagesList,
-                          reportName: widget.reportCategoryName,
-                          reportLocation: '100 Main Street Lrvine',
-                          reporterLetter: 'Y'))
-                      .then(
-                        (value) => ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            duration: Duration(seconds: 2),
-                            content: Text('The Report is added Sucessfully!'),
-                            backgroundColor: Colors.green,
-                          ),
-                        ),
-                      )
-                      .then((value) {
-                      Future.delayed(Duration(seconds: 3)).then((value) {
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      });
-                    });
-            },
-            child: Text(
-              'Submit',
-              style: TextStyle(color: Colors.white),
+    return BlocProvider(
+      create: (context) => AddCubit(),
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0.0,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
             ),
+            onPressed: () {
+              // HomeScreenCubit.get(context).imagesList = [];
+              // HomeScreenCubit.get(context).image = null;
+              Navigator.of(context).pop();
+            },
           ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Center(
-                child: Text(
-                  'For Emergencies Call 911',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: <Widget>[
-                  Icon(widget.iconData),
-                  SizedBox(
-                    width: 20,
+          centerTitle: true,
+          title: Text('Report an issue'),
+          actions: [
+            BlocBuilder<AddCubit, AddState>(
+              builder: (context, state) {
+                return TextButton(
+                  onPressed: () {
+                    reportTextEditing.text.isEmpty
+                        // ignore: unnecessary_statements
+                        ? null
+                        // : HomeScreenCubit.get(context)
+                        //     .addReport(NewReportContainer(
+                        //       reportDate: '17 jan',
+                        //       reporterName: 'youssef hussien',
+                        //       reportContent: reportTextEditing.text,
+                        //       reportImage: HomeScreenCubit.get(context).imagesList,
+                        //       reportName: widget.reportCategoryName,
+                        //       reportLocation: '100 Main Street Lrvine',
+                        //       reporterLetter: 'Y',
+                        //       reportComments: 12,
+                        //       reportDislikes: 12,
+                        //       reportLikes: 12,
+                        //     ))
+                        //     .then(
+                        //       (value) => ScaffoldMessenger.of(context).showSnackBar(
+                        //         SnackBar(
+                        //           duration: Duration(seconds: 2),
+                        //           content: Text('The Report is added Sucessfully!'),
+                        //           backgroundColor: Colors.green,
+                        //         ),
+                        //       ),
+                        //     )
+                        //     .then((value) {
+                        //     Future.delayed(Duration(seconds: 3)).then((value) {
+                        //       Navigator.pop(context);
+                        //       Navigator.pop(context);
+                        //     });
+                        //   });
+                        : AddCubit.get(context).addReport();
+                  },
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.white),
                   ),
-                  Text(
-                    widget.reportCategoryName,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                );
+              },
+            ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Center(
+                  child: Text(
+                    'For Emergencies Call 911',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Text(
-                'Description',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextField(
-                controller: reportTextEditing,
-                maxLines: 5,
-                decoration: InputDecoration(
-                    hintText: 'Enter Issue Description...',
-                    border: OutlineInputBorder()),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Incident Location',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                SizedBox(
+                  height: 15,
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: <Widget>[
-                  Text('100 Main Street irvine'),
-                  Spacer(),
-                  IconButton(
-                    iconSize: 45,
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.arrow_right,
-                      color: Colors.blue,
+                Row(
+                  children: <Widget>[
+                    Icon(widget.iconData),
+                    SizedBox(
+                      width: 20,
                     ),
+                    Text(
+                      widget.reportCategoryName,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  'Description',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              BlocBuilder<HomeScreenCubit, HomeScreenState>(
-                  builder: (context, state) {
-                var bloc = HomeScreenCubit.get(context);
-                if (bloc.imagesList.isEmpty) {
-                  return InkWell(
-                    onTap: bloc.getImageFromGallery,
-                    child: Container(
-                        child: Center(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            FaIcon(
-                              FontAwesomeIcons.camera,
-                              color: Colors.grey[400],
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text('Add photos and vidoes'),
-                          ]),
-                    )),
-                  );
-                } else {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: bloc.imagesList.map((e) {
-                          if (e == bloc.imagesList.last) {
-                            return Wrap(
-                              children: <Widget>[
-                                ImageContainer(
-                                  e: e,
-                                  index: bloc.imagesList.indexOf(e),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Container(
-                                  height: 100,
-                                  width: 100,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: reportTextEditing,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                      hintText: 'Enter Issue Description...',
+                      border: OutlineInputBorder()),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Incident Location',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: <Widget>[
+                    Text('100 Main Street irvine'),
+                    Spacer(),
+                    IconButton(
+                      iconSize: 45,
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.arrow_right,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                BlocBuilder<HomeScreenCubit, HomeScreenState>(
+                    builder: (context, state) {
+                  var bloc = HomeScreenCubit.get(context);
+                  if (bloc.imagesList.isEmpty) {
+                    return InkWell(
+                      onTap: bloc.getImageFromGallery,
+                      child: Container(
+                          child: Center(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              FaIcon(
+                                FontAwesomeIcons.camera,
+                                color: Colors.grey[400],
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Text('Add photos and vidoes'),
+                            ]),
+                      )),
+                    );
+                  } else {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: bloc.imagesList.map((e) {
+                            if (e == bloc.imagesList.last) {
+                              return Wrap(
+                                children: <Widget>[
+                                  ImageContainer(
+                                    e: e,
+                                    index: bloc.imagesList.indexOf(e),
                                   ),
-                                  child: Center(
-                                    child: IconButton(
-                                      onPressed: bloc.getImageFromGallery,
-                                      icon: Icon(Icons.add),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Container(
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                    ),
+                                    child: Center(
+                                      child: IconButton(
+                                        onPressed: bloc.getImageFromGallery,
+                                        icon: Icon(Icons.add),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              );
+                            }
+                            return ImageContainer(
+                              e: e,
+                              index: bloc.imagesList.indexOf(e),
                             );
-                          }
-                          return ImageContainer(
-                            e: e,
-                            index: bloc.imagesList.indexOf(e),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  );
-                }
-              })
-            ],
+                          }).toList(),
+                        ),
+                      ],
+                    );
+                  }
+                })
+              ],
+            ),
           ),
         ),
       ),

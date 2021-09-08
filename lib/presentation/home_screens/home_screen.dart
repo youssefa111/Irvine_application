@@ -107,23 +107,18 @@ class ViewSection extends StatelessWidget {
     return Column(
       children: <Widget>[
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             TopContainer(
                 height: 100,
-                width: screenWidth / 4,
+                width: screenWidth / 3,
                 imagePath: 'assets/forbidden.jpg',
-                title: 'Report Hate Crime'),
-            TopContainer(
-                height: 100,
-                width: screenWidth / 4,
-                imagePath: 'assets/map1.jpg',
                 title: 'Report an issue'),
             TopContainer(
                 height: 100,
-                width: screenWidth / 4,
+                width: screenWidth / 3,
                 imagePath: 'assets/map2.jpg',
-                title: 'Neighborhood Activity'),
+                title: 'Add news'),
           ],
         ),
         SizedBox(
@@ -131,16 +126,6 @@ class ViewSection extends StatelessWidget {
         ),
         Row(
           children: <Widget>[
-            SizedBox(
-              width: 5,
-            ),
-            Text(
-              'Alerts & New',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
             Spacer(),
             IconButton(
               onPressed: () {

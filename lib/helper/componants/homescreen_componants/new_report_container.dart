@@ -1,5 +1,6 @@
 import 'package:first_task/helper/constants/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,18 +14,26 @@ class NewReportContainer extends StatelessWidget {
   final String reportName;
   final String reportLocation;
   final String reporterLetter;
+  final String reportDate;
+  final int reportLikes;
+  final int reportDislikes;
+  final int reportComments;
   ContainerCategory containerCategory = ContainerCategory.newsContiner;
 
-  NewReportContainer(
-      {Key? key,
-      required this.reporterName,
-      required this.reportContent,
-      required this.reportImage,
-      required this.reportName,
-      required this.reportLocation,
-      required this.reporterLetter,
-      containerCategory})
-      : super(key: key);
+  NewReportContainer({
+    Key? key,
+    required this.reporterName,
+    required this.reportContent,
+    required this.reportImage,
+    required this.reportName,
+    required this.reportLocation,
+    required this.reporterLetter,
+    required this.reportDate,
+    containerCategory,
+    required this.reportLikes,
+    required this.reportDislikes,
+    required this.reportComments,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -92,18 +101,18 @@ class NewReportContainer extends StatelessWidget {
                     child: Text(
                   reportName,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
                   ),
                 )),
                 Spacer(),
-                Icon(Icons.location_on),
-                FittedBox(
-                    child: Text(
-                  reportLocation,
+                Text(
+                  reportDate,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
                   ),
-                )),
+                ),
               ],
             ),
             SizedBox(
@@ -129,9 +138,24 @@ class NewReportContainer extends StatelessWidget {
                     height: 10,
                   ),
             SizedBox(
-              height: 10,
+              height: 0,
             ),
             Text(reportContent),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '( $reportLikes Agrees , $reportDislikes Disagrees , $reportComments Comments )',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
             SizedBox(
               height: 5,
             ),
@@ -300,22 +324,19 @@ class InteractBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       builder: (context, state) {
-        return FittedBox(
-          child: Row(
-            children: <Widget>[
-              InteractButton(
-                  func: () => HomeScreenCubit.get(context).interactAgree(),
-                  icon: HomeScreenCubit.get(context).agreedIcon,
-                  iconName: 'Agree'),
-              InteractButton(
-                  func: () => HomeScreenCubit.get(context).interactDisagree(),
-                  icon: HomeScreenCubit.get(context).disagreedIcon,
-                  iconName: 'Disagree'),
-              InteractButton(
-                  icon: FontAwesomeIcons.comment, iconName: 'Comment'),
-              InteractButton(icon: FontAwesomeIcons.share, iconName: 'Share'),
-            ],
-          ),
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            InteractButton(
+                func: () => HomeScreenCubit.get(context).interactAgree(),
+                icon: HomeScreenCubit.get(context).agreedIcon,
+                iconName: 'Agree'),
+            InteractButton(
+                func: () => HomeScreenCubit.get(context).interactDisagree(),
+                icon: HomeScreenCubit.get(context).disagreedIcon,
+                iconName: 'Disagree'),
+            InteractButton(icon: FontAwesomeIcons.comment, iconName: 'Comment'),
+          ],
         );
       },
     );
@@ -342,7 +363,10 @@ class InteractButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            FaIcon(icon),
+            FaIcon(
+              icon,
+              size: 18,
+            ),
             SizedBox(
               width: 5,
             ),

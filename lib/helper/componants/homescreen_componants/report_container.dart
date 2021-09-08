@@ -303,7 +303,6 @@ class InteractBar extends StatelessWidget {
                 icon: HomeScreenCubit.get(context).disagreedIcon,
                 iconName: 'Disagree'),
             InteractButton(icon: FontAwesomeIcons.comment, iconName: 'Comment'),
-            InteractButton(icon: FontAwesomeIcons.share, iconName: 'Share'),
           ],
         );
       },

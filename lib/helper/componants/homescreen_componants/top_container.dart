@@ -22,6 +22,7 @@ class TopContainer extends StatelessWidget {
       onTap: () => Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => ReportCategoryScreen())),
       child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Container(
           width: width,
           height: height,
