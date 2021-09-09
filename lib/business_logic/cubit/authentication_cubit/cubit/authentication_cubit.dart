@@ -26,7 +26,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 4),
           content: Text("Please Check your Email or password Again!"),
           backgroundColor: Colors.red,
         ),

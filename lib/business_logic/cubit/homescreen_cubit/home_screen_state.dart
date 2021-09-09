@@ -11,13 +11,7 @@ class HomeScreenSucess extends HomeScreenState {}
 
 class HomeScreenError extends HomeScreenState {}
 
-class MediaAddedSucessfully extends HomeScreenState {}
-
-class ReportAddedSucessfully extends HomeScreenState {}
-
 class FilteredSucessfully extends HomeScreenState {}
-
-class ImageRemovedSucessfully extends HomeScreenState {}
 
 class InteractedSucessfully extends HomeScreenState {}
 

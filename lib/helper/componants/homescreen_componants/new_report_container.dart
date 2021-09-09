@@ -1,4 +1,4 @@
-import 'package:first_task/helper/constants/constants.dart';
+import 'package:first_task/model/report_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,32 +8,9 @@ import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 
 // ignore: must_be_immutable
 class NewReportContainer extends StatelessWidget {
-  final String reporterName;
-  final String reportContent;
-  final List<dynamic> reportImage;
-  final String reportName;
-  final String reportLocation;
-  final String reporterLetter;
-  final String reportDate;
-  final int reportLikes;
-  final int reportDislikes;
-  final int reportComments;
-  ContainerCategory containerCategory = ContainerCategory.newsContiner;
+  final ReportModel model;
 
-  NewReportContainer({
-    Key? key,
-    required this.reporterName,
-    required this.reportContent,
-    required this.reportImage,
-    required this.reportName,
-    required this.reportLocation,
-    required this.reporterLetter,
-    required this.reportDate,
-    containerCategory,
-    required this.reportLikes,
-    required this.reportDislikes,
-    required this.reportComments,
-  }) : super(key: key);
+  const NewReportContainer({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +36,7 @@ class NewReportContainer extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      reporterLetter,
+                      model.reporterLetter,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -71,7 +48,7 @@ class NewReportContainer extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  reporterName,
+                  model.reporterName,
                 ),
                 Spacer(),
                 IconButton(
@@ -99,7 +76,7 @@ class NewReportContainer extends StatelessWidget {
                 ),
                 FittedBox(
                     child: Text(
-                  reportName,
+                  model.reportName,
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -107,7 +84,7 @@ class NewReportContainer extends StatelessWidget {
                 )),
                 Spacer(),
                 Text(
-                  reportDate,
+                  model.reportDate,
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
@@ -118,15 +95,15 @@ class NewReportContainer extends StatelessWidget {
             SizedBox(
               height: 5,
             ),
-            reportImage.isNotEmpty
+            model.reportImage.isNotEmpty
                 ? Wrap(
                     runSpacing: 10,
                     spacing: 10,
-                    children: reportImage.map((e) {
+                    children: model.reportImage.map((e) {
                       return Container(
                         height: 70,
                         width: MediaQuery.of(context).size.width /
-                            reportImage.length,
+                            model.reportImage.length,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(13),
                           image: DecorationImage(
@@ -140,7 +117,7 @@ class NewReportContainer extends StatelessWidget {
             SizedBox(
               height: 0,
             ),
-            Text(reportContent),
+            Text(model.reportContent),
             SizedBox(
               height: 5,
             ),
@@ -148,7 +125,7 @@ class NewReportContainer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  '( $reportLikes Agrees , $reportDislikes Disagrees , $reportComments Comments )',
+                  '( ${model.reportLikes} Agrees , ${model.reportDislikes} Disagrees , ${model.reportComments} Comments )',
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey[600],

@@ -3,7 +3,6 @@ import 'package:first_task/business_logic/cubit/authentication_cubit/cubit/authe
 import 'package:first_task/helper/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 // ignore: must_be_immutable
 class RegisterScreen extends StatefulWidget {

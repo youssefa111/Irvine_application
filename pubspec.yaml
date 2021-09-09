@@ -41,6 +41,7 @@ dependencies:
   firebase_core: ^1.6.0
   conditional_builder_null_safety: ^0.0.4
   fluttertoast: ^8.0.8
+  intl: ^0.17.0
   
 
 
