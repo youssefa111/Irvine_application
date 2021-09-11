@@ -67,41 +67,40 @@ class _ReportScreenState extends State<ReportScreen> {
                     reportTextEditing.text.isEmpty
                         // ignore: unnecessary_statements
                         ? null
-                        // : AddCubit.get(context)
-                        //     .addReport(
-                        //       reportModel: ReportModel(
-                        //           reportDate: formattedDate,
-                        //           reporterName: userInfo['name'],
-                        //           reportContent: reportTextEditing.text,
-                        //           reportImage: AddCubit.get(context).imagesList,
-                        //           reportName: widget.reportCategoryName,
-                        //           reportLocation: userInfo['neighborhood'],
-                        //           reporterLetter:
-                        //               userInfo['name'].toString()[0],
-                        //           reportComments: 0,
-                        //           reportDislikes: 0,
-                        //           reportLikes: 0,
-                        //           userID: userID,
-                        //           containerCategory: 1),
-                        //     )
-                        //     .then(
-                        //       (value) =>
-                        //           ScaffoldMessenger.of(context).showSnackBar(
-                        //         SnackBar(
-                        //           duration: Duration(seconds: 2),
-                        //           content:
-                        //               Text('The Report is added Sucessfully!'),
-                        //           backgroundColor: Colors.green,
-                        //         ),
-                        //       ),
-                        //     )
-                        //     .then((value) {
-                        //     Future.delayed(Duration(seconds: 3)).then((value) {
-                        //       Navigator.pop(context);
-                        //       Navigator.pop(context);
-                        //     });
-                        //   });
-                        : print(userInfo.password);
+                        : AddCubit.get(context)
+                            .addReport(
+                              reportModel: ReportModel(
+                                  reportDate: formattedDate,
+                                  reporterName: userInfo['name'],
+                                  reportContent: reportTextEditing.text,
+                                  reportImage: AddCubit.get(context).imagesList,
+                                  reportName: widget.reportCategoryName,
+                                  reportLocation: userInfo['neighborhood'],
+                                  reporterLetter:
+                                      userInfo['name'].toString()[0],
+                                  reportComments: 0,
+                                  reportDislikes: 0,
+                                  reportLikes: 0,
+                                  userID: userID,
+                                  containerCategory: 1),
+                            )
+                            .then(
+                              (value) =>
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  duration: Duration(seconds: 2),
+                                  content:
+                                      Text('The Report is added Sucessfully!'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              ),
+                            )
+                            .then((value) {
+                            Future.delayed(Duration(seconds: 3)).then((value) {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            });
+                          });
                   },
                   child: Text(
                     'Submit',
@@ -110,19 +109,20 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
               ],
             ),
-            body: FutureBuilder<Object>(
+            body: FutureBuilder<DocumentSnapshot>(
                 future: FirebaseFirestore.instance
                     .collection('users')
                     .doc(userID)
                     .get(),
-                builder: (context, snapshot) {
+                builder: (BuildContext context,
+                    AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
                       child: CircularProgressIndicator(),
                     );
                   } else if (snapshot.connectionState == ConnectionState.done) {
                     Map<String, dynamic> data =
-                        snapshot.data as Map<String, dynamic>;
+                        snapshot.data!.data() as Map<String, dynamic>;
                     userInfo = data;
                     return Padding(
                       padding: const EdgeInsets.all(12.0),
