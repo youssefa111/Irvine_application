@@ -2,6 +2,8 @@ import 'package:first_task/business_logic/cubit/homescreen_cubit/home_screen_cub
 import 'package:first_task/helper/componants/homescreen_componants/drawer.dart';
 import 'package:first_task/helper/componants/homescreen_componants/filter_dialog.dart';
 import 'package:first_task/helper/componants/homescreen_componants/top_container.dart';
+import 'package:first_task/presentation/add_screens/news_screen.dart';
+import 'package:first_task/presentation/add_screens/report_category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,6 +15,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         elevation: 0.0,
         centerTitle: true,
         title: const Text('Irvine'),
@@ -110,15 +113,19 @@ class ViewSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             TopContainer(
-                height: 100,
-                width: screenWidth / 3,
-                imagePath: 'assets/forbidden.jpg',
-                title: 'Report an issue'),
+              height: 100,
+              width: screenWidth / 3,
+              imagePath: 'assets/forbidden.jpg',
+              title: 'Report an issue',
+              widget: ReportCategoryScreen(),
+            ),
             TopContainer(
-                height: 100,
-                width: screenWidth / 3,
-                imagePath: 'assets/map2.jpg',
-                title: 'Add news'),
+              height: 100,
+              width: screenWidth / 3,
+              imagePath: 'assets/map2.jpg',
+              title: 'Add news',
+              widget: NewsScreen(),
+            ),
           ],
         ),
         SizedBox(

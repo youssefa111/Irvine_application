@@ -1,27 +1,11 @@
+import 'package:first_task/model/news_model.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewsContainer extends StatelessWidget {
-  final String reporterName;
-  final String newsTitle;
-  final String newsContent;
-  final String newsDate;
-  final String iconLetter;
-  final int newsThanks;
-  final int newsReplies;
-  final bool isAgency;
+  final NewsModel newsModel;
 
-  NewsContainer({
-    Key? key,
-    required this.reporterName,
-    required this.newsTitle,
-    required this.newsContent,
-    required this.newsDate,
-    required this.iconLetter,
-    required this.isAgency,
-    required this.newsThanks,
-    required this.newsReplies,
-  }) : super(key: key);
+  const NewsContainer({Key? key, required this.newsModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +30,7 @@ class NewsContainer extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      iconLetter,
+                      newsModel.iconLetter,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -58,21 +42,21 @@ class NewsContainer extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  reporterName,
+                  newsModel.reporterName,
                 ),
-                if (isAgency)
-                  SizedBox(
-                    width: 5,
-                  ),
-                if (isAgency)
-                  Text(
-                    'AGENCY',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.green),
-                  ),
+                // if (isAgency)
+                //   SizedBox(
+                //     width: 5,
+                //   ),
+                // if (isAgency)
+                //   Text(
+                //     'AGENCY',
+                //     style: TextStyle(
+                //         fontWeight: FontWeight.bold, color: Colors.green),
+                //   ),
                 Spacer(),
                 Text(
-                  newsDate,
+                  newsModel.newsDate,
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
               ],
@@ -81,7 +65,7 @@ class NewsContainer extends StatelessWidget {
               height: 7,
             ),
             Text(
-              newsTitle,
+              newsModel.newsTitle,
               style: Theme.of(context).textTheme.button!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -90,7 +74,7 @@ class NewsContainer extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Text(newsContent),
+            Text(newsModel.newsContent),
             SizedBox(
               height: 10,
             ),
@@ -98,7 +82,7 @@ class NewsContainer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  '( $newsThanks Thanks , $newsReplies Replies )',
+                  '( ${newsModel.newsThanks} Thanks , ${newsModel.newsReplies} Replies )',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[600],

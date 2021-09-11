@@ -1,5 +1,4 @@
 // ignore: must_be_immutable
-import 'package:first_task/presentation/add_screens/report_category_screen.dart';
 import 'package:flutter/material.dart';
 
 class TopContainer extends StatelessWidget {
@@ -7,6 +6,7 @@ class TopContainer extends StatelessWidget {
   final double width;
   final String imagePath;
   final String title;
+  final Widget widget;
 
   const TopContainer({
     Key? key,
@@ -14,13 +14,14 @@ class TopContainer extends StatelessWidget {
     required this.width,
     required this.imagePath,
     required this.title,
+    required this.widget,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ReportCategoryScreen())),
+      onTap: () => Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => widget)),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Container(

@@ -22,6 +22,7 @@ class ReportScreen extends StatefulWidget {
 
 class _ReportScreenState extends State<ReportScreen> {
   var reportTextEditing = TextEditingController();
+  var formKey = GlobalKey<FormState>();
   var userInfo;
   var userID;
 
@@ -40,7 +41,7 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
-    String formattedDate = DateFormat('d ABBR_MONTH').format(now);
+    String formattedDate = DateFormat("yyyy-MM-dd").format(now);
     return BlocProvider(
       create: (context) => AddCubit(),
       child: BlocConsumer<AddCubit, AddState>(
@@ -48,6 +49,7 @@ class _ReportScreenState extends State<ReportScreen> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
+              backgroundColor: Theme.of(context).primaryColor,
               elevation: 0.0,
               leading: IconButton(
                 icon: Icon(
@@ -64,7 +66,7 @@ class _ReportScreenState extends State<ReportScreen> {
               actions: [
                 TextButton(
                   onPressed: () {
-                    reportTextEditing.text.isEmpty
+                    !formKey.currentState!.validate()
                         // ignore: unnecessary_statements
                         ? null
                         : AddCubit.get(context)
@@ -73,7 +75,6 @@ class _ReportScreenState extends State<ReportScreen> {
                                   reportDate: formattedDate,
                                   reporterName: userInfo['name'],
                                   reportContent: reportTextEditing.text,
-                                  reportImage: AddCubit.get(context).imagesList,
                                   reportName: widget.reportCategoryName,
                                   reportLocation: userInfo['neighborhood'],
                                   reporterLetter:
@@ -109,181 +110,197 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
               ],
             ),
-            body: FutureBuilder<DocumentSnapshot>(
-                future: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(userID)
-                    .get(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    Map<String, dynamic> data =
-                        snapshot.data!.data() as Map<String, dynamic>;
-                    userInfo = data;
-                    return Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Center(
-                              child: Text(
-                                'For Emergencies Call 911',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Icon(widget.iconData),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  widget.reportCategoryName,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Text(
-                              'Description',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextField(
-                              controller: reportTextEditing,
-                              maxLines: 5,
-                              decoration: InputDecoration(
-                                  hintText: 'Enter Issue Description...',
-                                  border: OutlineInputBorder()),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Incident Location',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Text(data['neighborhood']),
-                                Spacer(),
-                                IconButton(
-                                  iconSize: 45,
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.arrow_right,
-                                    color: Colors.blue,
+            body: (state) is AddReportLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userID)
+                        .get(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
+                        Map<String, dynamic> data =
+                            snapshot.data!.data() as Map<String, dynamic>;
+                        userInfo = data;
+                        return Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: SingleChildScrollView(
+                            child: Form(
+                              key: formKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Center(
+                                    child: Text(
+                                      'For Emergencies Call 911',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            BlocBuilder<AddCubit, AddState>(
-                                builder: (context, state) {
-                              var bloc = AddCubit.get(context);
-                              if (bloc.imagesList.isEmpty) {
-                                return InkWell(
-                                  onTap: bloc.getImageFromGallery,
-                                  child: Container(
-                                      child: Center(
-                                    child: Column(
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(widget.iconData),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      Text(
+                                        widget.reportCategoryName,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  Text(
+                                    'Description',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  TextFormField(
+                                    validator: (String? valid) {
+                                      if (valid!.isEmpty) {
+                                        return 'Please Enter Description for thew report post!';
+                                      }
+                                    },
+                                    controller: reportTextEditing,
+                                    maxLines: 5,
+                                    decoration: InputDecoration(
+                                        hintText: 'Enter Issue Description...',
+                                        border: OutlineInputBorder()),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Incident Location',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Text(data['neighborhood']),
+                                      Spacer(),
+                                      IconButton(
+                                        iconSize: 45,
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.arrow_right,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  BlocBuilder<AddCubit, AddState>(
+                                      builder: (context, state) {
+                                    var bloc = AddCubit.get(context);
+                                    if (bloc.imagesList.isEmpty) {
+                                      return InkWell(
+                                        onTap: bloc.getImageFromGallery,
+                                        child: Container(
+                                            child: Center(
+                                          child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: <Widget>[
+                                                FaIcon(
+                                                  FontAwesomeIcons.camera,
+                                                  color: Colors.grey[400],
+                                                ),
+                                                SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Text('Add photos and vidoes'),
+                                              ]),
+                                        )),
+                                      );
+                                    } else {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: <Widget>[
-                                          FaIcon(
-                                            FontAwesomeIcons.camera,
-                                            color: Colors.grey[400],
-                                          ),
-                                          SizedBox(
-                                            height: 15,
-                                          ),
-                                          Text('Add photos and vidoes'),
-                                        ]),
-                                  )),
-                                );
-                              } else {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Wrap(
-                                      spacing: 10,
-                                      runSpacing: 10,
-                                      children: bloc.imagesList.map((e) {
-                                        if (e == bloc.imagesList.last &&
-                                            bloc.imagesList.length < 3) {
-                                          return Wrap(
-                                            children: <Widget>[
-                                              ImageContainer(
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Wrap(
+                                            spacing: 10,
+                                            runSpacing: 10,
+                                            children: bloc.imagesList.map((e) {
+                                              if (e == bloc.imagesList.last &&
+                                                  bloc.imagesList.length < 3) {
+                                                return Wrap(
+                                                  children: <Widget>[
+                                                    ImageContainer(
+                                                      e: e,
+                                                      index: bloc.imagesList
+                                                          .indexOf(e),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 10,
+                                                    ),
+                                                    Container(
+                                                      height: 100,
+                                                      width: 100,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(),
+                                                      ),
+                                                      child: Center(
+                                                        child: IconButton(
+                                                          onPressed: bloc
+                                                              .getImageFromGallery,
+                                                          icon: Icon(Icons.add),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }
+                                              return ImageContainer(
                                                 e: e,
                                                 index:
                                                     bloc.imagesList.indexOf(e),
-                                              ),
-                                              SizedBox(
-                                                width: 10,
-                                              ),
-                                              Container(
-                                                height: 100,
-                                                width: 100,
-                                                decoration: BoxDecoration(
-                                                  border: Border.all(),
-                                                ),
-                                                child: Center(
-                                                  child: IconButton(
-                                                    onPressed: bloc
-                                                        .getImageFromGallery,
-                                                    icon: Icon(Icons.add),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        }
-                                        return ImageContainer(
-                                          e: e,
-                                          index: bloc.imagesList.indexOf(e),
-                                        );
-                                      }).toList(),
-                                    ),
-                                  ],
-                                );
-                              }
-                            })
-                          ],
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Center(child: Text('Something went wrong'));
-                  }
-                }),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                  })
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Center(child: Text('Something went wrong'));
+                      }
+                    }),
           );
         },
       ),

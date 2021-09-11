@@ -3,7 +3,7 @@ import 'dart:convert';
 class ReportModel {
   String reporterName;
   String reportContent;
-  List<dynamic> reportImage;
+  List<dynamic>? reportImage;
   String reportName;
   String reportLocation;
   String reporterLetter;
@@ -17,7 +17,7 @@ class ReportModel {
   ReportModel({
     required this.reporterName,
     required this.reportContent,
-    required this.reportImage,
+    this.reportImage,
     required this.reportName,
     required this.reportLocation,
     required this.reporterLetter,
@@ -33,8 +33,8 @@ class ReportModel {
     return {
       'reporterName': reporterName,
       'reportContent': reportContent,
-      'reportImage': reportImage,
       'reportName': reportName,
+      'reportImage': reportImage,
       'reportLocation': reportLocation,
       'reporterLetter': reporterLetter,
       'reportDate': reportDate,
@@ -50,7 +50,6 @@ class ReportModel {
     return ReportModel(
       reporterName: map['reporterName'],
       reportContent: map['reportContent'],
-      reportImage: List<dynamic>.from(map['reportImage']),
       reportName: map['reportName'],
       reportLocation: map['reportLocation'],
       reporterLetter: map['reporterLetter'],
@@ -60,6 +59,7 @@ class ReportModel {
       reportComments: map['reportComments'],
       containerCategory: map['containerCategory'],
       userID: map['userID'],
+      reportImage: map['mediaList'],
     );
   }
 

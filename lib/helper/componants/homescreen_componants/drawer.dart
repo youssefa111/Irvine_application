@@ -1,5 +1,5 @@
 import 'package:first_task/helper/constants/constants.dart';
-import 'package:first_task/presentation/home_screens/profile_screen.dart';
+import 'package:first_task/presentation/profile_screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeDrawer extends StatelessWidget {

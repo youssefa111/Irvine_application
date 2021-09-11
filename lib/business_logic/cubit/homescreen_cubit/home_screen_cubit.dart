@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_task/helper/componants/homescreen_componants/news_container.dart';
-import 'package:first_task/helper/componants/homescreen_componants/report_container.dart';
-
+import 'package:first_task/helper/componants/homescreen_componants/reports_container.dart';
+import 'package:first_task/model/news_model.dart';
+import 'package:first_task/model/report_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,194 +16,36 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   static HomeScreenCubit get(BuildContext context) => BlocProvider.of(context);
 
-  List dataList = [
-    NewsContainer(
-      reporterName: 'Jas NewMn WoodBUD SouthLake',
-      newsTitle: 'Natinal Law Enforcement Appreciation Day',
-      newsContent:
-          'I did no make it up, i watch EVERY council meeting and she stated prior to being Mayor that she wanted to defunt the Irvine Police Department. I believe it was at a council.',
-      newsDate: '17 Jan',
-      iconLetter: 'I',
-      isAgency: false,
-      newsThanks: 147,
-      newsReplies: 41,
-    ),
-    ReportContainer(
-      reporterName: 'James Wine Portota Springo',
-      reportContent:
-          'Hi Neighbors, Does anyone Know who i need to contact to get this grafitti removed? Location is at Bridge',
-      reportImage: 'assets/grifatti.jpg',
-      reportName: 'Reported Grafitti',
-      reportLocation: '1.2 miles away',
-      reporterLetter: 'J',
-    ),
-    NewsContainer(
-      reporterName: 'Jas NewMn WoodBUD SouthLake',
-      newsTitle: 'Natinal Law Enforcement Appreciation Day',
-      newsContent:
-          'I did no make it up, i watch EVERY council meeting and she stated prior to being Mayor that she wanted to defunt the Irvine Police Department. I believe it was at a council.',
-      newsDate: '17 Jan',
-      iconLetter: 'I',
-      isAgency: false,
-      newsThanks: 147,
-      newsReplies: 41,
-    ),
-    ReportContainer(
-      reporterName: 'James Wine Portota Springo',
-      reportContent:
-          'Hi Neighbors, Does anyone Know who i need to contact to get this grafitti removed? Location is at Bridge',
-      reportImage: 'assets/grifatti.jpg',
-      reportName: 'Reported Grafitti',
-      reportLocation: '1.2 miles away',
-      reporterLetter: 'J',
-    ),
-    NewsContainer(
-      reporterName: 'Jas NewMn WoodBUD SouthLake',
-      newsTitle: 'Natinal Law Enforcement Appreciation Day',
-      newsContent:
-          'I did no make it up, i watch EVERY council meeting and she stated prior to being Mayor that she wanted to defunt the Irvine Police Department. I believe it was at a council.',
-      newsDate: '17 Jan',
-      iconLetter: 'I',
-      isAgency: false,
-      newsThanks: 147,
-      newsReplies: 41,
-    ),
-    ReportContainer(
-      reporterName: 'James Wine Portota Springo',
-      reportContent:
-          'Hi Neighbors, Does anyone Know who i need to contact to get this grafitti removed? Location is at Bridge',
-      reportImage: 'assets/grifatti.jpg',
-      reportName: 'Reported Grafitti',
-      reportLocation: '1.2 miles away',
-      reporterLetter: 'J',
-    ),
-    NewsContainer(
-      reporterName: 'Jas NewMn WoodBUD SouthLake',
-      newsTitle: 'Natinal Law Enforcement Appreciation Day',
-      newsContent:
-          'I did no make it up, i watch EVERY council meeting and she stated prior to being Mayor that she wanted to defunt the Irvine Police Department. I believe it was at a council.',
-      newsDate: '17 Jan',
-      iconLetter: 'I',
-      isAgency: false,
-      newsThanks: 147,
-      newsReplies: 41,
-    ),
-    ReportContainer(
-      reporterName: 'James Wine Portota Springo',
-      reportContent:
-          'Hi Neighbors, Does anyone Know who i need to contact to get this grafitti removed? Location is at Bridge',
-      reportImage: 'assets/grifatti.jpg',
-      reportName: 'Reported Grafitti',
-      reportLocation: '1.2 miles away',
-      reporterLetter: 'J',
-    ),
-    NewsContainer(
-      reporterName: 'Jas NewMn WoodBUD SouthLake',
-      newsTitle: 'Natinal Law Enforcement Appreciation Day',
-      newsContent:
-          'I did no make it up, i watch EVERY council meeting and she stated prior to being Mayor that she wanted to defunt the Irvine Police Department. I believe it was at a council.',
-      newsDate: '17 Jan',
-      iconLetter: 'I',
-      isAgency: false,
-      newsThanks: 147,
-      newsReplies: 41,
-    ),
-    ReportContainer(
-      reporterName: 'James Wine Portota Springo',
-      reportContent:
-          'Hi Neighbors, Does anyone Know who i need to contact to get this grafitti removed? Location is at Bridge',
-      reportImage: 'assets/grifatti.jpg',
-      reportName: 'Reported Grafitti',
-      reportLocation: '1.2 miles away',
-      reporterLetter: 'J',
-    ),
-    NewsContainer(
-      reporterName: 'Jas NewMn WoodBUD SouthLake',
-      newsTitle: 'Natinal Law Enforcement Appreciation Day',
-      newsContent:
-          'I did no make it up, i watch EVERY council meeting and she stated prior to being Mayor that she wanted to defunt the Irvine Police Department. I believe it was at a council.',
-      newsDate: '17 Jan',
-      iconLetter: 'I',
-      isAgency: false,
-      newsThanks: 147,
-      newsReplies: 41,
-    ),
-    ReportContainer(
-      reporterName: 'James Wine Portota Springo',
-      reportContent:
-          'Hi Neighbors, Does anyone Know who i need to contact to get this grafitti removed? Location is at Bridge',
-      reportImage: 'assets/grifatti.jpg',
-      reportName: 'Reported Grafitti',
-      reportLocation: '1.2 miles away',
-      reporterLetter: 'J',
-    ),
-    NewsContainer(
-      reporterName: 'Jas NewMn WoodBUD SouthLake',
-      newsTitle: 'Natinal Law Enforcement Appreciation Day',
-      newsContent:
-          'I did no make it up, i watch EVERY council meeting and she stated prior to being Mayor that she wanted to defunt the Irvine Police Department. I believe it was at a council.',
-      newsDate: '17 Jan',
-      iconLetter: 'I',
-      isAgency: false,
-      newsThanks: 147,
-      newsReplies: 41,
-    ),
-    ReportContainer(
-      reporterName: 'James Wine Portota Springo',
-      reportContent:
-          'Hi Neighbors, Does anyone Know who i need to contact to get this grafitti removed? Location is at Bridge',
-      reportImage: 'assets/grifatti.jpg',
-      reportName: 'Reported Grafitti',
-      reportLocation: '1.2 miles away',
-      reporterLetter: 'J',
-    ),
-    NewsContainer(
-      reporterName: 'Jas NewMn WoodBUD SouthLake',
-      newsTitle: 'Natinal Law Enforcement Appreciation Day',
-      newsContent:
-          'I did no make it up, i watch EVERY council meeting and she stated prior to being Mayor that she wanted to defunt the Irvine Police Department. I believe it was at a council.',
-      newsDate: '17 Jan',
-      iconLetter: 'I',
-      isAgency: false,
-      newsThanks: 147,
-      newsReplies: 41,
-    ),
-    ReportContainer(
-      reporterName: 'James Wine Portota Springo',
-      reportContent:
-          'Hi Neighbors, Does anyone Know who i need to contact to get this grafitti removed? Location is at Bridge',
-      reportImage: 'assets/grifatti.jpg',
-      reportName: 'Reported Grafitti',
-      reportLocation: '1.2 miles away',
-      reporterLetter: 'J',
-    ),
-    NewsContainer(
-      reporterName: 'Jas NewMn WoodBUD SouthLake',
-      newsTitle: 'Natinal Law Enforcement Appreciation Day',
-      newsContent:
-          'I did no make it up, i watch EVERY council meeting and she stated prior to being Mayor that she wanted to defunt the Irvine Police Department. I believe it was at a council.',
-      newsDate: '17 Jan',
-      iconLetter: 'I',
-      isAgency: false,
-      newsThanks: 147,
-      newsReplies: 41,
-    ),
-    ReportContainer(
-      reporterName: 'James Wine Portota Springo',
-      reportContent:
-          'Hi Neighbors, Does anyone Know who i need to contact to get this grafitti removed? Location is at Bridge',
-      reportImage: 'assets/grifatti.jpg',
-      reportName: 'Reported Grafitti',
-      reportLocation: '1.2 miles away',
-      reporterLetter: 'J',
-    ),
-  ];
+  List dataList = [];
 
-  void getHomeData() {
+  Future<void> getHomeData() async {
     emit(HomeScreenLoading());
-    dataList = dataList;
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection("posts").get();
+      querySnapshot.docs.map((e) {
+        var index = dataList.indexOf(e);
+        Map<String, dynamic> data = e.data() as Map<String, dynamic>;
+        if (data['containerCategory'] == 0) {
+          dataList.add(NewsContainer(
+            newsModel: NewsModel.fromMap(data),
+            key: ObjectKey("key$index"),
+          ));
+        } else if (data['containerCategory'] == 1) {
+          dataList.add(
+            NewReportContainer(
+              model: ReportModel.fromMap(data),
+              key: ObjectKey("key$index"),
+            ),
+          );
+        }
+      }).toList();
 
-    emit(HomeScreenSucess());
+      emit(HomeScreenSucess());
+    } catch (e) {
+      print(e.toString());
+      emit(HomeScreenError());
+    }
   }
 
   var filterList = [];

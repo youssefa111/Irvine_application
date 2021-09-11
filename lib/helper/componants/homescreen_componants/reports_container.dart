@@ -1,31 +1,16 @@
+import 'package:first_task/model/report_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
-import '../../constants/constants.dart';
 
 // ignore: must_be_immutable
-class ReportContainer extends StatelessWidget {
-  final String reporterName;
-  final String reportContent;
-  final String reportImage;
-  final String reportName;
-  final String reportLocation;
-  final String reporterLetter;
-  ContainerCategory containerCategory = ContainerCategory.reportContiner;
+class NewReportContainer extends StatelessWidget {
+  final ReportModel model;
 
-  ReportContainer({
-    Key? key,
-    required this.reporterName,
-    required this.reportContent,
-    required this.reportImage,
-    required this.reportName,
-    required this.reportLocation,
-    required this.reporterLetter,
-    containerCategory,
-  }) : super(key: key);
+  const NewReportContainer({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +36,7 @@ class ReportContainer extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      reporterLetter,
+                      model.reporterLetter,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -63,7 +48,7 @@ class ReportContainer extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  reporterName,
+                  model.reporterName,
                 ),
                 Spacer(),
                 IconButton(
@@ -91,38 +76,65 @@ class ReportContainer extends StatelessWidget {
                 ),
                 FittedBox(
                     child: Text(
-                  reportName,
+                  model.reportName,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
                   ),
                 )),
                 Spacer(),
-                Icon(Icons.location_on),
-                FittedBox(
-                    child: Text(
-                  reportLocation,
+                Text(
+                  model.reportDate,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
                   ),
-                )),
+                ),
               ],
             ),
             SizedBox(
               height: 5,
             ),
-            Container(
-              height: 100,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(13),
-                image: DecorationImage(
-                    image: AssetImage(reportImage), fit: BoxFit.fill),
-              ),
-            ),
+            model.reportImage != null
+                ? Wrap(
+                    runSpacing: 10,
+                    spacing: 2,
+                    children: model.reportImage!.map((e) {
+                      return Container(
+                        height: 70,
+                        width: e == model.reportImage!.last &&
+                                model.reportImage!.length == 3
+                            ? MediaQuery.of(context).size.width
+                            : MediaQuery.of(context).size.width / 2.2,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                              image: NetworkImage(e), fit: BoxFit.fill),
+                        ),
+                      );
+                    }).toList())
+                : SizedBox(
+                    height: 10,
+                  ),
             SizedBox(
               height: 10,
             ),
-            Text(reportContent),
+            Text(model.reportContent),
+            SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '( ${model.reportLikes} Agrees , ${model.reportDislikes} Disagrees , ${model.reportComments} Comments )',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
             SizedBox(
               height: 5,
             ),
@@ -255,7 +267,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                 children: <Widget>[
                   TextButton(
                     style: TextButton.styleFrom(
-                      backgroundColor: HexColor('#a99e71'),
+                      backgroundColor: Colors.blue,
                     ),
                     onPressed: () {},
                     child: Text(
@@ -268,7 +280,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                   ),
                   TextButton(
                     style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
+                      backgroundColor: Colors.blue,
                     ),
                     onPressed: () => Navigator.of(context).pop(),
                     child: Text(
