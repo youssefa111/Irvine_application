@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:first_task/model/report_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,19 +18,32 @@ class AddCubit extends Cubit<AddState> {
   static AddCubit get(BuildContext context) => BlocProvider.of(context);
 
   List homePostsList = [];
+  int i = 0;
 
   Future<void> addReport({
     required ReportModel reportModel,
   }) async {
     emit(AddReportLoading());
-    FirebaseFirestore.instance
-        .collection("posts")
-        .add(reportModel.toMap())
-        .then((value) {
+    try {
+      if (imagesList.isNotEmpty) {
+        while (i < imagesList.length) {
+          final ref = FirebaseStorage.instance
+              .ref()
+              .child('reports')
+              .child('')
+              .child('media${i + 1}');
+
+          i++;
+        }
+      } else {
+        await FirebaseFirestore.instance
+            .collection("posts")
+            .add(reportModel.toMap());
+      }
       emit(AddReportSucessfully());
-    }).catchError((error) {
+    } catch (e) {
       emit(AddReportError());
-    });
+    }
   }
 
   // ignore: avoid_init_to_null
