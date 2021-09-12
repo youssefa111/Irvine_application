@@ -107,7 +107,7 @@ class NewReportContainer extends StatelessWidget {
                       spacing: 2,
                       children: model.reportImage!.map((e) {
                         return Container(
-                          height: 70,
+                          height: 100,
                           width: e == model.reportImage!.last &&
                                   model.reportImage!.length == 3
                               ? MediaQuery.of(context).size.width
