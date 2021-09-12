@@ -156,7 +156,11 @@ class ViewSection extends StatelessWidget {
                   itemBuilder: (context, index) => state is FilteredSucessfully
                       ? HomeScreenCubit.get(context).filterList[index]
                       : HomeScreenCubit.get(context).dataList[index],
-                  separatorBuilder: (context, index) => SizedBox(),
+                  separatorBuilder: (context, index) => Container(
+                        color: Colors.grey[350],
+                        width: double.infinity,
+                        height: 5,
+                      ),
                   itemCount: state is FilteredSucessfully
                       ? HomeScreenCubit.get(context).filterList.length
                       : HomeScreenCubit.get(context).dataList.length),

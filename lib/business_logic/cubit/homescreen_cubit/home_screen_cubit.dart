@@ -44,7 +44,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           );
         }
       }).toList();
-      print(dataList);
+
       emit(HomeScreenSucess());
     } catch (e) {
       print(e.toString());
@@ -58,21 +58,18 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     if (index == 1) {
       filterList = [...dataList];
 
-      print(filterList);
       emit(HomeScreenSucess());
     } else if (index == 2) {
       filterList = dataList
           .where((element) => element.toString().contains('NewReportContainer'))
           .toList();
 
-      print(filterList);
       emit(FilteredSucessfully());
     } else if (index == 3) {
       filterList = dataList
           .where((element) => element.toString().contains('NewsContainer'))
           .toList();
 
-      print(filterList);
       emit(FilteredSucessfully());
     } else {
       return;
@@ -165,8 +162,45 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     }
   }
 
+  Future<void> interactThank(String postKey) async {
+    emit(InteractedLoading());
+    DocumentSnapshot instance =
+        await FirebaseFirestore.instance.collection('posts').doc(postKey).get();
+    Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
+    try {
+      if (data['isThank'] == false) {
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .doc(postKey)
+            .update({
+          'newsThanks': data['newsThanks'] + 1,
+          'isThank': true,
+        });
+      } else if (data['isThank'] == true) {
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .doc(postKey)
+            .update({
+          'newsThanks': data['newsThanks'] - 1,
+          'isThank': false,
+        });
+      }
+
+      emit(InteractedSucessfully());
+    } catch (e) {
+      print(e.toString());
+      emit(InteractedError());
+    }
+  }
+
   void comment() {}
 
   var searchList = [];
   void search(String text) {}
+
+  void hidePost(String key, BuildContext context) {
+    dataList.removeWhere((element) => element.toString().contains(key));
+    Navigator.pop(context);
+    emit(OptionsSucessfully());
+  }
 }

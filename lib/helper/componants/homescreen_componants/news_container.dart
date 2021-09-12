@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:first_task/business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import 'package:first_task/model/news_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewsContainer extends StatelessWidget {
@@ -11,11 +14,8 @@ class NewsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+    return BlocProvider(
+      create: (context) => HomeScreenCubit(),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         child: Column(
@@ -83,13 +83,31 @@ class NewsContainer extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  '( ${newsModel.newsThanks} Thanks , ${newsModel.newsReplies} Replies )',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
+                StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('posts')
+                        .doc(newsID)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Text(
+                          '( ${newsModel.newsThanks} Thanks , ${newsModel.newsReplies} Replies )',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                        );
+                      }
+                      Map<String, dynamic> data =
+                          snapshot.data!.data() as Map<String, dynamic>;
+                      return Text(
+                        '(${data['newsThanks']} Thanks , ${data['newsReplies']} Replies )',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
+                      );
+                    }),
               ],
             ),
             SizedBox(
@@ -101,8 +119,21 @@ class NewsContainer extends StatelessWidget {
                 SizedBox(
                   width: 5,
                 ),
-                NewsReactButton(
-                    icon: FontAwesomeIcons.heart, text: 'Thank', fun: () {}),
+                BlocConsumer<HomeScreenCubit, HomeScreenState>(
+                  listener: (context, state) {},
+                  builder: (context, state) {
+                    return NewsReactButton(
+                        icon: FontAwesomeIcons.heart,
+                        text: 'Thank',
+                        fun: () => HomeScreenCubit.get(context).interactThank(
+                              key
+                                  .toString()
+                                  .replaceAll(RegExp('\[<\'>\]'), '')
+                                  .replaceAll(']', '')
+                                  .replaceAll('[', ''),
+                            ));
+                  },
+                ),
                 SizedBox(
                   width: 15,
                 ),
@@ -120,7 +151,7 @@ class NewsContainer extends StatelessWidget {
 class NewsReactButton extends StatelessWidget {
   final IconData icon;
   final String text;
-  final VoidCallback fun;
+  final VoidCallback? fun;
   const NewsReactButton({
     Key? key,
     required this.icon,
@@ -131,7 +162,7 @@ class NewsReactButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => fun,
+      onTap: () => fun!(),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
