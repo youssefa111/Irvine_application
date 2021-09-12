@@ -19,28 +19,32 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   List dataList = [];
 
   Future<void> getHomeData() async {
+    dataList = [];
     emit(HomeScreenLoading());
     try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection("posts").get();
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection("posts")
+          .orderBy('createdAt', descending: true)
+          .get();
       querySnapshot.docs.map((e) {
-        var index = dataList.indexOf(e);
         Map<String, dynamic> data = e.data() as Map<String, dynamic>;
         if (data['containerCategory'] == 0) {
           dataList.add(NewsContainer(
             newsModel: NewsModel.fromMap(data),
-            key: ObjectKey("key$index"),
+            newsID: e.id,
+            key: ValueKey(e.id),
           ));
         } else if (data['containerCategory'] == 1) {
           dataList.add(
             NewReportContainer(
               model: ReportModel.fromMap(data),
-              key: ObjectKey("key$index"),
+              reportID: e.id,
+              key: ValueKey(e.id),
             ),
           );
         }
       }).toList();
-
+      print(dataList);
       emit(HomeScreenSucess());
     } catch (e) {
       print(e.toString());
@@ -52,22 +56,20 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   void filterHome(int index) {
     if (index == 1) {
-      filterList = dataList;
+      filterList = [...dataList];
 
       print(filterList);
       emit(HomeScreenSucess());
     } else if (index == 2) {
       filterList = dataList
-          .where((element) =>
-              element.toString() == "ReportContainer" ||
-              element.toString() == "NewReportContainer")
+          .where((element) => element.toString().contains('NewReportContainer'))
           .toList();
 
       print(filterList);
       emit(FilteredSucessfully());
     } else if (index == 3) {
       filterList = dataList
-          .where((element) => element.toString() == "NewsContainer")
+          .where((element) => element.toString().contains('NewsContainer'))
           .toList();
 
       print(filterList);
@@ -81,32 +83,89 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   bool isDisagree = false;
   IconData agreedIcon = FontAwesomeIcons.thumbsUp;
   IconData disagreedIcon = FontAwesomeIcons.thumbsDown;
-  void interactAgree() {
-    isAgree = !isAgree;
-    agreedIcon =
-        isAgree ? FontAwesomeIcons.solidThumbsUp : FontAwesomeIcons.thumbsUp;
-    if (disagreedIcon == FontAwesomeIcons.solidThumbsDown) {
-      disagreedIcon = FontAwesomeIcons.thumbsDown;
-      isDisagree = false;
+  Future<void> interactAgree(String postKey) async {
+    emit(InteractedLoading());
+    DocumentSnapshot instance =
+        await FirebaseFirestore.instance.collection('posts').doc(postKey).get();
+    Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
+    try {
+      if (data['isLiked'] == false && data['isDisliked'] == false) {
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .doc(postKey)
+            .update({
+          'reportLikes': data['reportLikes'] + 1,
+          'isLiked': true,
+        });
+      } else if (data['isLiked'] == false && data['isDisliked'] == true) {
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .doc(postKey)
+            .update({
+          'reportLikes': data['reportLikes'] + 1,
+          'reportDislikes': data['reportDislikes'] - 1,
+          'isDisliked': false,
+          'isLiked': true,
+        });
+      } else if (data['isLiked'] == true) {
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .doc(postKey)
+            .update({
+          'reportLikes': data['reportLikes'] - 1,
+          'isLiked': false,
+        });
+      }
+
+      emit(InteractedSucessfully());
+    } catch (error) {
+      print(error.toString());
+      emit(InteractedError());
     }
-    emit(InteractedSucessfully());
   }
 
-  void interactDisagree() {
-    isDisagree = !isDisagree;
-    disagreedIcon = isDisagree
-        ? FontAwesomeIcons.solidThumbsDown
-        : FontAwesomeIcons.thumbsDown;
+  Future<void> interactDisagree(String postKey) async {
+    emit(InteractedLoading());
+    DocumentSnapshot instance =
+        await FirebaseFirestore.instance.collection('posts').doc(postKey).get();
+    Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
+    try {
+      if (data['isDisliked'] == false && data['isLiked'] == false) {
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .doc(postKey)
+            .update({
+          'reportDislikes': data['reportDislikes'] + 1,
+          'isDisliked': true,
+        });
+      } else if (data['isDisliked'] == false && data['isLiked'] == true) {
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .doc(postKey)
+            .update({
+          'reportDislikes': data['reportDislikes'] + 1,
+          'reportLikes': data['reportLikes'] - 1,
+          'isLiked': false,
+          'isDisliked': true,
+        });
+      } else if (data['isDisliked'] == true) {
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .doc(postKey)
+            .update({
+          'reportDislikes': data['reportDislikes'] - 1,
+          'isDisliked': false,
+        });
+      }
 
-    if (agreedIcon == FontAwesomeIcons.solidThumbsUp) {
-      agreedIcon = FontAwesomeIcons.thumbsUp;
-      isAgree = false;
+      emit(InteractedSucessfully());
+    } catch (e) {
+      print(e.toString());
+      emit(InteractedError());
     }
-    emit(InteractedSucessfully());
   }
 
   void comment() {}
-  void share() {}
 
   var searchList = [];
   void search(String text) {}

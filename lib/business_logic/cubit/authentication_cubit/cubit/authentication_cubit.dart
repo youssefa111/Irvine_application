@@ -73,4 +73,15 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       emit(SignupError());
     }
   }
+
+  void signout() {
+    emit(SignoutLoading());
+
+    FirebaseAuth.instance.signOut().then((value) {
+      emit(SignoutSucessfully());
+    }).catchError((error) {
+      print(error.toString());
+      emit(SignoutError());
+    });
+  }
 }

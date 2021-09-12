@@ -22,38 +22,38 @@ class HomeScreen extends StatelessWidget {
       ),
       drawer: HomeDrawer(),
       body: HomeBody(),
-      bottomSheet: Row(
-        children: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: 'Search for Information',
-                  isDense: true,
-                ),
-              ),
-            ),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-            onPressed: () {},
-            child: FittedBox(
-              child: Text(
-                'Find',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 15,
-          ),
-        ],
-      ),
+      // bottomSheet: Row(
+      //   children: <Widget>[
+      //     Expanded(
+      //       child: Padding(
+      //         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+      //         child: TextField(
+      //           decoration: InputDecoration(
+      //             labelText: 'Search for Information',
+      //             isDense: true,
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     TextButton(
+      //       style: TextButton.styleFrom(
+      //         backgroundColor: Theme.of(context).primaryColor,
+      //       ),
+      //       onPressed: () {},
+      //       child: FittedBox(
+      //         child: Text(
+      //           'Find',
+      //           style: TextStyle(
+      //             color: Colors.white,
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //     SizedBox(
+      //       width: 15,
+      //     ),
+      //   ],
+      // ),
     );
   }
 }
@@ -150,14 +150,17 @@ class ViewSection extends StatelessWidget {
         ),
         Expanded(child: BlocBuilder<HomeScreenCubit, HomeScreenState>(
           builder: (context, state) {
-            return ListView.separated(
-                itemBuilder: (context, index) => state is FilteredSucessfully
-                    ? HomeScreenCubit.get(context).filterList[index]
-                    : HomeScreenCubit.get(context).dataList[index],
-                separatorBuilder: (context, index) => SizedBox(),
-                itemCount: state is FilteredSucessfully
-                    ? HomeScreenCubit.get(context).filterList.length
-                    : HomeScreenCubit.get(context).dataList.length);
+            return RefreshIndicator(
+              onRefresh: () => HomeScreenCubit.get(context).getHomeData(),
+              child: ListView.separated(
+                  itemBuilder: (context, index) => state is FilteredSucessfully
+                      ? HomeScreenCubit.get(context).filterList[index]
+                      : HomeScreenCubit.get(context).dataList[index],
+                  separatorBuilder: (context, index) => SizedBox(),
+                  itemCount: state is FilteredSucessfully
+                      ? HomeScreenCubit.get(context).filterList.length
+                      : HomeScreenCubit.get(context).dataList.length),
+            );
           },
         )),
       ],

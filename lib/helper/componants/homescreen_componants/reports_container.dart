@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_task/model/report_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -9,140 +10,167 @@ import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 // ignore: must_be_immutable
 class NewReportContainer extends StatelessWidget {
   final ReportModel model;
+  final String reportID;
 
-  const NewReportContainer({Key? key, required this.model}) : super(key: key);
+  const NewReportContainer(
+      {Key? key, required this.model, required this.reportID})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  child: Center(
-                    child: Text(
-                      model.reporterLetter,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+    return BlocProvider(
+      create: (context) => HomeScreenCubit(),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    child: Center(
+                      child: Text(
+                        model.reporterLetter,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  model.reporterName,
-                ),
-                Spacer(),
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => OptionsDialog());
-                  },
-                  icon: Icon(Icons.more_horiz),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 10,
-                  height: 10,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    shape: BoxShape.circle,
+                  SizedBox(
+                    width: 5,
                   ),
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                FittedBox(
-                    child: Text(
-                  model.reportName,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                  Text(
+                    model.reporterName,
                   ),
-                )),
-                Spacer(),
-                Text(
-                  model.reportDate,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+                  Spacer(),
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) => OptionsDialog());
+                    },
+                    icon: Icon(Icons.more_horiz),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            model.reportImage != null
-                ? Wrap(
-                    runSpacing: 10,
-                    spacing: 2,
-                    children: model.reportImage!.map((e) {
-                      return Container(
-                        height: 70,
-                        width: e == model.reportImage!.last &&
-                                model.reportImage!.length == 3
-                            ? MediaQuery.of(context).size.width
-                            : MediaQuery.of(context).size.width / 2.2,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                              image: NetworkImage(e), fit: BoxFit.fill),
-                        ),
-                      );
-                    }).toList())
-                : SizedBox(
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 10,
                     height: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      shape: BoxShape.circle,
+                    ),
                   ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(model.reportContent),
-            SizedBox(
-              height: 5,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '( ${model.reportLikes} Agrees , ${model.reportDislikes} Disagrees , ${model.reportComments} Comments )',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[600],
+                  SizedBox(
+                    width: 5,
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Divider(
-              thickness: 1,
-            ),
-            InteractBar(),
-          ],
+                  FittedBox(
+                      child: Text(
+                    model.reportName,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )),
+                  Spacer(),
+                  Text(
+                    model.date,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              model.reportImage != null
+                  ? Wrap(
+                      runSpacing: 10,
+                      spacing: 2,
+                      children: model.reportImage!.map((e) {
+                        return Container(
+                          height: 70,
+                          width: e == model.reportImage!.last &&
+                                  model.reportImage!.length == 3
+                              ? MediaQuery.of(context).size.width
+                              : MediaQuery.of(context).size.width / 2.2,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: DecorationImage(
+                                image: NetworkImage(e), fit: BoxFit.fill),
+                          ),
+                        );
+                      }).toList())
+                  : SizedBox(
+                      height: 10,
+                    ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(model.reportContent),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  StreamBuilder<DocumentSnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('posts')
+                          .doc(reportID)
+                          .snapshots(),
+                      builder: (BuildContext context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return Text(
+                            '( ${model.reportLikes} Agrees , ${model.reportDislikes} Disagrees , ${model.reportComments} Comments )',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey[600],
+                            ),
+                          );
+                        }
+                        Map<String, dynamic> data =
+                            snapshot.data!.data() as Map<String, dynamic>;
+                        return Text(
+                          '( ${data['reportLikes']} Agrees , ${data['reportDislikes']} Disagrees , ${data['reportComments']} Comments )',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[600],
+                          ),
+                        );
+                      }),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Divider(
+                thickness: 1,
+              ),
+              InteractBar(
+                key: key,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -299,6 +327,9 @@ class _OptionsDialogState extends State<OptionsDialog> {
 }
 
 class InteractBar extends StatelessWidget {
+  const InteractBar({
+    Key? key,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
@@ -307,11 +338,23 @@ class InteractBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             InteractButton(
-                func: () => HomeScreenCubit.get(context).interactAgree(),
+                func: () => HomeScreenCubit.get(context).interactAgree(
+                      key
+                          .toString()
+                          .replaceAll(RegExp('\[<\'>\]'), '')
+                          .replaceAll(']', '')
+                          .replaceAll('[', ''),
+                    ),
                 icon: HomeScreenCubit.get(context).agreedIcon,
                 iconName: 'Agree'),
             InteractButton(
-                func: () => HomeScreenCubit.get(context).interactDisagree(),
+                func: () => HomeScreenCubit.get(context).interactDisagree(
+                      key
+                          .toString()
+                          .replaceAll(RegExp('\[<\'>\]'), '')
+                          .replaceAll(']', '')
+                          .replaceAll('[', ''),
+                    ),
                 icon: HomeScreenCubit.get(context).disagreedIcon,
                 iconName: 'Disagree'),
             InteractButton(icon: FontAwesomeIcons.comment, iconName: 'Comment'),

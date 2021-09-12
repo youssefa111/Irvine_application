@@ -15,4 +15,8 @@ class FilteredSucessfully extends HomeScreenState {}
 
 class InteractedSucessfully extends HomeScreenState {}
 
+class InteractedLoading extends HomeScreenState {}
+
+class InteractedError extends HomeScreenState {}
+
 class SearchSucessfully extends HomeScreenState {}

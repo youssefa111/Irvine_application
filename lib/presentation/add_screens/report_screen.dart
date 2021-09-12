@@ -22,12 +22,8 @@ class ReportScreen extends StatefulWidget {
 
 class _ReportScreenState extends State<ReportScreen> {
   var reportTextEditing = TextEditingController();
-<<<<<<< Updated upstream
   var formKey = GlobalKey<FormState>();
   var userInfo;
-=======
-  // var userInfo;
->>>>>>> Stashed changes
   var userID;
 
   @override
@@ -73,22 +69,25 @@ class _ReportScreenState extends State<ReportScreen> {
                     !formKey.currentState!.validate()
                         // ignore: unnecessary_statements
                         ? null
-<<<<<<< Updated upstream
                         : AddCubit.get(context)
                             .addReport(
                               reportModel: ReportModel(
-                                  reportDate: formattedDate,
-                                  reporterName: userInfo['name'],
-                                  reportContent: reportTextEditing.text,
-                                  reportName: widget.reportCategoryName,
-                                  reportLocation: userInfo['neighborhood'],
-                                  reporterLetter:
-                                      userInfo['name'].toString()[0],
-                                  reportComments: 0,
-                                  reportDislikes: 0,
-                                  reportLikes: 0,
-                                  userID: userID,
-                                  containerCategory: 1),
+                                date: formattedDate,
+                                reporterName: userInfo['name'],
+                                reportContent: reportTextEditing.text,
+                                reportName: widget.reportCategoryName,
+                                reportLocation: userInfo['neighborhood'],
+                                reporterLetter: userInfo['name'].toString()[0],
+                                reportComments: 0,
+                                reportDislikes: 0,
+                                reportLikes: 0,
+                                userID: userID,
+                                containerCategory: 1,
+                                timestamp: Timestamp.now(),
+                                isComment: false,
+                                isDisliked: false,
+                                isLiked: false,
+                              ),
                             )
                             .then(
                               (value) =>
@@ -107,43 +106,6 @@ class _ReportScreenState extends State<ReportScreen> {
                               Navigator.pop(context);
                             });
                           });
-=======
-                        // : AddCubit.get(context)
-                        //     .addReport(
-                        //       reportModel: ReportModel(
-                        //           reportDate: formattedDate,
-                        //           reporterName: userInfo['name'],
-                        //           reportContent: reportTextEditing.text,
-                        //           reportImage: AddCubit.get(context).imagesList,
-                        //           reportName: widget.reportCategoryName,
-                        //           reportLocation: userInfo['neighborhood'],
-                        //           reporterLetter:
-                        //               userInfo['name'].toString()[0],
-                        //           reportComments: 0,
-                        //           reportDislikes: 0,
-                        //           reportLikes: 0,
-                        //           userID: userID,
-                        //           containerCategory: 1),
-                        //     )
-                        //     .then(
-                        //       (value) =>
-                        //           ScaffoldMessenger.of(context).showSnackBar(
-                        //         SnackBar(
-                        //           duration: Duration(seconds: 2),
-                        //           content:
-                        //               Text('The Report is added Sucessfully!'),
-                        //           backgroundColor: Colors.green,
-                        //         ),
-                        //       ),
-                        //     )
-                        //     .then((value) {
-                        //     Future.delayed(Duration(seconds: 3)).then((value) {
-                        //       Navigator.pop(context);
-                        //       Navigator.pop(context);
-                        //     });
-                        //   });
-                        : print('ss');
->>>>>>> Stashed changes
                   },
                   child: Text(
                     'Submit',
@@ -152,7 +114,6 @@ class _ReportScreenState extends State<ReportScreen> {
                 ),
               ],
             ),
-<<<<<<< Updated upstream
             body: (state) is AddReportLoading
                 ? Center(
                     child: CircularProgressIndicator(),
@@ -344,178 +305,6 @@ class _ReportScreenState extends State<ReportScreen> {
                         return Center(child: Text('Something went wrong'));
                       }
                     }),
-=======
-            body:
-                // FutureBuilder<Object>(
-                //     future: FirebaseFirestore.instance
-                //         .collection('users')
-                //         .doc(userID)
-                //         .get(),
-                //     builder: (context, snapshot) {
-                //       if (snapshot.connectionState == ConnectionState.waiting) {
-                //         return Center(
-                //           child: CircularProgressIndicator(),
-                //         );
-                //       } else if (snapshot.connectionState == ConnectionState.done) {
-                //         Map<String, dynamic> data =
-                //             snapshot.data as Map<String, dynamic>;
-                //         userInfo = data;
-                //         return
-                Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Center(
-                      child: Text(
-                        'For Emergencies Call 911',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Icon(widget.iconData),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Text(
-                          widget.reportCategoryName,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Text(
-                      'Description',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextField(
-                      controller: reportTextEditing,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                          hintText: 'Enter Issue Description...',
-                          border: OutlineInputBorder()),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Incident Location',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text('data[' 'neighborhood' ']'),
-                        Spacer(),
-                        IconButton(
-                          iconSize: 45,
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.arrow_right,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    BlocBuilder<AddCubit, AddState>(builder: (context, state) {
-                      var bloc = AddCubit.get(context);
-                      if (bloc.imagesList.isEmpty) {
-                        return InkWell(
-                          onTap: bloc.getImageFromGallery,
-                          child: Container(
-                              child: Center(
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  FaIcon(
-                                    FontAwesomeIcons.camera,
-                                    color: Colors.grey[400],
-                                  ),
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Text('Add photos and vidoes'),
-                                ]),
-                          )),
-                        );
-                      } else {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Wrap(
-                              spacing: 10,
-                              runSpacing: 10,
-                              children: bloc.imagesList.map((e) {
-                                if (e == bloc.imagesList.last &&
-                                    bloc.imagesList.length < 3) {
-                                  return Wrap(
-                                    children: <Widget>[
-                                      ImageContainer(
-                                        e: e,
-                                        index: bloc.imagesList.indexOf(e),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        height: 100,
-                                        width: 100,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(),
-                                        ),
-                                        child: Center(
-                                          child: IconButton(
-                                            onPressed: bloc.getImageFromGallery,
-                                            icon: Icon(Icons.add),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }
-                                return ImageContainer(
-                                  e: e,
-                                  index: bloc.imagesList.indexOf(e),
-                                );
-                              }).toList(),
-                            ),
-                          ],
-                        );
-                      }
-                    })
-                  ],
-                ),
-              ),
-            ),
-            // } else {
-            //   return Center(child: Text('Something went wrong'));
-            // }
-            // }
->>>>>>> Stashed changes
           );
         },
       ),

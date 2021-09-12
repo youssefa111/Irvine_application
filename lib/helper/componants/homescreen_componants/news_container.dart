@@ -4,8 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NewsContainer extends StatelessWidget {
   final NewsModel newsModel;
+  final String newsID;
 
-  const NewsContainer({Key? key, required this.newsModel}) : super(key: key);
+  const NewsContainer({Key? key, required this.newsModel, required this.newsID})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,7 @@ class NewsContainer extends StatelessWidget {
                 //   ),
                 Spacer(),
                 Text(
-                  newsModel.newsDate,
+                  newsModel.date,
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
               ],

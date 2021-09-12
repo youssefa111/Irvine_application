@@ -68,10 +68,13 @@ class _NewsScreenState extends State<NewsScreen> {
                                 reporterName: userInfo['name'],
                                 newsTitle: titleTextEditing.text,
                                 newsContent: newsTextEditing.text,
-                                newsDate: formattedDate,
+                                date: formattedDate,
                                 iconLetter: userInfo['name'].toString()[0],
                                 newsThanks: 0,
                                 newsReplies: 0,
+                                timestamp: Timestamp.now(),
+                                isReply: false,
+                                isThank: false,
                               ),
                             )
                             .then(

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ReportModel {
   String reporterName;
   String reportContent;
@@ -7,12 +9,16 @@ class ReportModel {
   String reportName;
   String reportLocation;
   String reporterLetter;
-  String reportDate;
+  String date;
   int reportLikes;
   int reportDislikes;
   int reportComments;
   int containerCategory = 1;
   String userID;
+  Timestamp timestamp;
+  bool isLiked;
+  bool isDisliked;
+  bool isComment;
 
   ReportModel({
     required this.reporterName,
@@ -21,12 +27,16 @@ class ReportModel {
     required this.reportName,
     required this.reportLocation,
     required this.reporterLetter,
-    required this.reportDate,
+    required this.date,
     required this.reportLikes,
     required this.reportDislikes,
     required this.reportComments,
     required this.containerCategory,
     required this.userID,
+    required this.timestamp,
+    required this.isLiked,
+    required this.isDisliked,
+    required this.isComment,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,12 +47,16 @@ class ReportModel {
       'reportImage': reportImage,
       'reportLocation': reportLocation,
       'reporterLetter': reporterLetter,
-      'reportDate': reportDate,
+      'Date': date,
       'reportLikes': reportLikes,
       'reportDislikes': reportDislikes,
       'reportComments': reportComments,
       'containerCategory': containerCategory,
       'userID': userID,
+      'createdAt': timestamp,
+      'isLiked': isLiked,
+      'isComment': isComment,
+      'isDisliked': isDisliked,
     };
   }
 
@@ -53,13 +67,17 @@ class ReportModel {
       reportName: map['reportName'],
       reportLocation: map['reportLocation'],
       reporterLetter: map['reporterLetter'],
-      reportDate: map['reportDate'],
+      date: map['Date'],
       reportLikes: map['reportLikes'],
       reportDislikes: map['reportDislikes'],
       reportComments: map['reportComments'],
       containerCategory: map['containerCategory'],
       userID: map['userID'],
       reportImage: map['mediaList'],
+      timestamp: map['createdAt'],
+      isLiked: map['isLiked'],
+      isDisliked: map['isDisliked'],
+      isComment: map['isComment'],
     );
   }
 

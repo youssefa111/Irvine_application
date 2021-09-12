@@ -1,23 +1,31 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class NewsModel {
   final String reporterName;
   final String newsTitle;
   final String newsContent;
-  final String newsDate;
+  final String date;
   final String iconLetter;
   final int newsThanks;
   final int newsReplies;
+  final bool isThank;
+  final bool isReply;
   int containerCategory = 0;
+  Timestamp timestamp;
   NewsModel({
     required this.reporterName,
     required this.newsTitle,
     required this.newsContent,
-    required this.newsDate,
+    required this.date,
     required this.iconLetter,
     required this.newsThanks,
     required this.newsReplies,
     this.containerCategory = 0,
+    required this.timestamp,
+    required this.isThank,
+    required this.isReply,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,24 +33,31 @@ class NewsModel {
       'reporterName': reporterName,
       'newsTitle': newsTitle,
       'newsContent': newsContent,
-      'newsDate': newsDate,
+      'Date': date,
       'iconLetter': iconLetter,
       'newsThanks': newsThanks,
       'newsReplies': newsReplies,
       'containerCategory': containerCategory,
+      'createdAt': timestamp,
+      'isThank': isThank,
+      'isReply': isReply,
     };
   }
 
   factory NewsModel.fromMap(Map<String, dynamic> map) {
     return NewsModel(
-        reporterName: map['reporterName'],
-        newsTitle: map['newsTitle'],
-        newsContent: map['newsContent'],
-        newsDate: map['newsDate'],
-        iconLetter: map['iconLetter'],
-        newsThanks: map['newsThanks'],
-        newsReplies: map['newsReplies'],
-        containerCategory: map['containerCategory']);
+      reporterName: map['reporterName'],
+      newsTitle: map['newsTitle'],
+      newsContent: map['newsContent'],
+      date: map['Date'],
+      iconLetter: map['iconLetter'],
+      newsThanks: map['newsThanks'],
+      newsReplies: map['newsReplies'],
+      containerCategory: map['containerCategory'],
+      timestamp: map['createdAt'],
+      isReply: map['isReply'],
+      isThank: map['isThank'],
+    );
   }
 
   String toJson() => json.encode(toMap());
