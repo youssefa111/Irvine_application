@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:first_task/model/report_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
+import '../../../model/report_model.dart';
 
 // ignore: must_be_immutable
 class NewReportContainer extends StatelessWidget {

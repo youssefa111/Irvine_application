@@ -1,10 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first_task/business_logic/cubit/authentication_cubit/cubit/authentication_cubit.dart';
-import 'package:first_task/helper/constants/constants.dart';
-import 'package:first_task/presentation/profile_screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../business_logic/cubit/authentication_cubit/cubit/authentication_cubit.dart';
+import '../../../presentation/profile_screens/profile_screen.dart';
+import '../../constants/constants.dart';
 
 class HomeDrawer extends StatelessWidget {
   @override

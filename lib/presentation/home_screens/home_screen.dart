@@ -1,15 +1,16 @@
 import 'dart:ui';
 
-import 'package:first_task/business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
-import 'package:first_task/helper/componants/homescreen_componants/drawer.dart';
-import 'package:first_task/helper/componants/homescreen_componants/filter_dialog.dart';
-import 'package:first_task/helper/componants/homescreen_componants/top_container.dart';
-import 'package:first_task/helper/constants/constants.dart';
-import 'package:first_task/presentation/add_screens/news_screen.dart';
-import 'package:first_task/presentation/add_screens/report_category_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
+import '../../helper/componants/homescreen_componants/drawer.dart';
+import '../../helper/componants/homescreen_componants/filter_dialog.dart';
+import '../../helper/componants/homescreen_componants/top_container.dart';
+import '../../helper/constants/constants.dart';
+import '../add_screens/news_screen.dart';
+import '../add_screens/report_category_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);

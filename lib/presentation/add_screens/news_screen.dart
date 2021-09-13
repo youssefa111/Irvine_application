@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first_task/business_logic/cubit/add_process_cubit/cubit/add_cubit.dart';
-import 'package:first_task/helper/constants/constants.dart';
-import 'package:first_task/model/news_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+
+import '../../business_logic/cubit/add_process_cubit/cubit/add_cubit.dart';
+import '../../helper/constants/constants.dart';
+import '../../model/news_model.dart';
 
 class NewsScreen extends StatefulWidget {
   @override

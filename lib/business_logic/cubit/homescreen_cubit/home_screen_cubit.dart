@@ -1,15 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:first_task/helper/componants/homescreen_componants/news_container.dart';
-import 'package:first_task/helper/componants/homescreen_componants/reports_container.dart';
-import 'package:first_task/model/news_model.dart';
-import 'package:first_task/model/report_model.dart';
-import 'package:first_task/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meta/meta.dart';
+
+import '../../../helper/componants/homescreen_componants/news_container.dart';
+import '../../../helper/componants/homescreen_componants/reports_container.dart';
+import '../../../model/news_model.dart';
+import '../../../model/report_model.dart';
+import '../../../model/user_model.dart';
 
 part 'home_screen_state.dart';
 

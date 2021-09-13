@@ -1,10 +1,10 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:first_task/business_logic/cubit/authentication_cubit/cubit/authentication_cubit.dart';
-import 'package:first_task/helper/constants/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../business_logic/cubit/authentication_cubit/cubit/authentication_cubit.dart';
+import '../../helper/constants/constants.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
