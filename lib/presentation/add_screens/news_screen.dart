@@ -16,6 +16,7 @@ class NewsScreen extends StatefulWidget {
 class _NewsScreenState extends State<NewsScreen> {
   var newsTextEditing = TextEditingController();
   var titleTextEditing = TextEditingController();
+  var scrollController = ScrollController();
   var userInfo;
   var userID;
   var formKey = GlobalKey<FormState>();
@@ -30,6 +31,7 @@ class _NewsScreenState extends State<NewsScreen> {
   void dispose() {
     newsTextEditing.dispose();
     titleTextEditing.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -169,18 +171,26 @@ class _NewsScreenState extends State<NewsScreen> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                TextFormField(
-                                  controller: newsTextEditing,
-                                  maxLines: 5,
-                                  maxLength: 200,
-                                  decoration: InputDecoration(
-                                      hintText: 'Enter News Description...',
-                                      border: OutlineInputBorder()),
-                                  validator: (String? valid) {
-                                    if (valid!.isEmpty) {
-                                      return 'Please Enter Description for thew news post!';
-                                    }
-                                  },
+                                Scrollbar(
+                                  thickness: 10,
+                                  controller: scrollController,
+                                  child: TextFormField(
+                                    scrollController: scrollController,
+                                    scrollPhysics: ScrollPhysics(
+                                        parent:
+                                            AlwaysScrollableScrollPhysics()),
+                                    controller: newsTextEditing,
+                                    maxLines: 5,
+                                    maxLength: 200,
+                                    decoration: InputDecoration(
+                                        hintText: 'Enter News Description...',
+                                        border: OutlineInputBorder()),
+                                    validator: (String? valid) {
+                                      if (valid!.isEmpty) {
+                                        return 'Please Enter Description for thew news post!';
+                                      }
+                                    },
+                                  ),
                                 ),
                               ]),
                         ),

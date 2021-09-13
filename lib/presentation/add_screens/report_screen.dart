@@ -23,6 +23,7 @@ class ReportScreen extends StatefulWidget {
 
 class _ReportScreenState extends State<ReportScreen> {
   var reportTextEditing = TextEditingController();
+  var scrollController = ScrollController();
   var formKey = GlobalKey<FormState>();
   var userInfo;
   var userID;
@@ -36,6 +37,7 @@ class _ReportScreenState extends State<ReportScreen> {
   @override
   void dispose() {
     reportTextEditing.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -188,17 +190,27 @@ class _ReportScreenState extends State<ReportScreen> {
                                   SizedBox(
                                     height: 10,
                                   ),
-                                  TextFormField(
-                                    validator: (String? valid) {
-                                      if (valid!.isEmpty) {
-                                        return 'Please Enter Description for thew report post!';
-                                      }
-                                    },
-                                    controller: reportTextEditing,
-                                    maxLines: 5,
-                                    decoration: InputDecoration(
-                                        hintText: 'Enter Issue Description...',
-                                        border: OutlineInputBorder()),
+                                  Scrollbar(
+                                    thickness: 10,
+                                    controller: scrollController,
+                                    child: TextFormField(
+                                      scrollController: scrollController,
+                                      scrollPhysics: ScrollPhysics(
+                                          parent:
+                                              AlwaysScrollableScrollPhysics()),
+                                      validator: (String? valid) {
+                                        if (valid!.isEmpty) {
+                                          return 'Please Enter Description for thew report post!';
+                                        }
+                                      },
+                                      keyboardType: TextInputType.multiline,
+                                      controller: reportTextEditing,
+                                      maxLines: 5,
+                                      decoration: InputDecoration(
+                                          hintText:
+                                              'Enter Issue Description...',
+                                          border: OutlineInputBorder()),
+                                    ),
                                   ),
                                   SizedBox(
                                     height: 10,
