@@ -1,3 +1,4 @@
+import 'package:first_task/helper/constants/constants.dart';
 import 'package:first_task/presentation/add_screens/report_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,9 +10,17 @@ class ReportCategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: linearGradient,
+          ),
+        ),
         elevation: 0.0,
         centerTitle: true,
-        title: Text('Report Location'),
+        title: Text(
+          'Report issue',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class UserModel {
-  final String userID;
+  late String userID;
   final String address;
   final String name;
   final String email;
@@ -9,7 +9,6 @@ class UserModel {
   final String neighborhood;
   final int phone;
   UserModel({
-    required this.userID,
     required this.address,
     required this.name,
     required this.email,
@@ -32,7 +31,6 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      userID: map['userID'],
       address: map['address'],
       name: map['name'],
       email: map['email'],

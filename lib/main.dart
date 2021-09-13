@@ -42,7 +42,18 @@ class MyApp extends StatelessWidget {
         // builder: DevicePreview.appBuilder, // Add the builder here
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: HexColor("#0D8AE3"),
+          appBarTheme: AppBarTheme(
+            foregroundColor: Colors.white,
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+            ),
+            color: Colors.white,
+            centerTitle: true,
+            iconTheme: IconThemeData(
+              color: Colors.white,
+            ),
+          ),
+          primaryColor: HexColor("#4BB9BC"),
         ),
         home: Container(
           decoration: BoxDecoration(

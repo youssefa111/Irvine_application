@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_task/business_logic/cubit/add_process_cubit/cubit/add_cubit.dart';
+import 'package:first_task/helper/constants/constants.dart';
 import 'package:first_task/model/news_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,8 +43,12 @@ class _NewsScreenState extends State<NewsScreen> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: linearGradient,
+                ),
+              ),
               elevation: 0.0,
-              backgroundColor: Theme.of(context).primaryColor,
               leading: IconButton(
                 icon: Icon(
                   Icons.arrow_back,
@@ -55,7 +60,10 @@ class _NewsScreenState extends State<NewsScreen> {
                 },
               ),
               centerTitle: true,
-              title: Text('Add a New'),
+              title: Text(
+                'Add News',
+                style: TextStyle(color: Colors.white),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -135,6 +143,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                   height: 15,
                                 ),
                                 TextFormField(
+                                  maxLength: 100,
                                   controller: titleTextEditing,
                                   decoration: InputDecoration(
                                     hintText: 'Enter News Title...',
@@ -162,6 +171,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                 TextFormField(
                                   controller: newsTextEditing,
                                   maxLines: 5,
+                                  maxLength: 200,
                                   decoration: InputDecoration(
                                       hintText: 'Enter News Description...',
                                       border: OutlineInputBorder()),

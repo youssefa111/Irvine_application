@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:first_task/business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import 'package:first_task/helper/componants/homescreen_componants/drawer.dart';
 import 'package:first_task/helper/componants/homescreen_componants/filter_dialog.dart';
 import 'package:first_task/helper/componants/homescreen_componants/top_container.dart';
+import 'package:first_task/helper/constants/constants.dart';
 import 'package:first_task/presentation/add_screens/news_screen.dart';
 import 'package:first_task/presentation/add_screens/report_category_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +18,21 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        iconTheme: IconThemeData(color: Colors.white),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: linearGradient,
+          ),
+        ),
         elevation: 0.0,
         centerTitle: true,
-        title: const Text('Irvine'),
+        title: const Text(
+          'Irvine',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       drawer: HomeDrawer(),
       body: HomeBody(),
@@ -145,25 +159,27 @@ class ViewSection extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
-          height: 10,
-        ),
         Expanded(child: BlocBuilder<HomeScreenCubit, HomeScreenState>(
           builder: (context, state) {
             return RefreshIndicator(
               onRefresh: () => HomeScreenCubit.get(context).getHomeData(),
-              child: ListView.separated(
-                  itemBuilder: (context, index) => state is FilteredSucessfully
-                      ? HomeScreenCubit.get(context).filterList[index]
-                      : HomeScreenCubit.get(context).dataList[index],
-                  separatorBuilder: (context, index) => Container(
-                        color: Colors.grey[350],
-                        width: double.infinity,
-                        height: 5,
-                      ),
-                  itemCount: state is FilteredSucessfully
-                      ? HomeScreenCubit.get(context).filterList.length
-                      : HomeScreenCubit.get(context).dataList.length),
+              child: state is HomeScreenLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView.separated(
+                      itemBuilder: (context, index) =>
+                          state is FilteredSucessfully
+                              ? HomeScreenCubit.get(context).filterList[index]
+                              : HomeScreenCubit.get(context).dataList[index],
+                      separatorBuilder: (context, index) => Container(
+                            color: Colors.grey[350],
+                            width: double.infinity,
+                            height: 5,
+                          ),
+                      itemCount: state is FilteredSucessfully
+                          ? HomeScreenCubit.get(context).filterList.length
+                          : HomeScreenCubit.get(context).dataList.length),
             );
           },
         )),

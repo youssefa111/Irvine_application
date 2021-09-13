@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_task/business_logic/cubit/add_process_cubit/cubit/add_cubit.dart';
+import 'package:first_task/helper/constants/constants.dart';
 import 'package:first_task/model/report_model.dart';
 
 import 'package:flutter/material.dart';
@@ -49,7 +50,11 @@ class _ReportScreenState extends State<ReportScreen> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: Theme.of(context).primaryColor,
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: linearGradient,
+                ),
+              ),
               elevation: 0.0,
               leading: IconButton(
                 icon: Icon(
@@ -62,7 +67,10 @@ class _ReportScreenState extends State<ReportScreen> {
                 },
               ),
               centerTitle: true,
-              title: Text('Report an issue'),
+              title: Text(
+                'Report an issue',
+                style: TextStyle(color: Colors.white),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {

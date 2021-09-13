@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_task/helper/componants/homescreen_componants/news_container.dart';
 import 'package:first_task/helper/componants/homescreen_componants/reports_container.dart';
 import 'package:first_task/model/news_model.dart';
 import 'package:first_task/model/report_model.dart';
+import 'package:first_task/model/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,6 +18,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   static HomeScreenCubit get(BuildContext context) => BlocProvider.of(context);
 
+  //==================== HomeData Function ==========================
   List dataList = [];
 
   Future<void> getHomeData() async {
@@ -52,6 +55,21 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     }
   }
 
+  //====================== UserData Function ====================================
+
+  late UserModel userData;
+
+  Future<UserModel> userDataLoad() async {
+    var result = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+    return userData = UserModel.fromMap(result.data() as Map<String, dynamic>);
+  }
+  //================================================================
+
+  //==================== Filter Function ==========================
+
   var filterList = [];
 
   void filterHome(int index) {
@@ -76,10 +94,15 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     }
   }
 
-  bool isAgree = false;
-  bool isDisagree = false;
+  //================================================================
+
+  //==================== Interact Functions ==========================
+
   IconData agreedIcon = FontAwesomeIcons.thumbsUp;
   IconData disagreedIcon = FontAwesomeIcons.thumbsDown;
+
+  //==================== Agree Function ==========================
+
   Future<void> interactAgree(String postKey) async {
     emit(InteractedLoading());
     DocumentSnapshot instance =
@@ -120,6 +143,8 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       emit(InteractedError());
     }
   }
+
+  //==================== Disagree Function ==========================
 
   Future<void> interactDisagree(String postKey) async {
     emit(InteractedLoading());
@@ -162,6 +187,8 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     }
   }
 
+  //==================== Thank Function ==========================
+
   Future<void> interactThank(String postKey) async {
     emit(InteractedLoading());
     DocumentSnapshot instance =
@@ -193,14 +220,24 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     }
   }
 
+  //==================== Comment Function ==========================
+
   void comment() {}
 
+  //================================================================
+
+  //==================== Search Function ==========================
   var searchList = [];
   void search(String text) {}
 
+  //================================================================
+
+  //==================== Options Function ==========================
   void hidePost(String key, BuildContext context) {
     dataList.removeWhere((element) => element.toString().contains(key));
     Navigator.pop(context);
     emit(OptionsSucessfully());
   }
+
+  //================================================================
 }

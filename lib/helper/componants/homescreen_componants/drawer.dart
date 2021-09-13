@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:first_task/business_logic/cubit/authentication_cubit/cubit/authentication_cubit.dart';
 import 'package:first_task/helper/constants/constants.dart';
 import 'package:first_task/presentation/profile_screens/profile_screen.dart';
@@ -5,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeDrawer extends StatelessWidget {
-  const HomeDrawer({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -52,7 +52,8 @@ class HomeDrawer extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        'Youssef Hussein',
+                        FirebaseAuth.instance.currentUser!.displayName
+                            .toString(),
                         style: Theme.of(context).textTheme.headline5!.copyWith(
                             color: Colors.white, fontWeight: FontWeight.w600),
                       ),
@@ -62,7 +63,7 @@ class HomeDrawer extends StatelessWidget {
                     ),
                     Center(
                         child: Text(
-                      'youssefhussien97@gmail.com',
+                      FirebaseAuth.instance.currentUser!.email.toString(),
                       style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: Colors.white,
                           ),
