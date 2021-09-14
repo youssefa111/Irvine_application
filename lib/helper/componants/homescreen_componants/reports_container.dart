@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:like_button/like_button.dart';
 
 import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import '../../../model/report_model.dart';
@@ -162,9 +163,173 @@ class NewReportContainer extends StatelessWidget {
             Divider(
               thickness: 2,
             ),
-            InteractBar(
-              key: key,
-            ),
+            // InteractBar(
+            //   key: key,
+            // ),
+            StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('posts')
+                    .doc(reportID)
+                    .snapshots(),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            LikeButton(
+                              likeBuilder: (bool isLiked) {
+                                return Icon(
+                                  isLiked
+                                      ? FontAwesomeIcons.solidThumbsUp
+                                      : FontAwesomeIcons.thumbsUp,
+                                  size: 18,
+                                );
+                              },
+                              onTap: (bool x) {
+                                return HomeScreenCubit.get(context)
+                                    .interactAgree(
+                                  key
+                                      .toString()
+                                      .replaceAll(RegExp('\[<\'>\]'), '')
+                                      .replaceAll(']', '')
+                                      .replaceAll('[', ''),
+                                );
+                              },
+                              isLiked: model.isLiked,
+                            ),
+                            Text('Agree'),
+                          ],
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            LikeButton(
+                              likeBuilder: (bool isLiked) {
+                                return Icon(
+                                  isLiked
+                                      ? FontAwesomeIcons.solidThumbsDown
+                                      : FontAwesomeIcons.thumbsDown,
+                                  size: 18,
+                                );
+                              },
+                              onTap: (bool x) {
+                                return HomeScreenCubit.get(context)
+                                    .interactDisagree(
+                                  key
+                                      .toString()
+                                      .replaceAll(RegExp('\[<\'>\]'), '')
+                                      .replaceAll(']', '')
+                                      .replaceAll('[', ''),
+                                );
+                              },
+                              isLiked: model.isLiked,
+                            ),
+                            Text('Disagree'),
+                          ],
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Container(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                FaIcon(
+                                  FontAwesomeIcons.comment,
+                                  size: 18,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text('Comment')
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                  Map<String, dynamic> data =
+                      snapshot.data!.data() as Map<String, dynamic>;
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          LikeButton(
+                            likeBuilder: (bool isLiked) {
+                              return Icon(
+                                data['isLiked']
+                                    ? FontAwesomeIcons.solidThumbsUp
+                                    : FontAwesomeIcons.thumbsUp,
+                                size: 18,
+                              );
+                            },
+                            onTap: (bool x) {
+                              return HomeScreenCubit.get(context).interactAgree(
+                                key
+                                    .toString()
+                                    .replaceAll(RegExp('\[<\'>\]'), '')
+                                    .replaceAll(']', '')
+                                    .replaceAll('[', ''),
+                              );
+                            },
+                            isLiked: data['isLiked'],
+                          ),
+                          Text('Agree'),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          LikeButton(
+                            likeBuilder: (bool isLiked) {
+                              return Icon(
+                                data['isDisliked']
+                                    ? FontAwesomeIcons.solidThumbsDown
+                                    : FontAwesomeIcons.thumbsDown,
+                                size: 18,
+                              );
+                            },
+                            onTap: (bool x) {
+                              return HomeScreenCubit.get(context)
+                                  .interactDisagree(
+                                key
+                                    .toString()
+                                    .replaceAll(RegExp('\[<\'>\]'), '')
+                                    .replaceAll(']', '')
+                                    .replaceAll('[', ''),
+                              );
+                            },
+                            isLiked: data['isDisliked'],
+                          ),
+                          Text('Disagree'),
+                        ],
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              FaIcon(
+                                FontAwesomeIcons.comment,
+                                size: 18,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text('Comment')
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                }),
           ],
         ),
       ),

@@ -104,11 +104,14 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   //==================== Agree Function ==========================
 
-  Future<void> interactAgree(String postKey) async {
+  bool isLiked = false;
+
+  Future<bool?> interactAgree(String postKey) async {
     emit(InteractedLoading());
     DocumentSnapshot instance =
         await FirebaseFirestore.instance.collection('posts').doc(postKey).get();
     Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
+    isLiked = data['isLiked'];
     try {
       if (data['isLiked'] == false && data['isDisliked'] == false) {
         await FirebaseFirestore.instance
@@ -139,19 +142,24 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       }
 
       emit(InteractedSucessfully());
+      return !isLiked;
     } catch (error) {
       print(error.toString());
       emit(InteractedError());
+      return isLiked;
     }
   }
 
   //==================== Disagree Function ==========================
 
-  Future<void> interactDisagree(String postKey) async {
+  bool isDisliked = false;
+
+  Future<bool> interactDisagree(String postKey) async {
     emit(InteractedLoading());
     DocumentSnapshot instance =
         await FirebaseFirestore.instance.collection('posts').doc(postKey).get();
     Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
+    isDisliked = data['isDisliked'];
     try {
       if (data['isDisliked'] == false && data['isLiked'] == false) {
         await FirebaseFirestore.instance
@@ -182,19 +190,24 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       }
 
       emit(InteractedSucessfully());
+      return !isDisliked;
     } catch (e) {
       print(e.toString());
       emit(InteractedError());
+      return isDisliked;
     }
   }
 
   //==================== Thank Function ==========================
 
-  Future<void> interactThank(String postKey) async {
+  bool isThanked = false;
+
+  Future<bool> interactThank(String postKey) async {
     emit(InteractedLoading());
     DocumentSnapshot instance =
         await FirebaseFirestore.instance.collection('posts').doc(postKey).get();
     Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
+    isThanked = data['isThank'];
     try {
       if (data['isThank'] == false) {
         await FirebaseFirestore.instance
@@ -215,9 +228,11 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       }
 
       emit(InteractedSucessfully());
+      return !isThanked;
     } catch (e) {
       print(e.toString());
       emit(InteractedError());
+      return isThanked;
     }
   }
 
