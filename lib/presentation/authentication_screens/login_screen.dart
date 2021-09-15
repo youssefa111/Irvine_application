@@ -90,8 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             function: () {
                               if (formKey.currentState!.validate()) {
                                 AuthenticationCubit.get(context).loginFun(
-                                    email: emailController.text,
-                                    password: passwordController.text,
+                                    email: emailController.text.trim(),
+                                    password: passwordController.text.trim(),
                                     context: context);
                               }
                             },

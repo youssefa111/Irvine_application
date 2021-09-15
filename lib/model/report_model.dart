@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ReportModel {
@@ -16,9 +14,10 @@ class ReportModel {
   int containerCategory = 1;
   String userID;
   Timestamp timestamp;
-  bool isLiked;
-  bool isDisliked;
+  // bool isLiked;
+  // bool isDisliked;
   bool isComment;
+  dynamic reactItem;
 
   ReportModel({
     required this.reporterName,
@@ -34,9 +33,10 @@ class ReportModel {
     required this.containerCategory,
     required this.userID,
     required this.timestamp,
-    required this.isLiked,
-    required this.isDisliked,
+    // required this.isLiked,
+    // required this.isDisliked,
     required this.isComment,
+    this.reactItem,
   });
 
   Map<String, dynamic> toMap() {
@@ -54,9 +54,9 @@ class ReportModel {
       'containerCategory': containerCategory,
       'userID': userID,
       'createdAt': timestamp,
-      'isLiked': isLiked,
+      // 'isLiked': isLiked,
       'isComment': isComment,
-      'isDisliked': isDisliked,
+      // 'isDisliked': isDisliked,
     };
   }
 
@@ -75,14 +75,10 @@ class ReportModel {
       userID: map['userID'],
       reportImage: map['mediaList'],
       timestamp: map['createdAt'],
-      isLiked: map['isLiked'],
-      isDisliked: map['isDisliked'],
+      // isLiked: map['isLiked'],
+      // isDisliked: map['isDisliked'],
       isComment: map['isComment'],
+      reactItem: map['reactItem'],
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory ReportModel.fromJson(String source) =>
-      ReportModel.fromMap(json.decode(source));
 }

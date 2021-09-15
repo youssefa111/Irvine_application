@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,7 @@ class NewReportContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userID = FirebaseAuth.instance.currentUser!.uid;
     return BlocProvider(
       create: (context) => HomeScreenCubit(),
       child: Container(
@@ -166,7 +168,7 @@ class NewReportContainer extends StatelessWidget {
             // InteractBar(
             //   key: key,
             // ),
-            StreamBuilder<DocumentSnapshot>(
+            StreamBuilder<DocumentSnapshot?>(
                 stream: FirebaseFirestore.instance
                     .collection('posts')
                     .doc(reportID)
@@ -198,7 +200,12 @@ class NewReportContainer extends StatelessWidget {
                                       .replaceAll('[', ''),
                                 );
                               },
-                              isLiked: model.isLiked,
+                              // isLiked: model.isLiked,
+                              isLiked: model.reactItem == null ||
+                                      (model.reactItem != null &&
+                                          !model.reactItem.containsKey(userID))
+                                  ? false
+                                  : model.reactItem[userID]['isLiked'],
                             ),
                             Text('Agree'),
                           ],
@@ -225,7 +232,12 @@ class NewReportContainer extends StatelessWidget {
                                       .replaceAll('[', ''),
                                 );
                               },
-                              isLiked: model.isLiked,
+                              // isLiked: model.isLiked,
+                              isLiked: model.reactItem == null ||
+                                      (model.reactItem != null &&
+                                          !model.reactItem.containsKey(userID))
+                                  ? false
+                                  : model.reactItem[userID]['isDisliked'],
                             ),
                             Text('Disagree'),
                           ],
@@ -253,6 +265,7 @@ class NewReportContainer extends StatelessWidget {
                   }
                   Map<String, dynamic> data =
                       snapshot.data!.data() as Map<String, dynamic>;
+
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
@@ -262,9 +275,18 @@ class NewReportContainer extends StatelessWidget {
                           LikeButton(
                             likeBuilder: (bool isLiked) {
                               return Icon(
-                                data['isLiked']
+                                // data['isLiked']
+
+                                data['reactItem'] != null &&
+                                        data['reactItem'].containsKey(userID) &&
+                                        data['reactItem'][userID]['isLiked']
                                     ? FontAwesomeIcons.solidThumbsUp
                                     : FontAwesomeIcons.thumbsUp,
+                                color: data['reactItem'] != null &&
+                                        data['reactItem'].containsKey(userID) &&
+                                        data['reactItem'][userID]['isLiked']
+                                    ? Colors.green
+                                    : Colors.black,
                                 size: 18,
                               );
                             },
@@ -277,7 +299,11 @@ class NewReportContainer extends StatelessWidget {
                                     .replaceAll('[', ''),
                               );
                             },
-                            isLiked: data['isLiked'],
+                            // isLiked: data['isLiked']
+                            isLiked: data['reactItem'] != null &&
+                                    data['reactItem'].containsKey(userID)
+                                ? data['reactItem'][userID]['isLiked']
+                                : false,
                           ),
                           Text('Agree'),
                         ],
@@ -288,9 +314,17 @@ class NewReportContainer extends StatelessWidget {
                           LikeButton(
                             likeBuilder: (bool isLiked) {
                               return Icon(
-                                data['isDisliked']
+                                // data['isDisliked']
+                                data['reactItem'] != null &&
+                                        data['reactItem'].containsKey(userID) &&
+                                        data['reactItem'][userID]['isDisliked']
                                     ? FontAwesomeIcons.solidThumbsDown
                                     : FontAwesomeIcons.thumbsDown,
+                                color: data['reactItem'] != null &&
+                                        data['reactItem'].containsKey(userID) &&
+                                        data['reactItem'][userID]['isDisliked']
+                                    ? Colors.red[900]
+                                    : Colors.black,
                                 size: 18,
                               );
                             },
@@ -304,7 +338,11 @@ class NewReportContainer extends StatelessWidget {
                                     .replaceAll('[', ''),
                               );
                             },
-                            isLiked: data['isDisliked'],
+                            // isLiked: data['isDisliked'],
+                            isLiked: data['reactItem'] != null &&
+                                    data['reactItem'].containsKey(userID)
+                                ? data['reactItem'][userID]['isDisliked']
+                                : false,
                           ),
                           Text('Disagree'),
                         ],
