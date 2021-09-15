@@ -10,7 +10,7 @@ import '../../helper/constants/constants.dart';
 import '../../model/report_model.dart';
 
 class ReportScreen extends StatefulWidget {
-  final IconData iconData;
+  final String iconData;
   final String reportCategoryName;
 
   ReportScreen(
@@ -154,6 +154,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                     child: Text(
                                       'For Emergencies Call 911',
                                       style: TextStyle(
+                                          color: Colors.red,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -163,7 +164,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                   ),
                                   Row(
                                     children: <Widget>[
-                                      Icon(widget.iconData),
+                                      Image.asset(widget.iconData),
                                       SizedBox(
                                         width: 20,
                                       ),

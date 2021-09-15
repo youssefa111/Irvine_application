@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../../helper/constants/constants.dart';
 import 'report_screen.dart';
 
@@ -9,6 +7,21 @@ class ReportCategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List categoryList = [
+      ReportCategory(icon: 'assets/2.png', iconName: 'Other'),
+      ReportCategory(icon: 'assets/6.png', iconName: 'Traffic Signal Issues'),
+      ReportCategory(
+          icon: 'assets/10.png', iconName: 'COVID Qeustions / Concerns'),
+      ReportCategory(icon: 'assets/5.png', iconName: 'Facility Maintenance'),
+      ReportCategory(icon: 'assets/4.png', iconName: 'Street Light Repair'),
+      ReportCategory(
+          icon: 'assets/7.png', iconName: 'Graffitti At City Facility'),
+      ReportCategory(icon: 'assets/3.png', iconName: 'Inefficient Water Use'),
+      ReportCategory(icon: 'assets/1.png', iconName: 'App Feedback'),
+      ReportCategory(icon: 'assets/8.png', iconName: 'Repost A Code Violation'),
+      ReportCategory(icon: 'assets/9.png', iconName: 'Damaged Street Sign'),
+      ReportCategory(icon: 'assets/9.png', iconName: 'Test Name'),
+    ];
     return Scaffold(
       appBar: AppBar(
         flexibleSpace: Container(
@@ -19,7 +32,7 @@ class ReportCategoryScreen extends StatelessWidget {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          'Report issue',
+          'Choose Category',
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -28,108 +41,12 @@ class ReportCategoryScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Expanded(
-              child: ListView(
-                children: [
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Other',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Traffic Signal Issues',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'COVID Questions / Concerns',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Facility Maintenance',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Street Light Repair',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Graffiti At City Facility',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Inefficient wATE uSER',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'App Feedback',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Repost A Code Violation',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Damaged Street Sign',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Test Name',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Other',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Other',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ReportCategory(
-                    icon: FontAwesomeIcons.thumbsUp,
-                    iconName: 'Other',
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
+              child: ListView.separated(
+                  itemBuilder: (context, index) => categoryList[index],
+                  separatorBuilder: (Context, index) => SizedBox(
+                        height: 20,
+                      ),
+                  itemCount: categoryList.length),
             ),
             Row(
               children: <Widget>[
@@ -167,7 +84,7 @@ class ReportCategoryScreen extends StatelessWidget {
 }
 
 class ReportCategory extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String iconName;
 
   const ReportCategory({
@@ -189,18 +106,17 @@ class ReportCategory extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            FaIcon(
+            Image.asset(
               icon,
-              size: 30,
+              height: 50,
+              width: 50,
             ),
             SizedBox(
               width: 20,
             ),
             Text(
               iconName,
-              style: TextStyle(
-                fontSize: 18,
-              ),
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             )
           ],
         ),

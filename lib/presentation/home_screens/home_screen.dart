@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
         elevation: 0.0,
         centerTitle: true,
         title: const Text(
-          'Irvine',
+          'Home',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -37,38 +37,6 @@ class HomeScreen extends StatelessWidget {
       ),
       drawer: HomeDrawer(),
       body: HomeBody(),
-      // bottomSheet: Row(
-      //   children: <Widget>[
-      //     Expanded(
-      //       child: Padding(
-      //         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
-      //         child: TextField(
-      //           decoration: InputDecoration(
-      //             labelText: 'Search for Information',
-      //             isDense: true,
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //     TextButton(
-      //       style: TextButton.styleFrom(
-      //         backgroundColor: Theme.of(context).primaryColor,
-      //       ),
-      //       onPressed: () {},
-      //       child: FittedBox(
-      //         child: Text(
-      //           'Find',
-      //           style: TextStyle(
-      //             color: Colors.white,
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //     SizedBox(
-      //       width: 15,
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
@@ -82,40 +50,6 @@ class HomeBody extends StatelessWidget {
   }
 }
 
-// class TopSection extends StatelessWidget {
-//   const TopSection({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     var screenWidth = MediaQuery.of(context).size.width;
-//     var screenHeight = MediaQuery.of(context).size.height;
-//     return Container(
-//       height: screenHeight * .15,
-//       width: screenWidth,
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: <Widget>[
-//           TopContainer(
-//               height: screenHeight * .2,
-//               width: screenWidth / 4,
-//               imagePath: 'assets/forbidden.jpg',
-//               title: 'Report Hate Crime'),
-//           TopContainer(
-//               height: screenHeight * .2,
-//               width: screenWidth / 4,
-//               imagePath: 'assets/map1.jpg',
-//               title: 'Report an issue'),
-//           TopContainer(
-//               height: screenHeight * .2,
-//               width: screenWidth / 4,
-//               imagePath: 'assets/map2.jpg',
-//               title: 'Neighborhood Activity'),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class ViewSection extends StatelessWidget {
   const ViewSection({Key? key}) : super(key: key);
 
@@ -124,19 +58,22 @@ class ViewSection extends StatelessWidget {
     var screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: <Widget>[
+        SizedBox(
+          height: 5,
+        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             TopContainer(
-              height: 100,
-              width: screenWidth / 3,
-              imagePath: 'assets/forbidden.jpg',
+              height: 110,
+              width: screenWidth / 3.5,
+              imagePath: 'assets/hate.jpeg',
               title: 'Report an issue',
               widget: ReportCategoryScreen(),
             ),
             TopContainer(
               height: 100,
-              width: screenWidth / 3,
+              width: screenWidth / 3.5,
               imagePath: 'assets/map2.jpg',
               title: 'Add news',
               widget: NewsScreen(),

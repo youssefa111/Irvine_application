@@ -14,52 +14,47 @@ class HomeDrawer extends StatelessWidget {
       child: Drawer(
           child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey[200],
+          color: Colors.grey[300],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height * .32,
+              height: MediaQuery.of(context).size.height * .33,
               decoration: BoxDecoration(
                 gradient: linearGradient,
               ),
               child: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     BackButton(
                       color: Colors.white,
                     ),
                     Center(
-                      child: Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Image.asset(
-                          'assets/grifatti.jpg',
-                          fit: BoxFit.fill,
-                        ),
+                      child: Image.asset(
+                        'assets/employee.png',
+                        height: 100,
+                        width: 100,
+                        color: Colors.white,
+                        fit: BoxFit.cover,
+                        filterQuality: FilterQuality.high,
                       ),
                     ),
+                    // SizedBox(
+                    //   height: 10,
+                    // ),
+                    // Center(
+                    //   child: Text(
+                    //     FirebaseAuth.instance.currentUser!.displayName
+                    //         .toString(),
+                    //     style: Theme.of(context).textTheme.headline5!.copyWith(
+                    //         color: Colors.white, fontWeight: FontWeight.w600),
+                    //   ),
+                    // ),
                     SizedBox(
-                      height: 10,
-                    ),
-                    Center(
-                      child: Text(
-                        FirebaseAuth.instance.currentUser!.displayName
-                            .toString(),
-                        style: Theme.of(context).textTheme.headline5!.copyWith(
-                            color: Colors.white, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
+                      height: 15,
                     ),
                     Center(
                         child: Text(
@@ -75,8 +70,11 @@ class HomeDrawer extends StatelessWidget {
             drawerSetting(
                 title: 'Profile Settings',
                 context: context,
-                voidCallback: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProfileScreen()))),
+                voidCallback: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ProfileScreen()));
+                }),
             drawerSetting(title: 'Feed Preferences', context: context),
             drawerSetting(title: 'My Activites', context: context),
             drawerSetting(title: 'Notifcations', context: context),

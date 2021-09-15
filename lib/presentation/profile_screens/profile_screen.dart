@@ -46,17 +46,13 @@ class ProfileScreen extends StatelessWidget {
                             color: Colors.white,
                           ),
                           Center(
-                            child: Container(
-                              width: 70,
+                            child: Image.asset(
+                              'assets/employee.png',
                               height: 70,
-                              decoration: BoxDecoration(
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Image.asset(
-                                'assets/grifatti.jpg',
-                                fit: BoxFit.fill,
-                              ),
+                              width: 70,
+                              color: Colors.white,
+                              fit: BoxFit.cover,
+                              filterQuality: FilterQuality.high,
                             ),
                           ),
                           SizedBox(

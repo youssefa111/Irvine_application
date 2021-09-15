@@ -22,18 +22,19 @@ class TopContainer extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => widget)),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
         child: Container(
           width: width,
           height: height,
+          color: Colors.grey[200],
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Image.asset(
                 imagePath,
                 width: width,
-                height: height * .7,
+                height: height * .6,
                 fit: BoxFit.fill,
               ),
               SizedBox(
