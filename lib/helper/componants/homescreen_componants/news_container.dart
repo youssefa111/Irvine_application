@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:like_button/like_button.dart';
 
 import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import '../../../model/news_model.dart';
@@ -15,6 +17,7 @@ class NewsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var userID = FirebaseAuth.instance.currentUser!.uid;
     return BlocProvider(
       create: (context) => HomeScreenCubit(),
       child: Container(
@@ -114,34 +117,128 @@ class NewsContainer extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SizedBox(
-                  width: 5,
-                ),
-                BlocConsumer<HomeScreenCubit, HomeScreenState>(
-                  listener: (context, state) {},
-                  builder: (context, state) {
-                    return NewsReactButton(
-                        icon: FontAwesomeIcons.heart,
-                        text: 'Thank',
-                        fun: () => HomeScreenCubit.get(context).interactThank(
-                              key
-                                  .toString()
-                                  .replaceAll(RegExp('\[<\'>\]'), '')
-                                  .replaceAll(']', '')
-                                  .replaceAll('[', ''),
-                            ));
-                  },
-                ),
-                SizedBox(
-                  width: 15,
-                ),
-                NewsReactButton(
-                    icon: FontAwesomeIcons.reply, text: 'Reply', fun: () {}),
-              ],
-            ),
+            StreamBuilder<DocumentSnapshot?>(
+                stream: FirebaseFirestore.instance
+                    .collection('posts')
+                    .doc(newsID)
+                    .snapshots(),
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            LikeButton(
+                              likeBuilder: (bool isLiked) {
+                                return Icon(
+                                  isLiked
+                                      ? FontAwesomeIcons.solidHeart
+                                      : FontAwesomeIcons.heart,
+                                  size: 18,
+                                );
+                              },
+                              onTap: (bool x) {
+                                return HomeScreenCubit.get(context)
+                                    .interactThank(
+                                  key
+                                      .toString()
+                                      .replaceAll(RegExp('\[<\'>\]'), '')
+                                      .replaceAll(']', '')
+                                      .replaceAll('[', ''),
+                                );
+                              },
+                              isLiked: newsModel.loveItem == null ||
+                                      (newsModel.loveItem != null &&
+                                          !newsModel.loveItem
+                                              .containsKey(userID))
+                                  ? false
+                                  : newsModel.loveItem[userID]['isThanked'],
+                            ),
+                            Text('Thank'),
+                          ],
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              FaIcon(
+                                FontAwesomeIcons.reply,
+                                size: 18,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text('Reply'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  Map<String, dynamic> data =
+                      snapshot.data!.data() as Map<String, dynamic>;
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          LikeButton(
+                            likeBuilder: (bool islIked) {
+                              return Icon(
+                                data['loveItem'] != null &&
+                                        data['loveItem'].containsKey(userID) &&
+                                        data['loveItem'][userID]['isThanked']
+                                    ? FontAwesomeIcons.solidHeart
+                                    : FontAwesomeIcons.heart,
+                                color: data['loveItem'] != null &&
+                                        data['loveItem'].containsKey(userID) &&
+                                        data['loveItem'][userID]['isThanked']
+                                    ? Colors.pinkAccent[400]
+                                    : Colors.black,
+                                size: 18,
+                              );
+                            },
+                            onTap: (bool x) {
+                              return HomeScreenCubit.get(context).interactThank(
+                                key
+                                    .toString()
+                                    .replaceAll(RegExp('\[<\'>\]'), '')
+                                    .replaceAll(']', '')
+                                    .replaceAll('[', ''),
+                              );
+                            },
+                            isLiked: data['loveItem'] != null &&
+                                    data['loveItem'].containsKey(userID)
+                                ? data['loveItem'][userID]['isThanked']
+                                : false,
+                          ),
+                          Text('Thank'),
+                        ],
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            FaIcon(
+                              FontAwesomeIcons.reply,
+                              size: 18,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text('Reply'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }),
           ],
         ),
       ),

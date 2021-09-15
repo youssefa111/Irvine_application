@@ -95,8 +95,6 @@ class _ReportScreenState extends State<ReportScreen> {
                                 containerCategory: 1,
                                 timestamp: Timestamp.now(),
                                 isComment: false,
-                                // isDisliked: false,
-                                // isLiked: false,
                               ),
                             )
                             .then(

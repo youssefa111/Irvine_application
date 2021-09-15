@@ -85,7 +85,6 @@ class _NewsScreenState extends State<NewsScreen> {
                                 newsReplies: 0,
                                 timestamp: Timestamp.now(),
                                 isReply: false,
-                                isThank: false,
                               ),
                             )
                             .then(

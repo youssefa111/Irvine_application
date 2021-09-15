@@ -163,25 +163,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     var isDisliked = reactItem != null && reactItem.containsKey(userID)
         ? reactItem[userID]['isDisliked']
         : null;
-
-    // isLiked = data['isLiked'];
     bool isLikedFlag = isLiked != null ? isLiked : false;
     try {
       if (reactItem == null || isLiked == null || isDisliked == null) {
-        // await FirebaseFirestore.instance
-        //     .collection('posts')
-        //     .doc(postKey)
-        //     .update(
-        //   {
-        //     'reportLikes': data['reportLikes'] + 1,
-        //     'reactItem': {
-        //       userID: {
-        //         'isLiked': true,
-        //         'isDisliked': false,
-        //       },
-        //     }
-        //   },
-        // );
         await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
           {
             'reportLikes': data['reportLikes'] + 1,
@@ -196,18 +180,18 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         );
       } else {
         if (isLiked == false && isDisliked == false) {
-          await FirebaseFirestore.instance
-              .collection('posts')
-              .doc(postKey)
-              .update({
-            'reportLikes': data['reportLikes'] + 1,
-            'reactItem': {
-              userID: {
-                'isLiked': true,
-                'isDisliked': false,
-              },
-            }
-          });
+          await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+            {
+              'reportLikes': data['reportLikes'] + 1,
+              'reactItem': {
+                userID: {
+                  'isLiked': true,
+                  'isDisliked': false,
+                },
+              }
+            },
+            SetOptions(merge: true),
+          );
         } else if (isLiked == false && isDisliked == true) {
           await FirebaseFirestore.instance
               .collection('posts')
@@ -223,18 +207,18 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
             }
           });
         } else if (isLiked == true) {
-          await FirebaseFirestore.instance
-              .collection('posts')
-              .doc(postKey)
-              .update({
-            'reportLikes': data['reportLikes'] - 1,
-            'reactItem': {
-              userID: {
-                'isLiked': false,
-                'isDisliked': false,
-              },
-            }
-          });
+          await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+            {
+              'reportLikes': data['reportLikes'] - 1,
+              'reactItem': {
+                userID: {
+                  'isLiked': false,
+                  'isDisliked': false,
+                },
+              }
+            },
+            SetOptions(merge: true),
+          );
         }
       }
 
@@ -249,7 +233,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   //==================== Disagree Function ==========================
 
-  bool isDisliked = false;
+  bool isDislikedFlag = false;
 
   Future<bool> interactDisagree(String postKey) async {
     emit(InteractedLoading());
@@ -258,8 +242,12 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         await FirebaseFirestore.instance.collection('posts').doc(postKey).get();
     Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
     var reactItem = data['reactItem'];
-    var isLiked = reactItem != null ? reactItem[userID]['isLiked'] : null;
-    var isDisliked = reactItem != null ? reactItem[userID]['isDisliked'] : null;
+    var isLiked = reactItem != null && reactItem.containsKey(userID)
+        ? reactItem[userID]['isLiked']
+        : null;
+    var isDisliked = reactItem != null && reactItem.containsKey(userID)
+        ? reactItem[userID]['isDisliked']
+        : null;
     bool isDislikedFlag = isDisliked != null ? isDisliked : false;
     try {
       if (reactItem == null || isLiked == null || isDisliked == null) {
@@ -277,45 +265,45 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         );
       } else {
         if (isLiked == false && isDisliked == false) {
-          await FirebaseFirestore.instance
-              .collection('posts')
-              .doc(postKey)
-              .update({
-            'reportDislikes': data['reportDislikes'] + 1,
-            'reactItem': {
-              userID: {
-                'isDisliked': true,
-                'isLiked': false,
-              },
-            }
-          });
+          await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+            {
+              'reportDislikes': data['reportDislikes'] + 1,
+              'reactItem': {
+                userID: {
+                  'isDisliked': true,
+                  'isLiked': false,
+                },
+              }
+            },
+            SetOptions(merge: true),
+          );
         } else if (isDisliked == false && isLiked == true) {
-          await FirebaseFirestore.instance
-              .collection('posts')
-              .doc(postKey)
-              .update({
-            'reportDislikes': data['reportDislikes'] + 1,
-            'reportLikes': data['reportLikes'] - 1,
-            'reactItem': {
-              userID: {
-                'isDisliked': true,
-                'isLiked': false,
-              },
-            }
-          });
+          await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+            {
+              'reportDislikes': data['reportDislikes'] + 1,
+              'reportLikes': data['reportLikes'] - 1,
+              'reactItem': {
+                userID: {
+                  'isDisliked': true,
+                  'isLiked': false,
+                },
+              }
+            },
+            SetOptions(merge: true),
+          );
         } else if (isDisliked == true) {
-          await FirebaseFirestore.instance
-              .collection('posts')
-              .doc(postKey)
-              .update({
-            'reportDislikes': data['reportDislikes'] - 1,
-            'reactItem': {
-              userID: {
-                'isLiked': false,
-                'isDisliked': false,
-              },
-            }
-          });
+          await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+            {
+              'reportDislikes': data['reportDislikes'] - 1,
+              'reactItem': {
+                userID: {
+                  'isLiked': false,
+                  'isDisliked': false,
+                },
+              }
+            },
+            SetOptions(merge: true),
+          );
         }
       }
 
@@ -330,39 +318,67 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   //==================== Thank Function ==========================
 
-  bool isThanked = false;
+  bool isThankedFlag = false;
 
   Future<bool> interactThank(String postKey) async {
     emit(InteractedLoading());
+    var userID = FirebaseAuth.instance.currentUser!.uid;
     DocumentSnapshot instance =
         await FirebaseFirestore.instance.collection('posts').doc(postKey).get();
     Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
-    isThanked = data['isThank'];
+    var loveItem = data['loveItem'];
+    var isThanked = loveItem != null && loveItem.containsKey(userID)
+        ? loveItem[userID]['isThanked']
+        : null;
+    bool isThankedFlag = isThanked != null ? isThanked : false;
+
     try {
-      if (data['isThank'] == false) {
-        await FirebaseFirestore.instance
-            .collection('posts')
-            .doc(postKey)
-            .update({
-          'newsThanks': data['newsThanks'] + 1,
-          'isThank': true,
-        });
-      } else if (data['isThank'] == true) {
-        await FirebaseFirestore.instance
-            .collection('posts')
-            .doc(postKey)
-            .update({
-          'newsThanks': data['newsThanks'] - 1,
-          'isThank': false,
-        });
+      if (loveItem == null || isThanked == null) {
+        await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+          {
+            'newsThanks': data['newsThanks'] + 1,
+            'loveItem': {
+              userID: {
+                'isThanked': true,
+              }
+            }
+          },
+          SetOptions(merge: true),
+        );
+      } else {
+        if (isThanked == false) {
+          await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+            {
+              'newsThanks': data['newsThanks'] + 1,
+              'loveItem': {
+                userID: {
+                  'isThanked': true,
+                }
+              }
+            },
+            SetOptions(merge: true),
+          );
+        } else if (isThanked == true) {
+          await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+            {
+              'newsThanks': data['newsThanks'] - 1,
+              'loveItem': {
+                userID: {
+                  'isThanked': false,
+                }
+              }
+            },
+            SetOptions(merge: true),
+          );
+        }
       }
 
       emit(InteractedSucessfully());
-      return !isThanked;
+      return !isThankedFlag;
     } catch (e) {
       print(e.toString());
       emit(InteractedError());
-      return isThanked;
+      return isThankedFlag;
     }
   }
 

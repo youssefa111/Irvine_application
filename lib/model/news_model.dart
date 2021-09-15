@@ -10,7 +10,7 @@ class NewsModel {
   final String iconLetter;
   final int newsThanks;
   final int newsReplies;
-  final bool isThank;
+  dynamic loveItem;
   final bool isReply;
   int containerCategory = 0;
   Timestamp timestamp;
@@ -24,8 +24,8 @@ class NewsModel {
     required this.newsReplies,
     this.containerCategory = 0,
     required this.timestamp,
-    required this.isThank,
     required this.isReply,
+    this.loveItem,
   });
 
   Map<String, dynamic> toMap() {
@@ -39,7 +39,6 @@ class NewsModel {
       'newsReplies': newsReplies,
       'containerCategory': containerCategory,
       'createdAt': timestamp,
-      'isThank': isThank,
       'isReply': isReply,
     };
   }
@@ -56,7 +55,7 @@ class NewsModel {
       containerCategory: map['containerCategory'],
       timestamp: map['createdAt'],
       isReply: map['isReply'],
-      isThank: map['isThank'],
+      loveItem: map['loveItem'],
     );
   }
 
