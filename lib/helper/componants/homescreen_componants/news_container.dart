@@ -115,7 +115,10 @@ class NewsContainer extends StatelessWidget {
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 5,
+            ),
+            Divider(
+              thickness: 2,
             ),
             StreamBuilder<DocumentSnapshot?>(
                 stream: FirebaseFirestore.instance
@@ -184,41 +187,53 @@ class NewsContainer extends StatelessWidget {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          LikeButton(
-                            likeBuilder: (bool islIked) {
-                              return Icon(
-                                data['loveItem'] != null &&
-                                        data['loveItem'].containsKey(userID) &&
-                                        data['loveItem'][userID]['isThanked']
-                                    ? FontAwesomeIcons.solidHeart
-                                    : FontAwesomeIcons.heart,
-                                color: data['loveItem'] != null &&
-                                        data['loveItem'].containsKey(userID) &&
-                                        data['loveItem'][userID]['isThanked']
-                                    ? Colors.pinkAccent[400]
-                                    : Colors.black,
-                                size: 18,
-                              );
-                            },
-                            onTap: (bool x) {
-                              return HomeScreenCubit.get(context).interactThank(
-                                key
-                                    .toString()
-                                    .replaceAll(RegExp('\[<\'>\]'), '')
-                                    .replaceAll(']', '')
-                                    .replaceAll('[', ''),
-                              );
-                            },
-                            isLiked: data['loveItem'] != null &&
-                                    data['loveItem'].containsKey(userID)
-                                ? data['loveItem'][userID]['isThanked']
-                                : false,
-                          ),
-                          Text('Thank'),
-                        ],
+                      InkWell(
+                        onTap: () => HomeScreenCubit.get(context).interactThank(
+                          key
+                              .toString()
+                              .replaceAll(RegExp('\[<\'>\]'), '')
+                              .replaceAll(']', '')
+                              .replaceAll('[', ''),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            LikeButton(
+                              likeBuilder: (bool islIked) {
+                                return Icon(
+                                  data['loveItem'] != null &&
+                                          data['loveItem']
+                                              .containsKey(userID) &&
+                                          data['loveItem'][userID]['isThanked']
+                                      ? FontAwesomeIcons.solidHeart
+                                      : FontAwesomeIcons.heart,
+                                  color: data['loveItem'] != null &&
+                                          data['loveItem']
+                                              .containsKey(userID) &&
+                                          data['loveItem'][userID]['isThanked']
+                                      ? Colors.pinkAccent[400]
+                                      : Colors.black,
+                                  size: 18,
+                                );
+                              },
+                              onTap: (bool x) {
+                                return HomeScreenCubit.get(context)
+                                    .interactThank(
+                                  key
+                                      .toString()
+                                      .replaceAll(RegExp('\[<\'>\]'), '')
+                                      .replaceAll(']', '')
+                                      .replaceAll('[', ''),
+                                );
+                              },
+                              isLiked: data['loveItem'] != null &&
+                                      data['loveItem'].containsKey(userID)
+                                  ? data['loveItem'][userID]['isThanked']
+                                  : false,
+                            ),
+                            Text('Thank'),
+                          ],
+                        ),
                       ),
                       InkWell(
                         onTap: () {},

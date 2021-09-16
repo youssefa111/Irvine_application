@@ -25,6 +25,22 @@ class InteractedLoading extends HomeScreenState {}
 
 class InteractedError extends HomeScreenState {}
 
+//==================== Comment States =========================================
+
+class CommentSucessfully extends HomeScreenState {}
+
+class CommentLoading extends HomeScreenState {}
+
+class CommentError extends HomeScreenState {}
+
+//==================== CommentList States =========================================
+
+class CommentListSucessfully extends HomeScreenState {}
+
+class CommentListLoading extends HomeScreenState {}
+
+class CommentListError extends HomeScreenState {}
+
 //==================== Search States =========================================
 
 class SearchSucessfully extends HomeScreenState {}

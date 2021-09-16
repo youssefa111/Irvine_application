@@ -16,6 +16,7 @@ class ReportModel {
   Timestamp timestamp;
   bool isComment;
   dynamic reactItem;
+  dynamic commentList;
 
   ReportModel({
     required this.reporterName,
@@ -33,6 +34,7 @@ class ReportModel {
     required this.timestamp,
     required this.isComment,
     this.reactItem,
+    this.commentList,
   });
 
   Map<String, dynamic> toMap() {
@@ -56,21 +58,21 @@ class ReportModel {
 
   factory ReportModel.fromMap(Map<String, dynamic> map) {
     return ReportModel(
-      reporterName: map['reporterName'],
-      reportContent: map['reportContent'],
-      reportName: map['reportName'],
-      reportLocation: map['reportLocation'],
-      reporterLetter: map['reporterLetter'],
-      date: map['Date'],
-      reportLikes: map['reportLikes'],
-      reportDislikes: map['reportDislikes'],
-      reportComments: map['reportComments'],
-      containerCategory: map['containerCategory'],
-      userID: map['userID'],
-      reportImage: map['mediaList'],
-      timestamp: map['createdAt'],
-      isComment: map['isComment'],
-      reactItem: map['reactItem'],
-    );
+        reporterName: map['reporterName'],
+        reportContent: map['reportContent'],
+        reportName: map['reportName'],
+        reportLocation: map['reportLocation'],
+        reporterLetter: map['reporterLetter'],
+        date: map['Date'],
+        reportLikes: map['reportLikes'],
+        reportDislikes: map['reportDislikes'],
+        reportComments: map['reportComments'],
+        containerCategory: map['containerCategory'],
+        userID: map['userID'],
+        reportImage: map['mediaList'],
+        timestamp: map['createdAt'],
+        isComment: map['isComment'],
+        reactItem: map['reactItem'],
+        commentList: map['commenList']);
   }
 }

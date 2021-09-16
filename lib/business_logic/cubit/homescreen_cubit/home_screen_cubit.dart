@@ -3,8 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:meta/meta.dart';
 
 import '../../../helper/componants/homescreen_componants/news_container.dart';
 import '../../../helper/componants/homescreen_componants/reports_container.dart';
@@ -95,60 +93,8 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     }
   }
 
-  //================================================================
-
-  //==================== Interact Functions ==========================
-
-  IconData agreedIcon = FontAwesomeIcons.thumbsUp;
-  IconData disagreedIcon = FontAwesomeIcons.thumbsDown;
-
-  //==================== Agree Function ==========================
-
-  // Future<bool?> interactAgree(String postKey) async {
-  //   emit(InteractedLoading());
-  //   DocumentSnapshot instance =
-  //       await FirebaseFirestore.instance.collection('posts').doc(postKey).get();
-  //   Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
-  //   // isLiked = data['isLiked'];
-  //   try {
-  //     if (data['isLiked'] == false && data['isDisliked'] == false) {
-  //       await FirebaseFirestore.instance
-  //           .collection('posts')
-  //           .doc(postKey)
-  //           .update({
-  //         'reportLikes': data['reportLikes'] + 1,
-  //         'isLiked': true,
-  //       });
-  //     } else if (data['isLiked'] == false && data['isDisliked'] == true) {
-  //       await FirebaseFirestore.instance
-  //           .collection('posts')
-  //           .doc(postKey)
-  //           .update({
-  //         'reportLikes': data['reportLikes'] + 1,
-  //         'reportDislikes': data['reportDislikes'] - 1,
-  //         'isDisliked': false,
-  //         'isLiked': true,
-  //       });
-  //     } else if (data['isLiked'] == true) {
-  //       await FirebaseFirestore.instance
-  //           .collection('posts')
-  //           .doc(postKey)
-  //           .update({
-  //         'reportLikes': data['reportLikes'] - 1,
-  //         'isLiked': false,
-  //       });
-  //     }
-
-  //     emit(InteractedSucessfully());
-  //     return !isLiked;
-  //   } catch (error) {
-  //     print(error.toString());
-  //     emit(InteractedError());
-  //     return isLiked;
-  //   }
-  // }
-
   //=================================================================
+
   bool isLikedFlag = false;
   Future<bool?> interactAgree(String postKey) async {
     emit(InteractedLoading());
@@ -236,6 +182,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   bool isDislikedFlag = false;
 
   Future<bool> interactDisagree(String postKey) async {
+    print(postKey);
     emit(InteractedLoading());
     var userID = FirebaseAuth.instance.currentUser!.uid;
     DocumentSnapshot instance =
@@ -384,7 +331,57 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   //==================== Comment Function ==========================
 
-  void comment() {}
+  Future<void> comment(String postKey, String comment) async {
+    emit(CommentLoading());
+    try {
+      var userID = FirebaseAuth.instance.currentUser!.uid;
+      var userInstance = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userID)
+          .get();
+      Map<String, dynamic> userData =
+          userInstance.data() as Map<String, dynamic>;
+      DocumentSnapshot instance = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postKey)
+          .get();
+      Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
+      var commentList = data['commentList'];
+      if (commentList == null) {
+        await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+          {
+            'commentList': {
+              Timestamp.now().toString(): {
+                userData['name']: comment,
+              },
+            },
+          },
+          SetOptions(merge: true),
+        );
+      } else {
+        await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+          {
+            'commentList': {
+              Timestamp.now(): {
+                userData['name']: comment,
+              },
+            },
+          },
+          SetOptions(merge: true),
+        );
+      }
+      emit(CommentSucessfully());
+    } catch (e) {
+      print(e.toString());
+      emit(CommentError());
+    }
+  }
+
+  //==================== CommentList Function ==========================
+  List commentList = [];
+  void getCommentsList(String postKey) {
+    emit(CommentListLoading());
+  }
 
   //================================================================
 
