@@ -43,7 +43,7 @@ class ReportCategoryScreen extends StatelessWidget {
             Expanded(
               child: ListView.separated(
                   itemBuilder: (context, index) => categoryList[index],
-                  separatorBuilder: (Context, index) => SizedBox(
+                  separatorBuilder: (context, index) => SizedBox(
                         height: 20,
                       ),
                   itemCount: categoryList.length),
