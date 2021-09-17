@@ -362,7 +362,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
           {
             'commentList': {
-              Timestamp.now(): {
+              Timestamp.now().toString(): {
                 userData['name']: comment,
               },
             },
