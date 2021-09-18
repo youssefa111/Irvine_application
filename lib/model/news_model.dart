@@ -14,6 +14,7 @@ class NewsModel {
   final bool isReply;
   int containerCategory = 0;
   Timestamp timestamp;
+  dynamic replyList;
   NewsModel({
     required this.reporterName,
     required this.newsTitle,
@@ -26,6 +27,7 @@ class NewsModel {
     required this.timestamp,
     required this.isReply,
     this.loveItem,
+    this.replyList,
   });
 
   Map<String, dynamic> toMap() {
@@ -56,6 +58,7 @@ class NewsModel {
       timestamp: map['createdAt'],
       isReply: map['isReply'],
       loveItem: map['loveItem'],
+      replyList: map['replyList'],
     );
   }
 

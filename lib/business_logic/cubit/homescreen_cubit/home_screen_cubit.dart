@@ -352,9 +352,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           {
             'reportComments': data['reportComments'] + 1,
             'commentList': {
-              Timestamp.now().toString(): {
-                userData['name']: comment,
-              },
+              Timestamp.now().toString(): userData['name'] + ':' + comment,
             },
           },
           SetOptions(merge: true),
@@ -364,7 +362,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           {
             'reportComments': data['reportComments'] + 1,
             'commentList': {
-              userData['name']: comment,
+              Timestamp.now().toString(): userData['name'] + ':' + comment,
             },
           },
           SetOptions(
@@ -379,13 +377,55 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
     }
   }
 
-  //==================== CommentList Function ==========================
-  List commentList = [];
-  void getCommentsList(String postKey) {
-    emit(CommentListLoading());
-  }
-
   //================================================================
+
+  //==================== Reply Function ==========================
+
+  Future<void> reply(String postKey, String reply) async {
+    emit(ReplyLoading());
+    try {
+      var userID = FirebaseAuth.instance.currentUser!.uid;
+      var userInstance = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userID)
+          .get();
+      Map<String, dynamic> userData =
+          userInstance.data() as Map<String, dynamic>;
+      DocumentSnapshot instance = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postKey)
+          .get();
+      Map<String, dynamic> data = instance.data() as Map<String, dynamic>;
+      var replyList = data['replyList'];
+      if (replyList == null) {
+        await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+          {
+            'newsReplies': data['newsReplies'] + 1,
+            'replyList': {
+              Timestamp.now().toString(): userData['name'] + ':' + reply,
+            },
+          },
+          SetOptions(merge: true),
+        );
+      } else {
+        await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
+          {
+            'newsReplies': data['newsReplies'] + 1,
+            'replyList': {
+              Timestamp.now().toString(): userData['name'] + ':' + reply,
+            },
+          },
+          SetOptions(
+            merge: true,
+          ),
+        );
+      }
+      emit(ReplySucessfully());
+    } catch (e) {
+      print(e.toString());
+      emit(ReplyError());
+    }
+  }
 
   //==================== Search Function ==========================
   var searchList = [];

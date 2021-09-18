@@ -14,7 +14,6 @@ class ReportModel {
   int containerCategory = 1;
   String userID;
   Timestamp timestamp;
-
   dynamic reactItem;
   dynamic commentList;
 

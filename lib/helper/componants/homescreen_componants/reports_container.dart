@@ -384,7 +384,9 @@ class _NewReportContainerState extends State<NewReportContainer> {
               if (showComment)
                 CommentSection(
                   postKey: widget.reportID,
-                  commentList: widget.model.commentList,
+                  commentList: widget.model.commentList == null
+                      ? null
+                      : widget.model.commentList.values.toList(),
                 ),
             ],
           ),

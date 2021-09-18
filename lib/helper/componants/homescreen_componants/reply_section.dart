@@ -3,20 +3,20 @@ import 'package:first_task/business_logic/cubit/homescreen_cubit/home_screen_cub
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class CommentSection extends StatefulWidget {
+class ReplySection extends StatefulWidget {
   final String postKey;
   List? commentList;
-  CommentSection({
+  ReplySection({
     Key? key,
     required this.postKey,
     this.commentList,
   }) : super(key: key);
 
   @override
-  _CommentSectionState createState() => _CommentSectionState();
+  _ReplySectionState createState() => _ReplySectionState();
 }
 
-class _CommentSectionState extends State<CommentSection> {
+class _ReplySectionState extends State<ReplySection> {
   var commentController = TextEditingController();
 
   @override
@@ -49,7 +49,7 @@ class _CommentSectionState extends State<CommentSection> {
                           child: TextField(
                             controller: commentController,
                             decoration: InputDecoration(
-                              hintText: 'Write a Comment...',
+                              hintText: 'Write a Reply...',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25.0),
                                 gapPadding: 12,
@@ -67,7 +67,7 @@ class _CommentSectionState extends State<CommentSection> {
                         ),
                         IconButton(
                           onPressed: () => HomeScreenCubit.get(context)
-                              .comment(widget.postKey, commentController.text)
+                              .reply(widget.postKey, commentController.text)
                               .then((value) => commentController.clear()),
                           icon: Icon(
                             Icons.send,
@@ -81,7 +81,7 @@ class _CommentSectionState extends State<CommentSection> {
                   ),
                 ),
                 widget.commentList == null
-                    ? Text('There is no Comment yet!')
+                    ? Text('There is no Reply yet!')
                     : Expanded(
                         child: ListView.separated(
                           physics: NeverScrollableScrollPhysics(),
@@ -124,7 +124,7 @@ class _CommentSectionState extends State<CommentSection> {
         }
         Map<String, dynamic> data =
             snapshot.data!.data() as Map<String, dynamic>;
-        List? x = data['commentList']?.values.toList();
+        List? x = data['replyList']?.values.toList();
         return Container(
           height: x == null ? 120.0 : 100.0 * (x.length + .5),
           child: Column(
@@ -138,7 +138,7 @@ class _CommentSectionState extends State<CommentSection> {
                         child: TextField(
                           controller: commentController,
                           decoration: InputDecoration(
-                            hintText: 'Write a Comment...',
+                            hintText: 'Write a Reply...',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(25.0),
                               gapPadding: 12,
@@ -156,7 +156,7 @@ class _CommentSectionState extends State<CommentSection> {
                       ),
                       IconButton(
                         onPressed: () => HomeScreenCubit.get(context)
-                            .comment(widget.postKey, commentController.text)
+                            .reply(widget.postKey, commentController.text)
                             .then((value) => commentController.clear()),
                         icon: Icon(
                           Icons.send,
@@ -170,7 +170,7 @@ class _CommentSectionState extends State<CommentSection> {
                 ),
               ),
               x == null
-                  ? Text('There is no Comment yet!')
+                  ? Text('There is no Reply yet!')
                   : Expanded(
                       child: ListView.separated(
                         physics: NeverScrollableScrollPhysics(),

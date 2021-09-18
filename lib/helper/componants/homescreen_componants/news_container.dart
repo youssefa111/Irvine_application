@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_task/helper/componants/homescreen_componants/reply_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,13 +9,19 @@ import 'package:like_button/like_button.dart';
 import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import '../../../model/news_model.dart';
 
-class NewsContainer extends StatelessWidget {
+class NewsContainer extends StatefulWidget {
   final NewsModel newsModel;
   final String newsID;
 
   const NewsContainer({Key? key, required this.newsModel, required this.newsID})
       : super(key: key);
 
+  @override
+  _NewsContainerState createState() => _NewsContainerState();
+}
+
+class _NewsContainerState extends State<NewsContainer> {
+  bool showReply = false;
   @override
   Widget build(BuildContext context) {
     var userID = FirebaseAuth.instance.currentUser!.uid;
@@ -36,7 +43,7 @@ class NewsContainer extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      newsModel.iconLetter,
+                      widget.newsModel.iconLetter,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -48,21 +55,11 @@ class NewsContainer extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  newsModel.reporterName,
+                  widget.newsModel.reporterName,
                 ),
-                // if (isAgency)
-                //   SizedBox(
-                //     width: 5,
-                //   ),
-                // if (isAgency)
-                //   Text(
-                //     'AGENCY',
-                //     style: TextStyle(
-                //         fontWeight: FontWeight.bold, color: Colors.green),
-                //   ),
                 Spacer(),
                 Text(
-                  newsModel.date,
+                  widget.newsModel.date,
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
               ],
@@ -71,7 +68,7 @@ class NewsContainer extends StatelessWidget {
               height: 7,
             ),
             Text(
-              newsModel.newsTitle,
+              widget.newsModel.newsTitle,
               style: Theme.of(context).textTheme.button!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -80,7 +77,7 @@ class NewsContainer extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Text(newsModel.newsContent),
+            Text(widget.newsModel.newsContent),
             SizedBox(
               height: 10,
             ),
@@ -90,12 +87,12 @@ class NewsContainer extends StatelessWidget {
                 StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('posts')
-                        .doc(newsID)
+                        .doc(widget.newsID)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Text(
-                          '( ${newsModel.newsThanks} Thanks , ${newsModel.newsReplies} Replies )',
+                          '( ${widget.newsModel.newsThanks} Thanks , ${widget.newsModel.newsReplies} Replies )',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[600],
@@ -123,7 +120,7 @@ class NewsContainer extends StatelessWidget {
             StreamBuilder<DocumentSnapshot?>(
                 stream: FirebaseFirestore.instance
                     .collection('posts')
-                    .doc(newsID)
+                    .doc(widget.newsID)
                     .snapshots(),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -145,19 +142,20 @@ class NewsContainer extends StatelessWidget {
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
                                     .interactThank(
-                                  key
+                                  widget.key
                                       .toString()
                                       .replaceAll(RegExp('\[<\'>\]'), '')
                                       .replaceAll(']', '')
                                       .replaceAll('[', ''),
                                 );
                               },
-                              isLiked: newsModel.loveItem == null ||
-                                      (newsModel.loveItem != null &&
-                                          !newsModel.loveItem
+                              isLiked: widget.newsModel.loveItem == null ||
+                                      (widget.newsModel.loveItem != null &&
+                                          !widget.newsModel.loveItem
                                               .containsKey(userID))
                                   ? false
-                                  : newsModel.loveItem[userID]['isThanked'],
+                                  : widget.newsModel.loveItem[userID]
+                                      ['isThanked'],
                             ),
                             Text('Thank'),
                           ],
@@ -189,7 +187,7 @@ class NewsContainer extends StatelessWidget {
                     children: <Widget>[
                       InkWell(
                         onTap: () => HomeScreenCubit.get(context).interactThank(
-                          key
+                          widget.key
                               .toString()
                               .replaceAll(RegExp('\[<\'>\]'), '')
                               .replaceAll(']', '')
@@ -219,7 +217,7 @@ class NewsContainer extends StatelessWidget {
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
                                     .interactThank(
-                                  key
+                                  widget.key
                                       .toString()
                                       .replaceAll(RegExp('\[<\'>\]'), '')
                                       .replaceAll(']', '')
@@ -236,7 +234,11 @@ class NewsContainer extends StatelessWidget {
                         ),
                       ),
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          setState(() {
+                            showReply = !showReply;
+                          });
+                        },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
@@ -254,6 +256,13 @@ class NewsContainer extends StatelessWidget {
                     ],
                   );
                 }),
+            if (showReply)
+              ReplySection(
+                postKey: widget.newsID,
+                commentList: widget.newsModel.replyList == null
+                    ? null
+                    : widget.newsModel.replyList.values.toList(),
+              ),
           ],
         ),
       ),

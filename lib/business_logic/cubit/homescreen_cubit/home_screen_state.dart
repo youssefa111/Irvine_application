@@ -33,13 +33,13 @@ class CommentLoading extends HomeScreenState {}
 
 class CommentError extends HomeScreenState {}
 
-//==================== CommentList States =========================================
+//==================== Reply States =========================================
 
-class CommentListSucessfully extends HomeScreenState {}
+class ReplySucessfully extends HomeScreenState {}
 
-class CommentListLoading extends HomeScreenState {}
+class ReplyLoading extends HomeScreenState {}
 
-class CommentListError extends HomeScreenState {}
+class ReplyError extends HomeScreenState {}
 
 //==================== Search States =========================================
 
