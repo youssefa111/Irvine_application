@@ -350,6 +350,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       if (commentList == null) {
         await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
           {
+            'reportComments': data['reportComments'] + 1,
             'commentList': {
               Timestamp.now().toString(): {
                 userData['name']: comment,
@@ -361,13 +362,14 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       } else {
         await FirebaseFirestore.instance.collection('posts').doc(postKey).set(
           {
+            'reportComments': data['reportComments'] + 1,
             'commentList': {
-              Timestamp.now().toString(): {
-                userData['name']: comment,
-              },
+              userData['name']: comment,
             },
           },
-          SetOptions(merge: true),
+          SetOptions(
+            merge: true,
+          ),
         );
       }
       emit(CommentSucessfully());

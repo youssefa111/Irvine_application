@@ -1,10 +1,15 @@
 import 'package:first_task/business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
-import 'package:first_task/presentation/home_screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CommentSection extends StatefulWidget {
   final String postKey;
-  const CommentSection({Key? key, required this.postKey}) : super(key: key);
+  dynamic commentList;
+  CommentSection({
+    Key? key,
+    required this.postKey,
+    this.commentList,
+  }) : super(key: key);
 
   @override
   _CommentSectionState createState() => _CommentSectionState();
@@ -21,14 +26,10 @@ class _CommentSectionState extends State<CommentSection> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> test = [
-      'hello',
-      'hello World',
-      'hello World',
-      'hello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello hello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello Worldhello WorldWorldhello World'
-    ];
     return Container(
-      height: 100.0 * test.length,
+      height: widget.commentList == null
+          ? 100.0
+          : 100.0 * (widget.commentList.length + 1),
       child: Column(
         children: [
           Container(
@@ -70,41 +71,43 @@ class _CommentSectionState extends State<CommentSection> {
               ),
             ),
           ),
-          Expanded(
-            child: ListView.separated(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (context, index) => ClipRRect(
-                borderRadius: BorderRadius.circular(25),
-                child: Container(
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
+          (widget.commentList == null
+              ? Text('There is no Comment yet!')
+              : Expanded(
+                  child: ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => ClipRRect(
+                      borderRadius: BorderRadius.circular(25),
+                      child: Container(
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              widget.commentList[index]['username'],
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              widget.commentList[index]['username'],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: 10,
+                    ),
+                    itemCount: widget.commentList.length,
                   ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'UserName:',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        test[index],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              separatorBuilder: (context, index) => SizedBox(
-                height: 10,
-              ),
-              itemCount: test.length,
-            ),
-          ),
+                )),
         ],
       ),
     );

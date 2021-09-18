@@ -14,7 +14,7 @@ class ReportModel {
   int containerCategory = 1;
   String userID;
   Timestamp timestamp;
-  bool isComment;
+
   dynamic reactItem;
   dynamic commentList;
 
@@ -32,7 +32,6 @@ class ReportModel {
     required this.containerCategory,
     required this.userID,
     required this.timestamp,
-    required this.isComment,
     this.reactItem,
     this.commentList,
   });
@@ -52,7 +51,6 @@ class ReportModel {
       'containerCategory': containerCategory,
       'userID': userID,
       'createdAt': timestamp,
-      'isComment': isComment,
     };
   }
 
@@ -71,8 +69,7 @@ class ReportModel {
         userID: map['userID'],
         reportImage: map['mediaList'],
         timestamp: map['createdAt'],
-        isComment: map['isComment'],
         reactItem: map['reactItem'],
-        commentList: map['commenList']);
+        commentList: map['commentList']);
   }
 }

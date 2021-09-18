@@ -381,7 +381,11 @@ class _NewReportContainerState extends State<NewReportContainer> {
                   );
                 },
               ),
-              if (showComment) CommentSection(postKey: widget.reportID),
+              if (showComment)
+                CommentSection(
+                  postKey: widget.reportID,
+                  commentList: widget.model.commentList,
+                ),
             ],
           ),
         ),

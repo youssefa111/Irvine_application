@@ -94,7 +94,6 @@ class _ReportScreenState extends State<ReportScreen> {
                                 userID: userID,
                                 containerCategory: 1,
                                 timestamp: Timestamp.now(),
-                                isComment: false,
                               ),
                             )
                             .then(
