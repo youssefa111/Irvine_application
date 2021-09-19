@@ -66,14 +66,17 @@ class _ReplySectionState extends State<ReplySection> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () => HomeScreenCubit.get(context)
-                              .reply(widget.postKey, commentController.text)
-                              .then((value) => commentController.clear()),
+                          onPressed: () {
+                            commentController.text.trim().isEmpty
+                                ? null
+                                : HomeScreenCubit.get(context)
+                                    .reply(
+                                        widget.postKey, commentController.text)
+                                    .then((value) => commentController.clear());
+                          },
                           icon: Icon(
                             Icons.send,
-                            color: commentController.text.trim().isEmpty
-                                ? Colors.black
-                                : Theme.of(context).primaryColor,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                       ],
@@ -155,14 +158,16 @@ class _ReplySectionState extends State<ReplySection> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () => HomeScreenCubit.get(context)
-                            .reply(widget.postKey, commentController.text)
-                            .then((value) => commentController.clear()),
+                        onPressed: () {
+                          commentController.text.trim().isEmpty
+                              ? null
+                              : HomeScreenCubit.get(context)
+                                  .reply(widget.postKey, commentController.text)
+                                  .then((value) => commentController.clear());
+                        },
                         icon: Icon(
                           Icons.send,
-                          color: commentController.text.trim().isEmpty
-                              ? Colors.black
-                              : Theme.of(context).primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ],

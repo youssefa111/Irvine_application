@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -123,7 +124,17 @@ class _ReportScreenState extends State<ReportScreen> {
             ),
             body: (state) is AddReportLoading
                 ? Center(
-                    child: CircularProgressIndicator(),
+                    child: DefaultTextStyle(
+                      style:
+                          const TextStyle(fontSize: 25.0, color: Colors.black),
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          WavyAnimatedText('Uploading...'),
+                        ],
+                        isRepeatingAnimation: true,
+                        repeatForever: true,
+                      ),
+                    ),
                   )
                 : FutureBuilder<DocumentSnapshot>(
                     future: FirebaseFirestore.instance

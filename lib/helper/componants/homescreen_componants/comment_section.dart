@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:first_task/business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 // ignore: must_be_immutable
 class CommentSection extends StatefulWidget {
@@ -18,6 +19,7 @@ class CommentSection extends StatefulWidget {
 
 class _CommentSectionState extends State<CommentSection> {
   var commentController = TextEditingController();
+  String _x = '';
 
   @override
   void dispose() {
@@ -66,14 +68,17 @@ class _CommentSectionState extends State<CommentSection> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () => HomeScreenCubit.get(context)
-                              .comment(widget.postKey, commentController.text)
-                              .then((value) => commentController.clear()),
+                          onPressed: () {
+                            commentController.text.trim().isEmpty
+                                ? null
+                                : HomeScreenCubit.get(context)
+                                    .comment(
+                                        widget.postKey, commentController.text)
+                                    .then((value) => commentController.clear());
+                          },
                           icon: Icon(
                             Icons.send,
-                            color: commentController.text.trim().isEmpty
-                                ? Colors.black
-                                : Theme.of(context).primaryColor,
+                            color: HexColor("#4BB9BC"),
                           ),
                         ),
                       ],
@@ -155,14 +160,17 @@ class _CommentSectionState extends State<CommentSection> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () => HomeScreenCubit.get(context)
-                            .comment(widget.postKey, commentController.text)
-                            .then((value) => commentController.clear()),
+                        onPressed: () {
+                          commentController.text.trim().isEmpty
+                              ? null
+                              : HomeScreenCubit.get(context)
+                                  .comment(
+                                      widget.postKey, commentController.text)
+                                  .then((value) => commentController.clear());
+                        },
                         icon: Icon(
                           Icons.send,
-                          color: commentController.text.trim().isEmpty
-                              ? Colors.black
-                              : Theme.of(context).primaryColor,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ],

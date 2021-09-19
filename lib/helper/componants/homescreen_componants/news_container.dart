@@ -9,18 +9,14 @@ import 'package:like_button/like_button.dart';
 import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import '../../../model/news_model.dart';
 
-class NewsContainer extends StatefulWidget {
+// ignore: must_be_immutable
+class NewsContainer extends StatelessWidget {
   final NewsModel newsModel;
   final String newsID;
 
-  const NewsContainer({Key? key, required this.newsModel, required this.newsID})
+  NewsContainer({Key? key, required this.newsModel, required this.newsID})
       : super(key: key);
 
-  @override
-  _NewsContainerState createState() => _NewsContainerState();
-}
-
-class _NewsContainerState extends State<NewsContainer> {
   bool showReply = false;
   @override
   Widget build(BuildContext context) {
@@ -43,7 +39,7 @@ class _NewsContainerState extends State<NewsContainer> {
                   ),
                   child: Center(
                     child: Text(
-                      widget.newsModel.iconLetter,
+                      newsModel.iconLetter,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -55,11 +51,11 @@ class _NewsContainerState extends State<NewsContainer> {
                   width: 5,
                 ),
                 Text(
-                  widget.newsModel.reporterName,
+                  newsModel.reporterName,
                 ),
                 Spacer(),
                 Text(
-                  widget.newsModel.date,
+                  newsModel.date,
                   style: TextStyle(fontWeight: FontWeight.w500),
                 ),
               ],
@@ -68,7 +64,7 @@ class _NewsContainerState extends State<NewsContainer> {
               height: 7,
             ),
             Text(
-              widget.newsModel.newsTitle,
+              newsModel.newsTitle,
               style: Theme.of(context).textTheme.button!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -77,7 +73,7 @@ class _NewsContainerState extends State<NewsContainer> {
             SizedBox(
               height: 10,
             ),
-            Text(widget.newsModel.newsContent),
+            Text(newsModel.newsContent),
             SizedBox(
               height: 10,
             ),
@@ -87,12 +83,12 @@ class _NewsContainerState extends State<NewsContainer> {
                 StreamBuilder<DocumentSnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('posts')
-                        .doc(widget.newsID)
+                        .doc(newsID)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Text(
-                          '( ${widget.newsModel.newsThanks} Thanks , ${widget.newsModel.newsReplies} Replies )',
+                          '( ${newsModel.newsThanks} Thanks , ${newsModel.newsReplies} Replies )',
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey[600],
@@ -120,7 +116,7 @@ class _NewsContainerState extends State<NewsContainer> {
             StreamBuilder<DocumentSnapshot?>(
                 stream: FirebaseFirestore.instance
                     .collection('posts')
-                    .doc(widget.newsID)
+                    .doc(newsID)
                     .snapshots(),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -142,20 +138,19 @@ class _NewsContainerState extends State<NewsContainer> {
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
                                     .interactThank(
-                                  widget.key
+                                  key
                                       .toString()
                                       .replaceAll(RegExp('\[<\'>\]'), '')
                                       .replaceAll(']', '')
                                       .replaceAll('[', ''),
                                 );
                               },
-                              isLiked: widget.newsModel.loveItem == null ||
-                                      (widget.newsModel.loveItem != null &&
-                                          !widget.newsModel.loveItem
+                              isLiked: newsModel.loveItem == null ||
+                                      (newsModel.loveItem != null &&
+                                          !newsModel.loveItem
                                               .containsKey(userID))
                                   ? false
-                                  : widget.newsModel.loveItem[userID]
-                                      ['isThanked'],
+                                  : newsModel.loveItem[userID]['isThanked'],
                             ),
                             Text('Thank'),
                           ],
@@ -187,7 +182,7 @@ class _NewsContainerState extends State<NewsContainer> {
                     children: <Widget>[
                       InkWell(
                         onTap: () => HomeScreenCubit.get(context).interactThank(
-                          widget.key
+                          key
                               .toString()
                               .replaceAll(RegExp('\[<\'>\]'), '')
                               .replaceAll(']', '')
@@ -217,7 +212,7 @@ class _NewsContainerState extends State<NewsContainer> {
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
                                     .interactThank(
-                                  widget.key
+                                  key
                                       .toString()
                                       .replaceAll(RegExp('\[<\'>\]'), '')
                                       .replaceAll(']', '')
@@ -234,11 +229,7 @@ class _NewsContainerState extends State<NewsContainer> {
                         ),
                       ),
                       InkWell(
-                        onTap: () {
-                          setState(() {
-                            showReply = !showReply;
-                          });
-                        },
+                        onTap: () => HomeScreenCubit.get(context).showReplies(),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
@@ -256,13 +247,18 @@ class _NewsContainerState extends State<NewsContainer> {
                     ],
                   );
                 }),
-            if (showReply)
-              ReplySection(
-                postKey: widget.newsID,
-                commentList: widget.newsModel.replyList == null
-                    ? null
-                    : widget.newsModel.replyList.values.toList(),
-              ),
+            BlocBuilder<HomeScreenCubit, HomeScreenState>(
+              builder: (context, state) {
+                if (HomeScreenCubit.get(context).isReplyShown)
+                  return ReplySection(
+                    postKey: newsID,
+                    commentList: newsModel.replyList == null
+                        ? null
+                        : newsModel.replyList.values.toList(),
+                  );
+                return Container();
+              },
+            )
           ],
         ),
       ),

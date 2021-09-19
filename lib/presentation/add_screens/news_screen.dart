@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -111,94 +112,110 @@ class _NewsScreenState extends State<NewsScreen> {
                 ),
               ],
             ),
-            body: FutureBuilder<DocumentSnapshot>(
-                future: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(userID)
-                    .get(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.connectionState == ConnectionState.done) {
-                    Map<String, dynamic> data =
-                        snapshot.data!.data() as Map<String, dynamic>;
-                    userInfo = data;
-                    return Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: SingleChildScrollView(
-                        child: Form(
-                          key: formKey,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'Title',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                TextFormField(
-                                  maxLength: 100,
-                                  controller: titleTextEditing,
-                                  decoration: InputDecoration(
-                                    hintText: 'Enter News Title...',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  validator: (String? valid) {
-                                    if (valid!.isEmpty) {
-                                      return 'Please Enter Title for thew news post!';
-                                    }
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 25,
-                                ),
-                                Text(
-                                  'Description',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Scrollbar(
-                                  thickness: 10,
-                                  controller: scrollController,
-                                  child: TextFormField(
-                                    scrollController: scrollController,
-                                    scrollPhysics: ScrollPhysics(
-                                        parent:
-                                            AlwaysScrollableScrollPhysics()),
-                                    controller: newsTextEditing,
-                                    maxLines: 5,
-                                    maxLength: 200,
-                                    decoration: InputDecoration(
-                                        hintText: 'Enter News Description...',
-                                        border: OutlineInputBorder()),
-                                    validator: (String? valid) {
-                                      if (valid!.isEmpty) {
-                                        return 'Please Enter Description for thew news post!';
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ]),
-                        ),
+            body: (state) is AddNewsLoading
+                ? Center(
+                    child: DefaultTextStyle(
+                      style:
+                          const TextStyle(fontSize: 25.0, color: Colors.black),
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          WavyAnimatedText('Uploading...'),
+                        ],
+                        isRepeatingAnimation: true,
+                        repeatForever: true,
                       ),
-                    );
-                  } else {
-                    return Center(child: Text('Something went wrong'));
-                  }
-                }),
+                    ),
+                  )
+                : FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(userID)
+                        .get(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
+                        Map<String, dynamic> data =
+                            snapshot.data!.data() as Map<String, dynamic>;
+                        userInfo = data;
+                        return Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: SingleChildScrollView(
+                            child: Form(
+                              key: formKey,
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      'Title',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    TextFormField(
+                                      maxLength: 100,
+                                      controller: titleTextEditing,
+                                      decoration: InputDecoration(
+                                        hintText: 'Enter News Title...',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      validator: (String? valid) {
+                                        if (valid!.isEmpty) {
+                                          return 'Please Enter Title for thew news post!';
+                                        }
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 25,
+                                    ),
+                                    Text(
+                                      'Description',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Scrollbar(
+                                      thickness: 10,
+                                      controller: scrollController,
+                                      child: TextFormField(
+                                        scrollController: scrollController,
+                                        scrollPhysics: ScrollPhysics(
+                                            parent:
+                                                AlwaysScrollableScrollPhysics()),
+                                        controller: newsTextEditing,
+                                        maxLines: 5,
+                                        maxLength: 200,
+                                        decoration: InputDecoration(
+                                            hintText:
+                                                'Enter News Description...',
+                                            border: OutlineInputBorder()),
+                                        validator: (String? valid) {
+                                          if (valid!.isEmpty) {
+                                            return 'Please Enter Description for thew news post!';
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ]),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Center(child: Text('Something went wrong'));
+                      }
+                    }),
           );
         },
       ),

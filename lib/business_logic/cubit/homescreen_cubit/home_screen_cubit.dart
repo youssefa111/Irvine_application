@@ -379,6 +379,17 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   //================================================================
 
+  //====================== Show Comment Function ===================
+
+  bool isCommentShown = false;
+
+  void showComment() {
+    isCommentShown = !isCommentShown;
+    emit(ShowComment());
+  }
+
+  //================================================================
+
   //==================== Reply Function ==========================
 
   Future<void> reply(String postKey, String reply) async {
@@ -426,6 +437,19 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       emit(ReplyError());
     }
   }
+
+  //================================================================
+
+  //====================== Show Replys Function ===================
+
+  bool isReplyShown = false;
+
+  void showReplies() {
+    isReplyShown = !isReplyShown;
+    emit(ShowReply());
+  }
+
+  //================================================================
 
   //==================== Search Function ==========================
   var searchList = [];

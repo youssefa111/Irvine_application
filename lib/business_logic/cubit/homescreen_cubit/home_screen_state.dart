@@ -33,6 +33,8 @@ class CommentLoading extends HomeScreenState {}
 
 class CommentError extends HomeScreenState {}
 
+class ShowComment extends HomeScreenState {}
+
 //==================== Reply States =========================================
 
 class ReplySucessfully extends HomeScreenState {}
@@ -40,6 +42,8 @@ class ReplySucessfully extends HomeScreenState {}
 class ReplyLoading extends HomeScreenState {}
 
 class ReplyError extends HomeScreenState {}
+
+class ShowReply extends HomeScreenState {}
 
 //==================== Search States =========================================
 

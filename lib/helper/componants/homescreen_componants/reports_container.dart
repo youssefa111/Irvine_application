@@ -11,22 +11,14 @@ import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import '../../../model/report_model.dart';
 
 // ignore: must_be_immutable
-class NewReportContainer extends StatefulWidget {
+class NewReportContainer extends StatelessWidget {
   final ReportModel model;
   final String reportID;
 
-  const NewReportContainer(
-      {Key? key, required this.model, required this.reportID})
+  NewReportContainer({Key? key, required this.model, required this.reportID})
       : super(key: key);
 
 //  widget.key.toString().replaceAll(RegExp('\[<\'>\]'), '').replaceAll(']', '').replaceAll('[', ''),
-
-  @override
-  _NewReportContainerState createState() => _NewReportContainerState();
-}
-
-class _NewReportContainerState extends State<NewReportContainer> {
-  bool showComment = false;
   @override
   Widget build(BuildContext context) {
     var userID = FirebaseAuth.instance.currentUser!.uid;
@@ -51,7 +43,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                     ),
                     child: Center(
                       child: Text(
-                        widget.model.reporterLetter,
+                        model.reporterLetter,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -63,7 +55,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                     width: 5,
                   ),
                   Text(
-                    widget.model.reporterName,
+                    model.reporterName,
                   ),
                   Spacer(),
                   IconButton(
@@ -71,7 +63,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                       showDialog(
                           context: context,
                           builder: (context) => OptionsDialog(
-                                key: widget.key,
+                                key: key,
                               ));
                     },
                     icon: Icon(Icons.more_horiz),
@@ -93,7 +85,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                   ),
                   FittedBox(
                       child: Text(
-                    widget.model.reportName,
+                    model.reportName,
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
@@ -101,7 +93,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                   )),
                   Spacer(),
                   Text(
-                    widget.model.date,
+                    model.date,
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
@@ -112,21 +104,25 @@ class _NewReportContainerState extends State<NewReportContainer> {
               SizedBox(
                 height: 5,
               ),
-              widget.model.reportImage != null
+              model.reportImage != null
                   ? Wrap(
                       runSpacing: 10,
                       spacing: 2,
-                      children: widget.model.reportImage!.map((e) {
-                        return Container(
-                          height: 100,
-                          width: e == widget.model.reportImage!.last &&
-                                  widget.model.reportImage!.length == 3
-                              ? MediaQuery.of(context).size.width
-                              : MediaQuery.of(context).size.width / 2.2,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            image: DecorationImage(
-                                image: NetworkImage(e), fit: BoxFit.fill),
+                      children: model.reportImage!.map((e) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Container(
+                            height: 200,
+                            width: (e == model.reportImage!.last &&
+                                        model.reportImage!.length == 3) ||
+                                    model.reportImage!.length == 1
+                                ? MediaQuery.of(context).size.width
+                                : MediaQuery.of(context).size.width / 2.15,
+                            child: FadeInImage.assetNetwork(
+                              placeholder: 'assets/loading.gif',
+                              image: e,
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         );
                       }).toList())
@@ -136,7 +132,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
               SizedBox(
                 height: 10,
               ),
-              Text(widget.model.reportContent),
+              Text(model.reportContent),
               SizedBox(
                 height: 5,
               ),
@@ -146,13 +142,13 @@ class _NewReportContainerState extends State<NewReportContainer> {
                   StreamBuilder<DocumentSnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('posts')
-                          .doc(widget.reportID)
+                          .doc(reportID)
                           .snapshots(),
                       builder: (BuildContext context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Text(
-                            '( ${widget.model.reportLikes} Agrees , ${widget.model.reportDislikes} Disagrees , ${widget.model.reportComments} Comments )',
+                            '( ${model.reportLikes} Agrees , ${model.reportDislikes} Disagrees , ${model.reportComments} Comments )',
                             style: TextStyle(
                               fontSize: 13,
                               color: Colors.grey[600],
@@ -180,7 +176,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
               StreamBuilder<DocumentSnapshot?>(
                 stream: FirebaseFirestore.instance
                     .collection('posts')
-                    .doc(widget.reportID)
+                    .doc(reportID)
                     .snapshots(),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -202,19 +198,18 @@ class _NewReportContainerState extends State<NewReportContainer> {
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
                                     .interactAgree(
-                                  widget.key
+                                  key
                                       .toString()
                                       .replaceAll(RegExp('\[<\'>\]'), '')
                                       .replaceAll(']', '')
                                       .replaceAll('[', ''),
                                 );
                               },
-                              isLiked: widget.model.reactItem == null ||
-                                      (widget.model.reactItem != null &&
-                                          !widget.model.reactItem
-                                              .containsKey(userID))
+                              isLiked: model.reactItem == null ||
+                                      (model.reactItem != null &&
+                                          !model.reactItem.containsKey(userID))
                                   ? false
-                                  : widget.model.reactItem[userID]['isLiked'],
+                                  : model.reactItem[userID]['isLiked'],
                             ),
                             Text('Agree'),
                           ],
@@ -234,20 +229,18 @@ class _NewReportContainerState extends State<NewReportContainer> {
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
                                     .interactDisagree(
-                                  widget.key
+                                  key
                                       .toString()
                                       .replaceAll(RegExp('\[<\'>\]'), '')
                                       .replaceAll(']', '')
                                       .replaceAll('[', ''),
                                 );
                               },
-                              isLiked: widget.model.reactItem == null ||
-                                      (widget.model.reactItem != null &&
-                                          !widget.model.reactItem
-                                              .containsKey(userID))
+                              isLiked: model.reactItem == null ||
+                                      (model.reactItem != null &&
+                                          !model.reactItem.containsKey(userID))
                                   ? false
-                                  : widget.model.reactItem[userID]
-                                      ['isDisliked'],
+                                  : model.reactItem[userID]['isDisliked'],
                             ),
                             Text('Disagree'),
                           ],
@@ -281,7 +274,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                     children: <Widget>[
                       InkWell(
                         onTap: () => HomeScreenCubit.get(context)
-                            .interactAgree(widget.reportID),
+                            .interactAgree(reportID),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -305,7 +298,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                               },
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
-                                    .interactAgree(widget.reportID);
+                                    .interactAgree(reportID);
                               },
                               isLiked: data['reactItem'] != null &&
                                       data['reactItem'].containsKey(userID)
@@ -318,7 +311,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                       ),
                       InkWell(
                         onTap: () => HomeScreenCubit.get(context)
-                            .interactDisagree(widget.reportID),
+                            .interactDisagree(reportID),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -344,7 +337,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                               },
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
-                                    .interactDisagree(widget.reportID);
+                                    .interactDisagree(reportID);
                               },
                               isLiked: data['reactItem'] != null &&
                                       data['reactItem'].containsKey(userID)
@@ -356,11 +349,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                         ),
                       ),
                       InkWell(
-                        onTap: () {
-                          setState(() {
-                            showComment = !showComment;
-                          });
-                        },
+                        onTap: () => HomeScreenCubit.get(context).showComment(),
                         child: Container(
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -381,13 +370,18 @@ class _NewReportContainerState extends State<NewReportContainer> {
                   );
                 },
               ),
-              if (showComment)
-                CommentSection(
-                  postKey: widget.reportID,
-                  commentList: widget.model.commentList == null
-                      ? null
-                      : widget.model.commentList.values.toList(),
-                ),
+              BlocBuilder<HomeScreenCubit, HomeScreenState>(
+                builder: (context, state) {
+                  if (HomeScreenCubit.get(context).isCommentShown)
+                    return CommentSection(
+                      postKey: reportID,
+                      commentList: model.commentList == null
+                          ? null
+                          : model.commentList.values.toList(),
+                    );
+                  return Container();
+                },
+              )
             ],
           ),
         ),
