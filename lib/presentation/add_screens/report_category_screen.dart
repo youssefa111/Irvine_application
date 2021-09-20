@@ -1,5 +1,6 @@
-import 'package:first_task/helper/componants/search_widget.dart';
 import 'package:flutter/material.dart';
+
+import '../../helper/componants/search_widget.dart';
 import '../../helper/constants/constants.dart';
 import 'report_screen.dart';
 
@@ -15,7 +16,7 @@ class _ReportCategoryScreenState extends State<ReportCategoryScreen> {
     ReportCategory(icon: 'assets/2.png', iconName: 'Other'),
     ReportCategory(icon: 'assets/6.png', iconName: 'Traffic Signal Issues'),
     ReportCategory(
-        icon: 'assets/10.png', iconName: 'COVID Qeustions / Concerns'),
+        icon: 'assets/10.png', iconName: 'COVID Questions / Concerns'),
     ReportCategory(icon: 'assets/5.png', iconName: 'Facility Maintenance'),
     ReportCategory(icon: 'assets/4.png', iconName: 'Street Light Repair'),
     ReportCategory(
@@ -75,6 +76,7 @@ class _ReportCategoryScreenState extends State<ReportCategoryScreen> {
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: <Widget>[
+            buildSearch(),
             Expanded(
               child: ListView.separated(
                   itemBuilder: (context, index) {
@@ -89,35 +91,6 @@ class _ReportCategoryScreenState extends State<ReportCategoryScreen> {
                       ),
                   itemCount: searchList.length),
             ),
-            // Row(
-            //   children: <Widget>[
-            //     Expanded(
-            //       child: TextField(
-            //         decoration: InputDecoration(
-            //           hintText: 'search',
-            //         ),
-            //       ),
-            //     ),
-            //     SizedBox(
-            //       width: 25,
-            //     ),
-            //     TextButton(
-            //       style: TextButton.styleFrom(
-            //         backgroundColor: Theme.of(context).primaryColor,
-            //       ),
-            //       onPressed: () {},
-            //       child: FittedBox(
-            //         child: Text(
-            //           'Find',
-            //           style: TextStyle(
-            //             color: Colors.white,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // )
-            buildSearch(),
           ],
         ),
       ),

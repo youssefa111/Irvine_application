@@ -82,38 +82,34 @@ class _ReportScreenState extends State<ReportScreen> {
                         ? null
                         : AddCubit.get(context)
                             .addReport(
-                              reportModel: ReportModel(
-                                date: formattedDate,
-                                reporterName: userInfo['name'],
-                                reportContent: reportTextEditing.text,
-                                reportName: widget.reportCategoryName,
-                                reportLocation: userInfo['neighborhood'],
-                                reporterLetter: userInfo['name'].toString()[0],
-                                reportComments: 0,
-                                reportDislikes: 0,
-                                reportLikes: 0,
-                                userID: userID,
-                                containerCategory: 1,
-                                timestamp: Timestamp.now(),
-                              ),
-                            )
-                            .then(
-                              (value) =>
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  duration: Duration(seconds: 2),
-                                  content:
-                                      Text('The Report is added Sucessfully!'),
-                                  backgroundColor: Colors.green,
-                                ),
-                              ),
-                            )
+                            reportModel: ReportModel(
+                              date: formattedDate,
+                              reporterName: userInfo['name'],
+                              reportContent: reportTextEditing.text,
+                              reportName: widget.reportCategoryName,
+                              reportLocation: userInfo['neighborhood'],
+                              reporterLetter: userInfo['name'].toString()[0],
+                              reportComments: 0,
+                              reportDislikes: 0,
+                              reportLikes: 0,
+                              userID: userID,
+                              containerCategory: 1,
+                              timestamp: Timestamp.now(),
+                            ),
+                          )
                             .then((value) {
-                            Future.delayed(Duration(seconds: 3)).then((value) {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            });
-                          });
+                            Navigator.pop(context);
+                          }).then(
+                            (value) =>
+                                ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                duration: Duration(seconds: 2),
+                                content:
+                                    Text('The Report is added Sucessfully!'),
+                                backgroundColor: Colors.green,
+                              ),
+                            ),
+                          );
                   },
                   child: Text(
                     'Submit',

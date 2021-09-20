@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:first_task/business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import 'package:flutter/material.dart';
+
+import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 
 // ignore: must_be_immutable
 class ReplySection extends StatefulWidget {
@@ -68,6 +69,7 @@ class _ReplySectionState extends State<ReplySection> {
                         IconButton(
                           onPressed: () {
                             commentController.text.trim().isEmpty
+                                // ignore: unnecessary_statements
                                 ? null
                                 : HomeScreenCubit.get(context)
                                     .reply(
@@ -160,6 +162,7 @@ class _ReplySectionState extends State<ReplySection> {
                       IconButton(
                         onPressed: () {
                           commentController.text.trim().isEmpty
+                              // ignore: unnecessary_statements
                               ? null
                               : HomeScreenCubit.get(context)
                                   .reply(widget.postKey, commentController.text)

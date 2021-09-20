@@ -1,6 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_task/presentation/add_screens/news_screen.dart';
+import 'package:first_task/presentation/add_screens/report_category_screen.dart';
+import 'package:first_task/presentation/home_screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,9 +17,22 @@ part 'home_screen_state.dart';
 
 class HomeScreenCubit extends Cubit<HomeScreenState> {
   HomeScreenCubit() : super(HomeScreenInitial());
-
   static HomeScreenCubit get(BuildContext context) => BlocProvider.of(context);
 
+  //====================== Layout Function ==========================
+  int currentIndex = 0;
+  List<Widget> bottomScreens = [
+    HomeScreen(),
+    ReportCategoryScreen(),
+    NewsScreen(),
+  ];
+  void changeBottom(int index) {
+    currentIndex = index;
+
+    emit(ChangeBottomNavState());
+  }
+
+  //=================================================================
   //==================== HomeData Function ==========================
   List dataList = [];
 
@@ -81,12 +97,14 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           .where((element) => element.toString().contains('NewReportContainer'))
           .toList();
 
+      print(filterList);
+
       emit(FilteredSucessfully());
     } else if (index == 3) {
       filterList = dataList
           .where((element) => element.toString().contains('NewsContainer'))
           .toList();
-
+      print(filterList);
       emit(FilteredSucessfully());
     } else {
       return;

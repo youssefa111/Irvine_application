@@ -57,3 +57,61 @@ class TopContainer extends StatelessWidget {
     );
   }
 }
+
+class TopSearchBar extends StatefulWidget {
+  final String text;
+  final ValueChanged<String> onChanged;
+  TopSearchBar({Key? key, required this.text, required this.onChanged})
+      : super(key: key);
+
+  @override
+  _TopSearchBarState createState() => _TopSearchBarState();
+}
+
+class _TopSearchBarState extends State<TopSearchBar> {
+  final controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final styleActive = TextStyle(color: Colors.black);
+    final styleHint = TextStyle(color: Colors.black54);
+    final style = widget.text.isEmpty ? styleHint : styleActive;
+    return Container(
+      height: 42,
+      margin: const EdgeInsets.fromLTRB(5, 10, 5, 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        border: Border.all(color: Colors.black26),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          icon: Icon(Icons.search, color: style.color),
+          suffixIcon: widget.text.isNotEmpty
+              ? GestureDetector(
+                  child: Icon(Icons.close, color: style.color),
+                  onTap: () {
+                    controller.clear();
+                    widget.onChanged('');
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  },
+                )
+              : null,
+          hintText: 'Search',
+          hintStyle: style,
+          border: InputBorder.none,
+        ),
+        style: style,
+        onChanged: widget.onChanged,
+      ),
+    );
+  }
+}

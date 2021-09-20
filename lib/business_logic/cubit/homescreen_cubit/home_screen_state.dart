@@ -5,6 +5,10 @@ abstract class HomeScreenState {}
 
 class HomeScreenInitial extends HomeScreenState {}
 
+//==================== ChangeBottomNav States =========================================
+
+class ChangeBottomNavState extends HomeScreenState {}
+
 //==================== HomeScreen States =========================================
 
 class HomeScreenLoading extends HomeScreenState {}

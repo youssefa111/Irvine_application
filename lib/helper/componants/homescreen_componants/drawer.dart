@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_task/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,6 +7,9 @@ import '../../../presentation/profile_screens/profile_screen.dart';
 import '../../constants/constants.dart';
 
 class HomeDrawer extends StatelessWidget {
+  final UserModel model;
+
+  const HomeDrawer({Key? key, required this.model}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -58,7 +61,7 @@ class HomeDrawer extends StatelessWidget {
                     ),
                     Center(
                         child: Text(
-                      FirebaseAuth.instance.currentUser!.email.toString(),
+                      model.email,
                       style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             color: Colors.white,
                           ),
@@ -72,8 +75,10 @@ class HomeDrawer extends StatelessWidget {
                 context: context,
                 voidCallback: () {
                   Navigator.pop(context);
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ProfileScreen()));
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ProfileScreen(
+                            model: model,
+                          )));
                 }),
             drawerSetting(title: 'Feed Preferences', context: context),
             drawerSetting(title: 'My Activites', context: context),

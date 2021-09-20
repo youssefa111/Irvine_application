@@ -1,110 +1,80 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_task/model/user_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../helper/constants/constants.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final UserModel model;
+  const ProfileScreen({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance
-            .collection('users')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .get(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.connectionState == ConnectionState.done) {
-            Map<String, dynamic> data =
-                snapshot.data!.data() as Map<String, dynamic>;
-            return Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
+        body: Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * .32,
+            decoration: BoxDecoration(
+              gradient: linearGradient,
+            ),
+            child: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * .32,
-                    decoration: BoxDecoration(
-                      gradient: linearGradient,
-                    ),
-                    child: SafeArea(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          BackButton(
-                            color: Colors.white,
-                          ),
-                          Center(
-                            child: Image.asset(
-                              'assets/employee.png',
-                              height: 70,
-                              width: 70,
-                              color: Colors.white,
-                              fit: BoxFit.cover,
-                              filterQuality: FilterQuality.high,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Center(
-                            child: Text(
-                              data['name'],
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5!
-                                  .copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Center(
-                            child: Text(
-                              data['email'],
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2!
-                                  .copyWith(
-                                    color: Colors.white,
-                                  ),
-                            ),
-                          ),
-                        ],
-                      ),
+                  BackButton(
+                    color: Colors.white,
+                  ),
+                  Center(
+                    child: Image.asset(
+                      'assets/employee.png',
+                      height: 70,
+                      width: 70,
+                      color: Colors.white,
+                      fit: BoxFit.cover,
+                      filterQuality: FilterQuality.high,
                     ),
                   ),
-                  InfoRow(infoData: 'Name', infoType: data['name']),
-                  InfoRow(infoData: 'Email', infoType: data['email']),
-                  InfoRow(infoData: 'Password', infoType: data['password']),
-                  InfoRow(
-                      infoData: 'Phone Number',
-                      infoType: data['phone'].toString()),
-                  InfoRow(infoData: 'Address', infoType: data['address']),
-                  InfoRow(
-                      infoData: 'Neighborhood', infoType: data['neighborhood']),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                    child: Text(
+                      model.name,
+                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Center(
+                    child: Text(
+                      model.email,
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: Colors.white,
+                          ),
+                    ),
+                  ),
                 ],
               ),
-            );
-          } else {
-            return Center(child: Text('Something went wrong'));
-          }
-        },
+            ),
+          ),
+          InfoRow(infoData: 'Name', infoType: model.name),
+          InfoRow(infoData: 'Email', infoType: model.email),
+          InfoRow(infoData: 'Password', infoType: model.password),
+          InfoRow(infoData: 'Phone Number', infoType: model.phone.toString()),
+          InfoRow(infoData: 'Address', infoType: model.address),
+          InfoRow(infoData: 'Neighborhood', infoType: model.neighborhood),
+        ],
       ),
-    );
+    ));
   }
 }
 
@@ -126,17 +96,16 @@ class InfoRow extends StatelessWidget {
         children: <Widget>[
           Text(
             infoData,
-            style: Theme.of(context).textTheme.headline6!.copyWith(
-                  fontWeight: FontWeight.w700,
+            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                  fontWeight: FontWeight.w500,
                 ),
           ),
           Spacer(),
           Text(
             infoType,
-            style: Theme.of(context)
-                .textTheme
-                .subtitle1!
-                .copyWith(color: Colors.grey[700], fontSize: 18),
+            style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                  color: Colors.grey[700],
+                ),
           ),
         ],
       ),

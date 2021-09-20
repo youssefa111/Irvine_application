@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 

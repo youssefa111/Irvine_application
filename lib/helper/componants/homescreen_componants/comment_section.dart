@@ -19,7 +19,6 @@ class CommentSection extends StatefulWidget {
 
 class _CommentSectionState extends State<CommentSection> {
   var commentController = TextEditingController();
-  String _x = '';
 
   @override
   void dispose() {
@@ -70,6 +69,7 @@ class _CommentSectionState extends State<CommentSection> {
                         IconButton(
                           onPressed: () {
                             commentController.text.trim().isEmpty
+                                // ignore: unnecessary_statements
                                 ? null
                                 : HomeScreenCubit.get(context)
                                     .comment(
@@ -162,6 +162,7 @@ class _CommentSectionState extends State<CommentSection> {
                       IconButton(
                         onPressed: () {
                           commentController.text.trim().isEmpty
+                              // ignore: unnecessary_statements
                               ? null
                               : HomeScreenCubit.get(context)
                                   .comment(

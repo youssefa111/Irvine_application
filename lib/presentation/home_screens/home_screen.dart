@@ -9,11 +9,11 @@ import '../../helper/componants/homescreen_componants/drawer.dart';
 import '../../helper/componants/homescreen_componants/filter_dialog.dart';
 import '../../helper/componants/homescreen_componants/top_container.dart';
 import '../../helper/constants/constants.dart';
-import '../add_screens/news_screen.dart';
-import '../add_screens/report_category_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,12 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      drawer: HomeDrawer(),
+      drawer: BlocBuilder<HomeScreenCubit, HomeScreenState>(
+        builder: (context, state) {
+          var _userData = HomeScreenCubit.get(context).userData;
+          return HomeDrawer(model: _userData);
+        },
+      ),
       body: HomeBody(),
     );
   }
@@ -52,40 +57,19 @@ class HomeBody extends StatelessWidget {
 
 class ViewSection extends StatelessWidget {
   const ViewSection({Key? key}) : super(key: key);
-
+  void searchCategory(String query) {}
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
     return Column(
       children: <Widget>[
-        SizedBox(
-          height: 5,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            TopContainer(
-              height: 110,
-              width: screenWidth / 3.5,
-              imagePath: 'assets/hate.jpeg',
-              title: 'Report an issue',
-              widget: ReportCategoryScreen(),
-            ),
-            TopContainer(
-              height: 100,
-              width: screenWidth / 3.5,
-              imagePath: 'assets/map2.jpg',
-              title: 'Add news',
-              widget: NewsScreen(),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
         Row(
           children: <Widget>[
-            Spacer(),
+            Expanded(
+              child: TopSearchBar(
+                text: '',
+                onChanged: searchCategory,
+              ),
+            ),
             IconButton(
               onPressed: () {
                 showDialog(
@@ -110,9 +94,7 @@ class ViewSection extends StatelessWidget {
                           state is FilteredSucessfully
                               ? HomeScreenCubit.get(context).filterList[index]
                               : HomeScreenCubit.get(context).dataList[index],
-                      separatorBuilder: (context, index) => Container(
-                            color: Colors.grey[350],
-                            width: double.infinity,
+                      separatorBuilder: (context, index) => SizedBox(
                             height: 5,
                           ),
                       itemCount: state is FilteredSucessfully

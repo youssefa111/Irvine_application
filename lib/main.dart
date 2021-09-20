@@ -9,8 +9,8 @@ import 'package:hexcolor/hexcolor.dart';
 
 import 'business_logic/cubit/bloc_observer.dart';
 import 'business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
+import 'presentation/application_layout.dart';
 import 'presentation/authentication_screens/login_screen.dart';
-import 'presentation/home_screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,7 +71,12 @@ class MyApp extends StatelessWidget {
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return HomeScreen();
+                    return BlocProvider(
+                      create: (context) => HomeScreenCubit()
+                        ..getHomeData()
+                        ..userDataLoad(),
+                      child: ApplicationLayout(),
+                    );
                   }
                   return LoginScreen();
                 }),
