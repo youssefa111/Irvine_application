@@ -83,7 +83,7 @@ class _FilterDialogState extends State<FilterDialog> {
                     builder: (context, state) {
                       return TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor: HexColor('#a99e71'),
+                          backgroundColor: Theme.of(context).primaryColor,
                         ),
                         onPressed: () {
                           HomeScreenCubit.get(context)

@@ -33,8 +33,6 @@ dependencies:
   flutter_bloc: ^7.2.0
   bloc: ^7.1.0
   hexcolor: ^2.0.5
-  device_preview: ^0.7.4
-  provider: ^6.0.0
   animated_splash_screen: ^1.1.0
   cloud_firestore: ^2.5.1
   firebase_auth: ^3.1.0
@@ -52,11 +50,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-dependency_overrides:
-  device_preview: ^0.7.4
-  provider: ^5.0.0
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

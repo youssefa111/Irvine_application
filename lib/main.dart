@@ -21,26 +21,17 @@ void main() async {
   ]);
   Bloc.observer = MyBlocObserver();
 
-  // runApp(
-  //   DevicePreview(
-  //     enabled: !kReleaseMode,
-  //     builder: (context) => MyApp(), // Wrap your app
-  //   ),
-  // );
   runApp(MyApp());
 }
 // #1b3260
 // '#a99e71'
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => HomeScreenCubit()..getHomeData(),
       child: MaterialApp(
-        // locale: DevicePreview.locale(context), // Add the locale here
-        // builder: DevicePreview.appBuilder, // Add the builder here
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           appBarTheme: AppBarTheme(

@@ -2,7 +2,7 @@
     package="com.example.first_task">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
    <application
-        android:label="first_task"
+        android:label="Reporting App"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
