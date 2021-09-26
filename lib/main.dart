@@ -2,6 +2,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:first_task/business_logic/cubit/authentication_cubit/cubit/authentication_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,11 +30,19 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomeScreenCubit()..getHomeData(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => HomeScreenCubit(),
+        ),
+        BlocProvider(
+          create: (context) => AuthenticationCubit(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          fontFamily: 'Roboto',
           appBarTheme: AppBarTheme(
             foregroundColor: Colors.white,
             titleTextStyle: TextStyle(
@@ -71,12 +80,27 @@ class MyApp extends StatelessWidget {
                 stream: FirebaseAuth.instance.authStateChanges(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return BlocProvider(
-                      create: (context) => HomeScreenCubit()
-                        ..getHomeData()
-                        ..userDataLoad(),
-                      child: ApplicationLayout(),
-                    );
+                    return FutureBuilder(
+                        future: Future.wait([
+                          HomeScreenCubit.get(context).getHomeData(),
+                          HomeScreenCubit.get(context).userDataLoad(),
+                          HomeScreenCubit.get(context).gethidePostsList(),
+                        ]),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            return BlocBuilder<HomeScreenCubit,
+                                HomeScreenState>(
+                              builder: (context, state) {
+                                return ApplicationLayout();
+                              },
+                            );
+                          }
+
+                          return Scaffold(
+                            body: Center(child: CircularProgressIndicator()),
+                          );
+                        });
                   }
                   return LoginScreen();
                 }),

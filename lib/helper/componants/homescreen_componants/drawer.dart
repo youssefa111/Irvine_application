@@ -1,4 +1,5 @@
 import 'package:first_task/model/user_model.dart';
+import 'package:first_task/presentation/profile_screens/activity_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,7 +38,7 @@ class HomeDrawer extends StatelessWidget {
                     ),
                     Center(
                       child: Image.asset(
-                        'assets/employee.png',
+                        'assets/images/employee.png',
                         height: 100,
                         width: 100,
                         color: Colors.white,
@@ -81,7 +82,14 @@ class HomeDrawer extends StatelessWidget {
                           )));
                 }),
             drawerSetting(title: 'Feed Preferences', context: context),
-            drawerSetting(title: 'My Activites', context: context),
+            drawerSetting(
+                title: 'My Activites',
+                context: context,
+                voidCallback: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ActivityScreen()));
+                }),
             drawerSetting(title: 'Notifcations', context: context),
             drawerSetting(
                 title: 'Invite friends & neighbors', context: context),

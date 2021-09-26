@@ -89,7 +89,6 @@ class _ReplySectionState extends State<ReplySection> {
                     ? Text('There is no Reply yet!')
                     : Expanded(
                         child: ListView.separated(
-                          physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (context, index) => ClipRRect(
                             borderRadius: BorderRadius.circular(25),

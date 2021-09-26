@@ -33,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   Center(
                     child: Image.asset(
-                      'assets/employee.png',
+                      'assets/images/employee.png',
                       height: 70,
                       width: 70,
                       color: Colors.white,

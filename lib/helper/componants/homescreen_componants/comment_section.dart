@@ -98,22 +98,54 @@ class _CommentSectionState extends State<CommentSection> {
                               decoration: BoxDecoration(
                                 color: Colors.grey[200],
                               ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    widget.commentList![index].split(':')[0],
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    widget.commentList![index].split(':')[1],
-                                  ),
-                                ],
+                              child: Container(
+                                height: 100,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 20,
+                                          height: 20,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              widget.commentList![index]
+                                                  .split(':')[0]
+                                                  .toString()[0],
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          widget.commentList![index]
+                                              .split(':')[0],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      widget.commentList![index].split(':')[1],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -195,9 +227,34 @@ class _CommentSectionState extends State<CommentSection> {
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  x[index].split(':')[0],
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          x[index].split(':')[0].toString()[0],
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      x[index].split(':')[0],
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                  ],
                                 ),
                                 SizedBox(
                                   height: 10,

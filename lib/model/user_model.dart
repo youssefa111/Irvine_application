@@ -8,6 +8,7 @@ class UserModel {
   final String password;
   final String neighborhood;
   final int phone;
+  final dynamic hidePostsList;
   UserModel({
     required this.address,
     required this.name,
@@ -15,6 +16,7 @@ class UserModel {
     required this.password,
     required this.neighborhood,
     required this.phone,
+    this.hidePostsList,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,6 +39,7 @@ class UserModel {
       password: map['password'],
       neighborhood: map['neighborhood'],
       phone: map['phone'],
+      hidePostsList: map['hidePostsList'],
     );
   }
 

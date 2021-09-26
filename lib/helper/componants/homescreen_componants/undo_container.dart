@@ -6,36 +6,24 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:like_button/like_button.dart';
-import 'package:simple_page_indicator/simple_page_indicator.dart';
+
 import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import '../../../model/report_model.dart';
 
 // ignore: must_be_immutable
-class NewReportContainer extends StatefulWidget {
+class UndoContainer extends StatelessWidget {
   final ReportModel model;
   final String reportID;
 
-  NewReportContainer({Key? key, required this.model, required this.reportID})
+  UndoContainer({Key? key, required this.model, required this.reportID})
       : super(key: key);
 
-  @override
-  _NewReportContainerState createState() => _NewReportContainerState();
-}
-
-class _NewReportContainerState extends State<NewReportContainer> {
-  var _pageController = PageController();
-  bool showComment = false;
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
+//  widget.key.toString().replaceAll(RegExp('\[<\'>\]'), '').replaceAll(']', '').replaceAll('[', ''),
   @override
   Widget build(BuildContext context) {
     var userID = FirebaseAuth.instance.currentUser!.uid;
     return Card(
+      elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
         side: BorderSide(color: Colors.grey),
@@ -59,7 +47,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                     ),
                     child: Center(
                       child: Text(
-                        widget.model.reporterLetter,
+                        model.reporterLetter,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -71,19 +59,16 @@ class _NewReportContainerState extends State<NewReportContainer> {
                     width: 5,
                   ),
                   Text(
-                    widget.model.reporterName,
+                    model.reporterName,
                   ),
                   Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) => OptionsDialog(
-                                reprotID: widget.reportID,
-                              ));
-                    },
-                    icon: Icon(Icons.more_horiz),
-                  ),
+                  TextButton(
+                      onPressed: () {
+                        HomeScreenCubit.get(context).undoPost(reportID).then(
+                            (value) => HomeScreenCubit.get(context)
+                                .gethidePostsList());
+                      },
+                      child: Text('Undo'))
                 ],
               ),
               Row(
@@ -101,15 +86,15 @@ class _NewReportContainerState extends State<NewReportContainer> {
                   ),
                   FittedBox(
                       child: Text(
-                    widget.model.reportName,
+                    model.reportName,
                     style: TextStyle(
                       fontSize: 13,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                     ),
                   )),
                   Spacer(),
                   Text(
-                    widget.model.date,
+                    model.date,
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
@@ -120,53 +105,61 @@ class _NewReportContainerState extends State<NewReportContainer> {
               SizedBox(
                 height: 5,
               ),
-              widget.model.reportImage != null
+              model.reportImage != null
                   ? Container(
-                      height: 260,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: PageView.builder(
-                                controller: _pageController,
-                                itemBuilder: (context, index) => ClipRRect(
-                                      borderRadius: BorderRadius.circular(8),
-                                      child: Container(
-                                        height: 245,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                .9,
-                                        child: FadeInImage.assetNetwork(
-                                          placeholder:
-                                              'assets/images/loading.gif',
-                                          image:
-                                              widget.model.reportImage![index],
-                                          fit: BoxFit.fill,
-                                        ),
+                      height: 220,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Container(
+                                    height: 200,
+                                    width:
+                                        MediaQuery.of(context).size.width * .9,
+                                    child: FadeInImage.assetNetwork(
+                                      placeholder: 'assets/loading.gif',
+                                      image: model.reportImage![index],
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    widthFactor: 9.5,
+                                    child: Container(
+                                      height: 30,
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color: Colors.black87,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        '${index + 1}/${model.reportImage!.length}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
                                       ),
                                     ),
-                                itemCount: widget.model.reportImage!.length),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          SimplePageIndicator(
-                            itemCount: widget.model.reportImage!.length,
-                            controller: _pageController,
-                            maxSize: 6,
-                            minSize: 3,
-                            indicatorColor: Theme.of(context).primaryColor,
-                            space: 14,
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                        ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        itemCount: model.reportImage!.length,
                       ),
                     )
                   : SizedBox(
                       height: 10,
                     ),
-              Text(widget.model.reportContent),
+              Text(model.reportContent),
               SizedBox(
                 height: 5,
               ),
@@ -176,15 +169,15 @@ class _NewReportContainerState extends State<NewReportContainer> {
                   StreamBuilder<DocumentSnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('posts')
-                          .doc(widget.reportID)
+                          .doc(reportID)
                           .snapshots(),
                       builder: (BuildContext context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Text(
-                            '( ${widget.model.reportLikes} Agrees , ${widget.model.reportDislikes} Disagrees , ${widget.model.reportComments} Comments )',
+                            '( ${model.reportLikes} Agrees , ${model.reportDislikes} Disagrees , ${model.reportComments} Comments )',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 13,
                               color: Colors.grey[600],
                             ),
                           );
@@ -194,7 +187,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                         return Text(
                           '( ${data['reportLikes']} Agrees , ${data['reportDislikes']} Disagrees , ${data['reportComments']} Comments )',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 13,
                             color: Colors.grey[600],
                           ),
                         );
@@ -210,7 +203,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
               StreamBuilder<DocumentSnapshot?>(
                 stream: FirebaseFirestore.instance
                     .collection('posts')
-                    .doc(widget.reportID)
+                    .doc(reportID)
                     .snapshots(),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -226,25 +219,24 @@ class _NewReportContainerState extends State<NewReportContainer> {
                                   isLiked
                                       ? FontAwesomeIcons.solidThumbsUp
                                       : FontAwesomeIcons.thumbsUp,
-                                  size: 14,
+                                  size: 16,
                                 );
                               },
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
                                     .interactAgree(
-                                  widget.key
+                                  key
                                       .toString()
                                       .replaceAll(RegExp('\[<\'>\]'), '')
                                       .replaceAll(']', '')
                                       .replaceAll('[', ''),
                                 );
                               },
-                              isLiked: widget.model.reactItem == null ||
-                                      (widget.model.reactItem != null &&
-                                          !widget.model.reactItem
-                                              .containsKey(userID))
+                              isLiked: model.reactItem == null ||
+                                      (model.reactItem != null &&
+                                          !model.reactItem.containsKey(userID))
                                   ? false
-                                  : widget.model.reactItem[userID]['isLiked'],
+                                  : model.reactItem[userID]['isLiked'],
                             ),
                             Text('Agree'),
                           ],
@@ -258,43 +250,37 @@ class _NewReportContainerState extends State<NewReportContainer> {
                                   isLiked
                                       ? FontAwesomeIcons.solidThumbsDown
                                       : FontAwesomeIcons.thumbsDown,
-                                  size: 14,
+                                  size: 16,
                                 );
                               },
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
                                     .interactDisagree(
-                                  widget.key
+                                  key
                                       .toString()
                                       .replaceAll(RegExp('\[<\'>\]'), '')
                                       .replaceAll(']', '')
                                       .replaceAll('[', ''),
                                 );
                               },
-                              isLiked: widget.model.reactItem == null ||
-                                      (widget.model.reactItem != null &&
-                                          !widget.model.reactItem
-                                              .containsKey(userID))
+                              isLiked: model.reactItem == null ||
+                                      (model.reactItem != null &&
+                                          !model.reactItem.containsKey(userID))
                                   ? false
-                                  : widget.model.reactItem[userID]
-                                      ['isDisliked'],
+                                  : model.reactItem[userID]['isDisliked'],
                             ),
                             Text('Disagree'),
                           ],
                         ),
                         InkWell(
-                          onTap: () {
-                            setState(() {
-                              showComment = !showComment;
-                            });
-                          },
+                          onTap: () {},
                           child: Container(
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 FaIcon(
                                   FontAwesomeIcons.comment,
-                                  size: 14,
+                                  size: 16,
                                 ),
                                 SizedBox(
                                   width: 5,
@@ -314,13 +300,8 @@ class _NewReportContainerState extends State<NewReportContainer> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       InkWell(
-                        onTap: () => HomeScreenCubit.get(context).interactAgree(
-                          widget.key
-                              .toString()
-                              .replaceAll(RegExp('\[<\'>\]'), '')
-                              .replaceAll(']', '')
-                              .replaceAll('[', ''),
-                        ),
+                        onTap: () => HomeScreenCubit.get(context)
+                            .interactAgree(reportID),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -339,18 +320,12 @@ class _NewReportContainerState extends State<NewReportContainer> {
                                           data['reactItem'][userID]['isLiked']
                                       ? Colors.green
                                       : Colors.black,
-                                  size: 14,
+                                  size: 16,
                                 );
                               },
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
-                                    .interactAgree(
-                                  widget.key
-                                      .toString()
-                                      .replaceAll(RegExp('\[<\'>\]'), '')
-                                      .replaceAll(']', '')
-                                      .replaceAll('[', ''),
-                                );
+                                    .interactAgree(reportID);
                               },
                               isLiked: data['reactItem'] != null &&
                                       data['reactItem'].containsKey(userID)
@@ -362,14 +337,8 @@ class _NewReportContainerState extends State<NewReportContainer> {
                         ),
                       ),
                       InkWell(
-                        onTap: () =>
-                            HomeScreenCubit.get(context).interactDisagree(
-                          widget.key
-                              .toString()
-                              .replaceAll(RegExp('\[<\'>\]'), '')
-                              .replaceAll(']', '')
-                              .replaceAll('[', ''),
-                        ),
+                        onTap: () => HomeScreenCubit.get(context)
+                            .interactDisagree(reportID),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -390,18 +359,12 @@ class _NewReportContainerState extends State<NewReportContainer> {
                                               ['isDisliked']
                                       ? Colors.red[900]
                                       : Colors.black,
-                                  size: 14,
+                                  size: 16,
                                 );
                               },
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
-                                    .interactDisagree(
-                                  widget.key
-                                      .toString()
-                                      .replaceAll(RegExp('\[<\'>\]'), '')
-                                      .replaceAll(']', '')
-                                      .replaceAll('[', ''),
-                                );
+                                    .interactDisagree(reportID);
                               },
                               isLiked: data['reactItem'] != null &&
                                       data['reactItem'].containsKey(userID)
@@ -413,18 +376,14 @@ class _NewReportContainerState extends State<NewReportContainer> {
                         ),
                       ),
                       InkWell(
-                        onTap: () {
-                          setState(() {
-                            showComment = !showComment;
-                          });
-                        },
+                        onTap: () => HomeScreenCubit.get(context).showComment(),
                         child: Container(
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               FaIcon(
                                 FontAwesomeIcons.comment,
-                                size: 14,
+                                size: 16,
                               ),
                               SizedBox(
                                 width: 5,
@@ -440,26 +399,12 @@ class _NewReportContainerState extends State<NewReportContainer> {
               ),
               BlocBuilder<HomeScreenCubit, HomeScreenState>(
                 builder: (context, state) {
-                  if (showComment)
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: CommentSection(
-                        key: ValueKey(
-                          widget.key
-                              .toString()
-                              .replaceAll(RegExp('\[<\'>\]'), '')
-                              .replaceAll(']', '')
-                              .replaceAll('[', ''),
-                        ),
-                        postKey: widget.key
-                            .toString()
-                            .replaceAll(RegExp('\[<\'>\]'), '')
-                            .replaceAll(']', '')
-                            .replaceAll('[', ''),
-                        commentList: widget.model.commentList == null
-                            ? null
-                            : widget.model.commentList.values.toList(),
-                      ),
+                  if (HomeScreenCubit.get(context).isCommentShown)
+                    return CommentSection(
+                      postKey: reportID,
+                      commentList: model.commentList == null
+                          ? null
+                          : model.commentList.values.toList(),
                     );
                   return Container();
                 },
@@ -508,8 +453,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                     padding: const EdgeInsets.only(left: 15.0),
                     child: InteractButton(
                         func: () => HomeScreenCubit.get(context)
-                          ..hidePost(widget.reprotID, context)
-                          ..gethidePostsList(),
+                            .hidePost(widget.reprotID, context),
                         icon: FontAwesomeIcons.eyeSlash,
                         iconName: 'Hide post'),
                   ),

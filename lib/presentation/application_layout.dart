@@ -11,9 +11,9 @@ class ApplicationLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeScreenCubit, HomeScreenState>(
       builder: (context, state) {
-        var _cubit = HomeScreenCubit.get(context);
+        var cubit = HomeScreenCubit.get(context);
         return Scaffold(
-            body: _cubit.bottomScreens[_cubit.currentIndex],
+            body: cubit.bottomScreens[cubit.currentIndex],
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
                 gradient: linearGradient,
@@ -24,21 +24,18 @@ class ApplicationLayout extends StatelessWidget {
                       icon: Icon(Icons.home), label: 'Home'),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.report),
-                    label: 'Add Report',
+                    label: 'Report Issue',
                   ),
                   BottomNavigationBarItem(
                     icon: FaIcon(FontAwesomeIcons.newspaper),
                     label: 'Add News',
                   ),
                 ],
-                currentIndex: _cubit.currentIndex,
+                currentIndex: cubit.currentIndex,
                 onTap: (int index) {
-                  _cubit.changeBottom(index);
+                  cubit.changeBottom(index);
                 },
                 selectedItemColor: Theme.of(context).primaryColor,
-                type: BottomNavigationBarType.shifting,
-                unselectedItemColor: Colors.grey,
-                showUnselectedLabels: true,
               ),
             ));
       },

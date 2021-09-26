@@ -11,110 +11,110 @@ class FilterDialog extends StatefulWidget {
 }
 
 class _FilterDialogState extends State<FilterDialog> {
-  static int? filterGroup = 1;
-  bool checkBox = false;
+  int? filterGroup = 1;
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        height: MediaQuery.of(context).size.height * .35,
-        width: MediaQuery.of(context).size.width * .5,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
+    return BlocConsumer<HomeScreenCubit, HomeScreenState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        var cubit = HomeScreenCubit.get(context);
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            height: MediaQuery.of(context).size.height * .35,
+            width: MediaQuery.of(context).size.width * .5,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Radio<int>(
-                    activeColor: Colors.black,
-                    value: 1,
-                    groupValue: filterGroup,
-                    onChanged: (value) {
-                      setState(() {
-                        filterGroup = value;
-                      });
-                    },
+                  Row(
+                    children: <Widget>[
+                      Radio<int>(
+                        activeColor: Colors.black,
+                        value: 1,
+                        groupValue: cubit.filterGroup,
+                        onChanged: (value) {
+                          cubit.changeFilter(value!);
+                        },
+                      ),
+                      Text('All'),
+                    ],
                   ),
-                  Text('All'),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Radio<int>(
-                    activeColor: Colors.black,
-                    value: 2,
-                    groupValue: filterGroup,
-                    onChanged: (value) {
-                      setState(() {
-                        filterGroup = value;
-                      });
-                    },
+                  Row(
+                    children: <Widget>[
+                      Radio<int>(
+                        activeColor: Colors.black,
+                        value: 2,
+                        groupValue: cubit.filterGroup,
+                        onChanged: (value) {
+                          cubit.changeFilter(value!);
+                        },
+                      ),
+                      Text('Reports'),
+                    ],
                   ),
-                  Text('Reports'),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Radio<int>(
-                    activeColor: Colors.black,
-                    value: 3,
-                    groupValue: filterGroup,
-                    onChanged: (value) {
-                      setState(() {
-                        filterGroup = value;
-                      });
-                    },
+                  Row(
+                    children: <Widget>[
+                      Radio<int>(
+                        activeColor: Colors.black,
+                        value: 3,
+                        groupValue: cubit.filterGroup,
+                        onChanged: (value) {
+                          cubit.changeFilter(value!);
+                        },
+                      ),
+                      Text('News'),
+                    ],
                   ),
-                  Text('News'),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  BlocBuilder<HomeScreenCubit, HomeScreenState>(
-                    builder: (context, state) {
-                      return TextButton(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      BlocBuilder<HomeScreenCubit, HomeScreenState>(
+                        builder: (context, state) {
+                          return TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor,
+                            ),
+                            onPressed: () {
+                              HomeScreenCubit.get(context)
+                                  .filterHome(cubit.filterGroup!.toInt());
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'OK',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      TextButton(
                         style: TextButton.styleFrom(
                           backgroundColor: Theme.of(context).primaryColor,
                         ),
-                        onPressed: () {
-                          HomeScreenCubit.get(context)
-                              .filterHome(filterGroup!.toInt());
-                          Navigator.of(context).pop();
-                        },
+                        onPressed: () => Navigator.of(context).pop(),
                         child: Text(
-                          'OK',
+                          'Cancel',
                           style: TextStyle(color: Colors.white),
                         ),
-                      );
-                    },
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

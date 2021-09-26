@@ -19,7 +19,13 @@ class HomeScreenError extends HomeScreenState {}
 
 //==================== Filter States =========================================
 
+class FilterChange extends HomeScreenState {}
+
 class FilteredSucessfully extends HomeScreenState {}
+
+//==================== SEARCH States =========================================
+
+class SearchHomeSucessfully extends HomeScreenState {}
 
 //==================== Interaction States =========================================
 
@@ -53,6 +59,21 @@ class ShowReply extends HomeScreenState {}
 
 class SearchSucessfully extends HomeScreenState {}
 
-//==================== options States =========================================
+//==================== Hide Post States =========================================
 
-class OptionsSucessfully extends HomeScreenState {}
+class HidePostSucessfully extends HomeScreenState {}
+
+class HidePostError extends HomeScreenState {}
+
+class HidePostsListLoadedSucessfully extends HomeScreenState {}
+
+class HidePostsListLoading extends HomeScreenState {}
+
+class HidePostsListLoadedError extends HomeScreenState {}
+
+//==================== Undo Post States =========================================
+class UndoPostLoading extends HomeScreenState {}
+
+class UndoPostSucessfully extends HomeScreenState {}
+
+class UndoPostError extends HomeScreenState {}

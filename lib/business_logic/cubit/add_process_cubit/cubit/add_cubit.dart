@@ -93,6 +93,11 @@ class AddCubit extends Cubit<AddState> {
       await FirebaseFirestore.instance
           .collection('posts')
           .add(newsModel.toMap());
-    } catch (e) {}
+
+      emit(AddNewsSucessfully());
+    } catch (e) {
+      print(e.toString());
+      emit(AddNewsError());
+    }
   }
 }

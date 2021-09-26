@@ -95,7 +95,7 @@ class _TopSearchBarState extends State<TopSearchBar> {
         controller: controller,
         decoration: InputDecoration(
           icon: Icon(Icons.search, color: style.color),
-          suffixIcon: widget.text.isNotEmpty
+          suffixIcon: controller.text.isNotEmpty
               ? GestureDetector(
                   child: Icon(Icons.close, color: style.color),
                   onTap: () {

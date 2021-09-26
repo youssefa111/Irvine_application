@@ -7,7 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import '../../helper/componants/homescreen_componants/drawer.dart';
 import '../../helper/componants/homescreen_componants/filter_dialog.dart';
-import '../../helper/componants/homescreen_componants/top_container.dart';
 import '../../helper/constants/constants.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -51,25 +50,72 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: const EdgeInsets.all(0), child: ViewSection());
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: ViewSection());
   }
 }
 
-class ViewSection extends StatelessWidget {
+class ViewSection extends StatefulWidget {
   const ViewSection({Key? key}) : super(key: key);
+
+  @override
+  _ViewSectionState createState() => _ViewSectionState();
+}
+
+class _ViewSectionState extends State<ViewSection> {
+  final controller = TextEditingController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   void searchCategory(String query) {}
+
   @override
   Widget build(BuildContext context) {
+    final styleActive = TextStyle(color: Colors.black);
+    final styleHint = TextStyle(color: Colors.black54);
+    final style = controller.text.isEmpty ? styleHint : styleActive;
     return Column(
       children: <Widget>[
+        Container(
+          height: 42,
+          margin: const EdgeInsets.fromLTRB(5, 10, 5, 0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.white,
+            border: Border.all(color: Colors.black26),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: TextField(
+              controller: controller,
+              decoration: InputDecoration(
+                icon: Icon(Icons.search, color: style.color),
+                suffixIcon: controller.text.isNotEmpty
+                    ? GestureDetector(
+                        child: Icon(Icons.close, color: style.color),
+                        onTap: () {
+                          controller.clear();
+
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        },
+                      )
+                    : null,
+                hintText: 'Search',
+                hintStyle: style,
+                border: InputBorder.none,
+              ),
+              style: style,
+              onChanged: (String searchPost) {
+                HomeScreenCubit.get(context).search(searchPost);
+              }),
+        ),
         Row(
           children: <Widget>[
-            Expanded(
-              child: TopSearchBar(
-                text: '',
-                onChanged: searchCategory,
-              ),
-            ),
+            Spacer(),
             IconButton(
               onPressed: () {
                 showDialog(
@@ -81,7 +127,9 @@ class ViewSection extends StatelessWidget {
             ),
           ],
         ),
-        Expanded(child: BlocBuilder<HomeScreenCubit, HomeScreenState>(
+        Expanded(
+            child: BlocConsumer<HomeScreenCubit, HomeScreenState>(
+          listener: (context, state) {},
           builder: (context, state) {
             return RefreshIndicator(
               onRefresh: () => HomeScreenCubit.get(context).getHomeData(),
@@ -90,16 +138,15 @@ class ViewSection extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     )
                   : ListView.separated(
-                      itemBuilder: (context, index) =>
-                          state is FilteredSucessfully
-                              ? HomeScreenCubit.get(context).filterList[index]
-                              : HomeScreenCubit.get(context).dataList[index],
+                      itemBuilder: (context, index) => controller.text.isEmpty
+                          ? HomeScreenCubit.get(context).dataList[index]
+                          : HomeScreenCubit.get(context).searchList[index],
                       separatorBuilder: (context, index) => SizedBox(
                             height: 5,
                           ),
-                      itemCount: state is FilteredSucessfully
-                          ? HomeScreenCubit.get(context).filterList.length
-                          : HomeScreenCubit.get(context).dataList.length),
+                      itemCount: controller.text.isEmpty
+                          ? HomeScreenCubit.get(context).dataList.length
+                          : HomeScreenCubit.get(context).searchList.length),
             );
           },
         )),

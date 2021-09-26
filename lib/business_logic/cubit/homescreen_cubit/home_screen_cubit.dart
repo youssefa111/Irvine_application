@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:first_task/helper/componants/homescreen_componants/undo_container.dart';
 import 'package:first_task/presentation/add_screens/news_screen.dart';
 import 'package:first_task/presentation/add_screens/report_category_screen.dart';
 import 'package:first_task/presentation/home_screens/home_screen.dart';
@@ -35,11 +36,19 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   //=================================================================
   //==================== HomeData Function ==========================
   List dataList = [];
+  var filterList = [];
 
   Future<void> getHomeData() async {
     dataList = [];
     emit(HomeScreenLoading());
     try {
+      var userID = FirebaseAuth.instance.currentUser!.uid;
+      var userInstance = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userID)
+          .get();
+      Map<String, dynamic> userData =
+          userInstance.data() as Map<String, dynamic>;
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection("posts")
           .orderBy('createdAt', descending: true)
@@ -48,11 +57,14 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
         Map<String, dynamic> data = e.data() as Map<String, dynamic>;
         if (data['containerCategory'] == 0) {
           dataList.add(NewsContainer(
-            newsModel: NewsModel.fromMap(data),
+            model: NewsModel.fromMap(data),
             newsID: e.id,
             key: ValueKey(e.id),
           ));
-        } else if (data['containerCategory'] == 1) {
+        } else if ((data['containerCategory'] == 1 &&
+                userData['hidePostsList'] == null) ||
+            (data['containerCategory'] == 1 &&
+                !userData['hidePostsList'].values.toList().contains(e.id))) {
           dataList.add(
             NewReportContainer(
               model: ReportModel.fromMap(data),
@@ -62,7 +74,7 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
           );
         }
       }).toList();
-
+      filterList = [...dataList];
       emit(HomeScreenSucess());
     } catch (e) {
       print(e.toString());
@@ -84,30 +96,32 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   //================================================================
 
   //==================== Filter Function ==========================
+  int? filterGroup = 1;
 
-  var filterList = [];
+  void changeFilter(int index) {
+    filterGroup = index;
+
+    emit(FilterChange());
+  }
 
   void filterHome(int index) {
     if (index == 1) {
-      filterList = [...dataList];
-
+      dataList = [...filterList];
       emit(HomeScreenSucess());
     } else if (index == 2) {
-      filterList = dataList
+      dataList = filterList
           .where((element) => element.toString().contains('NewReportContainer'))
           .toList();
 
-      print(filterList);
-
       emit(FilteredSucessfully());
     } else if (index == 3) {
-      filterList = dataList
+      dataList = filterList
           .where((element) => element.toString().contains('NewsContainer'))
           .toList();
-      print(filterList);
+
       emit(FilteredSucessfully());
     } else {
-      return;
+      print('hi');
     }
   }
 
@@ -471,15 +485,97 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
 
   //==================== Search Function ==========================
   var searchList = [];
-  void search(String text) {}
+  void search(String searchedCharacter) {
+    searchList = dataList.where((data) {
+      if (data.model.containerCategory == 1) {
+        return data.model.reportName
+            .toLowerCase()
+            .contains(searchedCharacter.toLowerCase());
+      } else if (data.model.containerCategory == 0) {
+        return data.model.newsTitle
+            .toLowerCase()
+            .contains(searchedCharacter.toLowerCase());
+      } else {
+        return false;
+      }
+    }).toList();
+    emit(SearchHomeSucessfully());
+  }
 
   //================================================================
 
   //==================== Options Function ==========================
-  void hidePost(String key, BuildContext context) {
-    dataList.removeWhere((element) => element.toString().contains(key));
-    Navigator.pop(context);
-    emit(OptionsSucessfully());
+  Future<void> hidePost(String key, BuildContext context) async {
+    try {
+      var instance = FirebaseFirestore.instance.collection("users");
+      dataList.removeWhere((element) => element.toString().contains(key));
+      instance.doc(FirebaseAuth.instance.currentUser!.uid).set(
+        {
+          'hidePostsList': {
+            key: key,
+          },
+        },
+        SetOptions(merge: true),
+      );
+      Navigator.pop(context);
+      emit(HidePostSucessfully());
+    } catch (e) {
+      print(e.toString());
+      emit(HidePostError());
+    }
+  }
+
+  List hidePostsList = [];
+  Future<void> gethidePostsList() async {
+    hidePostsList = [];
+    emit(HidePostsListLoading());
+
+    try {
+      var userID = FirebaseAuth.instance.currentUser!.uid;
+      var userInstance = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userID)
+          .get();
+      Map<String, dynamic> userData =
+          userInstance.data() as Map<String, dynamic>;
+      if (userData['hidePostsList'] != null) {
+        var valuesList = userData['hidePostsList'].values.toList();
+        int index = 0;
+        while (index < valuesList.length) {
+          var x = await FirebaseFirestore.instance
+              .collection('posts')
+              .doc(valuesList[index])
+              .get();
+          Map<String, dynamic> data = x.data() as Map<String, dynamic>;
+          hidePostsList.add(UndoContainer(
+            model: ReportModel.fromMap(data),
+            reportID: x.id,
+            key: ValueKey(x.id),
+          ));
+          index++;
+        }
+      } else {
+        hidePostsList = [];
+      }
+      emit(HidePostsListLoadedSucessfully());
+    } catch (e) {
+      print(e.toString());
+      emit(HidePostsListLoadedError());
+    }
+  }
+
+  Future<void> undoPost(String postID) async {
+    emit(UndoPostLoading());
+    try {
+      var userID = FirebaseAuth.instance.currentUser!.uid;
+      await FirebaseFirestore.instance.collection('users').doc(userID).update(
+        {'hidePostsList.$postID': FieldValue.delete()},
+      );
+      emit(UndoPostSucessfully());
+    } catch (e) {
+      print(e.toString());
+      emit(UndoPostError());
+    }
   }
 
   //================================================================

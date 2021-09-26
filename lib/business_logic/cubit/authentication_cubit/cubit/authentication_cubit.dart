@@ -61,6 +61,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
           'neighborhood': neighborhood,
         },
       );
+
       emit(SignupSucessfully());
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

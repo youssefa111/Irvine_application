@@ -13,19 +13,25 @@ class ReportCategoryScreen extends StatefulWidget {
 
 class _ReportCategoryScreenState extends State<ReportCategoryScreen> {
   List<ReportCategory> categoryList = [
-    ReportCategory(icon: 'assets/2.png', iconName: 'Other'),
-    ReportCategory(icon: 'assets/6.png', iconName: 'Traffic Signal Issues'),
+    ReportCategory(icon: 'assets/images/2.png', iconName: 'Other'),
     ReportCategory(
-        icon: 'assets/10.png', iconName: 'COVID Questions / Concerns'),
-    ReportCategory(icon: 'assets/5.png', iconName: 'Facility Maintenance'),
-    ReportCategory(icon: 'assets/4.png', iconName: 'Street Light Repair'),
+        icon: 'assets/images/6.png', iconName: 'Traffic Signal Issues'),
     ReportCategory(
-        icon: 'assets/7.png', iconName: 'Graffitti At City Facility'),
-    ReportCategory(icon: 'assets/3.png', iconName: 'Inefficient Water Use'),
-    ReportCategory(icon: 'assets/1.png', iconName: 'App Feedback'),
-    ReportCategory(icon: 'assets/8.png', iconName: 'Repost A Code Violation'),
-    ReportCategory(icon: 'assets/9.png', iconName: 'Damaged Street Sign'),
-    ReportCategory(icon: 'assets/9.png', iconName: 'Test Name'),
+        icon: 'assets/images/10.png', iconName: 'COVID Questions / Concerns'),
+    ReportCategory(
+        icon: 'assets/images/5.png', iconName: 'Facility Maintenance'),
+    ReportCategory(
+        icon: 'assets/images/4.png', iconName: 'Street Light Repair'),
+    ReportCategory(
+        icon: 'assets/images/7.png', iconName: 'Graffitti At City Facility'),
+    ReportCategory(
+        icon: 'assets/images/3.png', iconName: 'Inefficient Water Use'),
+    ReportCategory(icon: 'assets/images/1.png', iconName: 'App Feedback'),
+    ReportCategory(
+        icon: 'assets/images/8.png', iconName: 'Repost A Code Violation'),
+    ReportCategory(
+        icon: 'assets/images/9.png', iconName: 'Damaged Street Sign'),
+    ReportCategory(icon: 'assets/images/9.png', iconName: 'Test Name'),
   ];
   late List searchList;
 
@@ -53,7 +59,7 @@ class _ReportCategoryScreenState extends State<ReportCategoryScreen> {
 
   Widget buildSearch() => SearchWidget(
         text: query,
-        hintText: 'Search for Category',
+        hintText: 'Search Title',
         onChanged: searchCategory,
       );
   @override
@@ -68,7 +74,7 @@ class _ReportCategoryScreenState extends State<ReportCategoryScreen> {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          'Choose Category',
+          'Issue Type',
           style: TextStyle(color: Colors.white),
         ),
       ),
