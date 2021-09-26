@@ -35,103 +35,7 @@ class _ReplySectionState extends State<ReplySection> {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            height: widget.commentList == null
-                ? 120.0
-                : 100.0 * (widget.commentList!.length + .5),
-            child: Column(
-              children: [
-                Container(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextField(
-                            controller: commentController,
-                            decoration: InputDecoration(
-                              hintText: 'Write a Reply...',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                gapPadding: 12,
-                              ),
-                              fillColor: Colors.grey[200],
-                              filled: true,
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                  color: Colors.black,
-                                ),
-                                borderRadius: BorderRadius.circular(25.0),
-                              ),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            commentController.text.trim().isEmpty
-                                // ignore: unnecessary_statements
-                                ? null
-                                : HomeScreenCubit.get(context)
-                                    .reply(
-                                        widget.postKey, commentController.text)
-                                    .then((value) => commentController.clear());
-                          },
-                          icon: Icon(
-                            Icons.send,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                widget.commentList == null
-                    ? Text('There is no Reply yet!')
-                    : Expanded(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) => ClipRRect(
-                            borderRadius: BorderRadius.circular(25),
-                            child: Container(
-                              padding: const EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    widget.commentList![index].split(':')[0],
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Text(
-                                    widget.commentList![index].split(':')[1],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: 10,
-                          ),
-                          itemCount: widget.commentList!.length,
-                        ),
-                      ),
-              ],
-            ),
-          );
-        }
-        Map<String, dynamic> data =
-            snapshot.data!.data() as Map<String, dynamic>;
-        List? x = data['replyList']?.values.toList();
-        return Container(
-          height: x == null ? 120.0 : 100.0 * (x.length + .5),
-          child: Column(
+          return Wrap(
             children: [
               Container(
                 child: Padding(
@@ -143,8 +47,8 @@ class _ReplySectionState extends State<ReplySection> {
                           controller: commentController,
                           decoration: InputDecoration(
                             hintText: 'Write a Reply...',
+                            hintStyle: TextStyle(fontSize: 11),
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25.0),
                               gapPadding: 12,
                             ),
                             fillColor: Colors.grey[200],
@@ -170,51 +74,135 @@ class _ReplySectionState extends State<ReplySection> {
                         icon: Icon(
                           Icons.send,
                           color: Theme.of(context).primaryColor,
+                          size: 30,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              x == null
-                  ? Text('There is no Reply yet!')
-                  : Expanded(
-                      child: ListView.separated(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) => ClipRRect(
-                          borderRadius: BorderRadius.circular(25),
-                          child: Container(
-                            padding: const EdgeInsets.all(15),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  x[index].split(':')[0],
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  x[index].split(':')[1],
-                                ),
-                              ],
-                            ),
+              widget.commentList == null
+                  ? Center(child: Text('There is no Reply yet!'))
+                  : ListView.separated(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) => ClipRRect(
+                        borderRadius: BorderRadius.circular(25),
+                        child: Container(
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                widget.commentList![index].split(':')[0],
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                widget.commentList![index].split(':')[1],
+                              ),
+                            ],
                           ),
                         ),
-                        separatorBuilder: (context, index) => SizedBox(
-                          height: 10,
-                        ),
-                        itemCount: x.length,
                       ),
+                      separatorBuilder: (context, index) => SizedBox(
+                        height: 10,
+                      ),
+                      itemCount: widget.commentList!.length,
                     ),
             ],
-          ),
+          );
+        }
+        Map<String, dynamic> data =
+            snapshot.data!.data() as Map<String, dynamic>;
+        List? x = data['replyList']?.values.toList();
+        return Wrap(
+          children: [
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        controller: commentController,
+                        decoration: InputDecoration(
+                          hintText: 'Write a Reply...',
+                          hintStyle: TextStyle(fontSize: 11),
+                          border: OutlineInputBorder(
+                            gapPadding: 12,
+                          ),
+                          fillColor: Colors.grey[200],
+                          filled: true,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Colors.black,
+                            ),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        commentController.text.trim().isEmpty
+                            // ignore: unnecessary_statements
+                            ? null
+                            : HomeScreenCubit.get(context)
+                                .reply(widget.postKey, commentController.text)
+                                .then((value) => commentController.clear());
+                      },
+                      icon: Icon(
+                        Icons.send,
+                        color: Theme.of(context).primaryColor,
+                        size: 30,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            x == null
+                ? Center(child: Text('There is no Reply yet!'))
+                : ListView.separated(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => ClipRRect(
+                      child: Container(
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              x[index].split(':')[0],
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              x[index].split(':')[1],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: 10,
+                    ),
+                    itemCount: x.length,
+                  ),
+          ],
         );
       },
     );

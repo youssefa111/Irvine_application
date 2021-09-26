@@ -161,7 +161,10 @@ class _NewsContainerState extends State<NewsContainer> {
                                   ? false
                                   : widget.model.loveItem[userID]['isThanked'],
                             ),
-                            Text('Thank'),
+                            Text(
+                              'Thank',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                         InkWell(
@@ -176,7 +179,10 @@ class _NewsContainerState extends State<NewsContainer> {
                               SizedBox(
                                 width: 5,
                               ),
-                              Text('Reply'),
+                              Text(
+                                'Reply',
+                                style: TextStyle(fontSize: 12),
+                              ),
                             ],
                           ),
                         ),
@@ -235,6 +241,7 @@ class _NewsContainerState extends State<NewsContainer> {
                             ),
                             Text(
                               'Thank',
+                              style: TextStyle(fontSize: 12),
                             ),
                           ],
                         ),
@@ -255,7 +262,10 @@ class _NewsContainerState extends State<NewsContainer> {
                             SizedBox(
                               width: 5,
                             ),
-                            Text('Reply'),
+                            Text(
+                              'Reply',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                       ),

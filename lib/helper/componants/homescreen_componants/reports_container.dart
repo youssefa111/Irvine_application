@@ -246,7 +246,10 @@ class _NewReportContainerState extends State<NewReportContainer> {
                                   ? false
                                   : widget.model.reactItem[userID]['isLiked'],
                             ),
-                            Text('Agree'),
+                            Text(
+                              'Agree',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                         Row(
@@ -279,7 +282,10 @@ class _NewReportContainerState extends State<NewReportContainer> {
                                   : widget.model.reactItem[userID]
                                       ['isDisliked'],
                             ),
-                            Text('Disagree'),
+                            Text(
+                              'Disagree',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                         InkWell(
@@ -299,7 +305,10 @@ class _NewReportContainerState extends State<NewReportContainer> {
                                 SizedBox(
                                   width: 5,
                                 ),
-                                Text('Comment'),
+                                Text(
+                                  'Comment',
+                                  style: TextStyle(fontSize: 12),
+                                ),
                               ],
                             ),
                           ),
@@ -357,7 +366,10 @@ class _NewReportContainerState extends State<NewReportContainer> {
                                   ? data['reactItem'][userID]['isLiked']
                                   : false,
                             ),
-                            Text('Agree'),
+                            Text(
+                              'Agree',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                       ),
@@ -408,7 +420,10 @@ class _NewReportContainerState extends State<NewReportContainer> {
                                   ? data['reactItem'][userID]['isDisliked']
                                   : false,
                             ),
-                            Text('Disagree'),
+                            Text(
+                              'Disagree',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                       ),
@@ -429,7 +444,10 @@ class _NewReportContainerState extends State<NewReportContainer> {
                               SizedBox(
                                 width: 5,
                               ),
-                              Text('Comment'),
+                              Text(
+                                'Comment',
+                                style: TextStyle(fontSize: 12),
+                              ),
                             ],
                           ),
                         ),

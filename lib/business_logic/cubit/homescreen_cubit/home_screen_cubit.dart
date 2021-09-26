@@ -36,8 +36,9 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   //=================================================================
   //==================== HomeData Function ==========================
   List dataList = [];
-  var filterList = [];
-
+  List filterList = [];
+  List newsList = [];
+  List reportsList = [];
   Future<void> getHomeData() async {
     dataList = [];
     emit(HomeScreenLoading());
@@ -61,6 +62,11 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
             newsID: e.id,
             key: ValueKey(e.id),
           ));
+          newsList.add(NewsContainer(
+            model: NewsModel.fromMap(data),
+            newsID: e.id,
+            key: ValueKey(e.id),
+          ));
         } else if ((data['containerCategory'] == 1 &&
                 userData['hidePostsList'] == null) ||
             (data['containerCategory'] == 1 &&
@@ -72,9 +78,18 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
               key: ValueKey(e.id),
             ),
           );
+          reportsList.add(
+            NewReportContainer(
+              model: ReportModel.fromMap(data),
+              reportID: e.id,
+              key: ValueKey(e.id),
+            ),
+          );
         }
       }).toList();
+
       filterList = [...dataList];
+
       emit(HomeScreenSucess());
     } catch (e) {
       print(e.toString());
@@ -109,19 +124,13 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       dataList = [...filterList];
       emit(HomeScreenSucess());
     } else if (index == 2) {
-      dataList = filterList
-          .where((element) => element.toString().contains('NewReportContainer'))
-          .toList();
-
+      dataList = [...reportsList];
       emit(FilteredSucessfully());
     } else if (index == 3) {
-      dataList = filterList
-          .where((element) => element.toString().contains('NewsContainer'))
-          .toList();
-
+      dataList = [...newsList];
       emit(FilteredSucessfully());
     } else {
-      print('hi');
+      print('error');
     }
   }
 
