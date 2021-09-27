@@ -53,12 +53,6 @@ class _ReplySectionState extends State<ReplySection> {
                             ),
                             fillColor: Colors.grey[200],
                             filled: true,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.black,
-                              ),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
                           ),
                         ),
                       ),
@@ -82,7 +76,11 @@ class _ReplySectionState extends State<ReplySection> {
                 ),
               ),
               widget.commentList == null
-                  ? Center(child: Text('There is no Reply yet!'))
+                  ? Center(
+                      child: Text(
+                      'There is no reply yet!',
+                      style: TextStyle(fontSize: 11),
+                    ))
                   : ListView.separated(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -97,15 +95,46 @@ class _ReplySectionState extends State<ReplySection> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                widget.commentList![index].split(':')[0],
-                                style: Theme.of(context).textTheme.bodyText1,
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        widget.commentList![index]
+                                            .split(':')[0]
+                                            .toString()[0],
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                          fontSize: 7,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    widget.commentList![index].split(':')[0],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
                               ),
                               SizedBox(
-                                height: 10,
+                                height: 5,
                               ),
                               Text(
                                 widget.commentList![index].split(':')[1],
+                                style: TextStyle(fontSize: 10),
                               ),
                             ],
                           ),
@@ -140,12 +169,6 @@ class _ReplySectionState extends State<ReplySection> {
                           ),
                           fillColor: Colors.grey[200],
                           filled: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black,
-                            ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
                         ),
                       ),
                     ),
@@ -169,7 +192,11 @@ class _ReplySectionState extends State<ReplySection> {
               ),
             ),
             x == null
-                ? Center(child: Text('There is no Reply yet!'))
+                ? Center(
+                    child: Text(
+                    'There is no reply yet!',
+                    style: TextStyle(fontSize: 11),
+                  ))
                 : ListView.separated(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -183,15 +210,46 @@ class _ReplySectionState extends State<ReplySection> {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              x[index].split(':')[0],
-                              style: Theme.of(context).textTheme.bodyText1,
+                            Row(
+                              children: [
+                                Container(
+                                  width: 12,
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      x[index].split(':')[0].toString()[0],
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 7,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  x[index].split(':')[0],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                  ),
+                                ),
+                              ],
                             ),
                             SizedBox(
-                              height: 10,
+                              height: 5,
                             ),
                             Text(
                               x[index].split(':')[1],
+                              style: TextStyle(
+                                fontSize: 10,
+                              ),
                             ),
                           ],
                         ),

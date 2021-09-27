@@ -47,7 +47,7 @@ class ProfileScreen extends StatelessWidget {
                   Center(
                     child: Text(
                       model.name,
-                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
                           color: Colors.white, fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -97,7 +97,8 @@ class InfoRow extends StatelessWidget {
           Text(
             infoData,
             style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
                 ),
           ),
           Spacer(),
@@ -105,6 +106,7 @@ class InfoRow extends StatelessWidget {
             infoType,
             style: Theme.of(context).textTheme.subtitle1!.copyWith(
                   color: Colors.grey[700],
+                  fontSize: 12,
                 ),
           ),
         ],

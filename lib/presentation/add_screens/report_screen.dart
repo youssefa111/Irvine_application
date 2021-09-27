@@ -66,7 +66,7 @@ class _ReportScreenState extends State<ReportScreen> {
                 centerTitle: true,
                 title: Text(
                   'Report an issue',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: 15),
                 ),
                 actions: [
                   TextButton(
@@ -112,8 +112,11 @@ class _ReportScreenState extends State<ReportScreen> {
                     },
                     child: Text(
                       'Submit',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white, fontSize: 11),
                     ),
+                  ),
+                  SizedBox(
+                    width: 10,
                   ),
                 ],
               ),
@@ -144,7 +147,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                   'For Emergencies Call 911',
                                   style: TextStyle(
                                       color: Colors.red,
-                                      fontSize: 20,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
@@ -161,7 +164,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                     widget.reportCategoryName,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 18),
+                                        fontSize: 12),
                                   ),
                                 ],
                               ),
@@ -172,7 +175,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                 'Description',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                                  fontSize: 11,
                                 ),
                               ),
                               SizedBox(
@@ -194,6 +197,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                   controller: reportTextEditing,
                                   maxLines: 5,
                                   decoration: InputDecoration(
+                                      hintStyle: TextStyle(fontSize: 12),
                                       hintText: 'Enter Issue Description...',
                                       border: OutlineInputBorder()),
                                 ),
@@ -205,7 +209,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                 'Incident Location',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                                  fontSize: 11,
                                 ),
                               ),
                               SizedBox(

@@ -51,8 +51,8 @@ class _NewReportContainerState extends State<NewReportContainer> {
               Row(
                 children: <Widget>[
                   Container(
-                    width: 20,
-                    height: 20,
+                    width: 15,
+                    height: 15,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Theme.of(context).primaryColor,
@@ -63,6 +63,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
+                          fontSize: 9,
                         ),
                       ),
                     ),
@@ -72,6 +73,10 @@ class _NewReportContainerState extends State<NewReportContainer> {
                   ),
                   Text(
                     widget.model.reporterName,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   Spacer(),
                   IconButton(
@@ -103,7 +108,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                       child: Text(
                     widget.model.reportName,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
                     ),
                   )),
@@ -111,7 +116,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                   Text(
                     widget.model.date,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 10,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -158,7 +163,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                             space: 14,
                           ),
                           SizedBox(
-                            height: 5,
+                            height: 10,
                           ),
                         ],
                       ),
@@ -166,9 +171,12 @@ class _NewReportContainerState extends State<NewReportContainer> {
                   : SizedBox(
                       height: 10,
                     ),
-              Text(widget.model.reportContent),
+              Text(
+                widget.model.reportContent,
+                style: TextStyle(fontSize: 10),
+              ),
               SizedBox(
-                height: 5,
+                height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -184,7 +192,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                           return Text(
                             '( ${widget.model.reportLikes} Agrees , ${widget.model.reportDislikes} Disagrees , ${widget.model.reportComments} Comments )',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 8,
                               color: Colors.grey[600],
                             ),
                           );
@@ -194,7 +202,7 @@ class _NewReportContainerState extends State<NewReportContainer> {
                         return Text(
                           '( ${data['reportLikes']} Agrees , ${data['reportDislikes']} Disagrees , ${data['reportComments']} Comments )',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 8,
                             color: Colors.grey[600],
                           ),
                         );

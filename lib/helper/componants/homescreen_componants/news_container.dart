@@ -40,8 +40,8 @@ class _NewsContainerState extends State<NewsContainer> {
             Row(
               children: <Widget>[
                 Container(
-                  height: 20,
-                  width: 20,
+                  height: 15,
+                  width: 15,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Theme.of(context).primaryColor,
@@ -52,6 +52,7 @@ class _NewsContainerState extends State<NewsContainer> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
+                        fontSize: 9,
                       ),
                     ),
                   ),
@@ -61,11 +62,15 @@ class _NewsContainerState extends State<NewsContainer> {
                 ),
                 Text(
                   widget.model.reporterName,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 Spacer(),
                 Text(
                   widget.model.date,
-                  style: TextStyle(fontWeight: FontWeight.w500),
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 10),
                 ),
               ],
             ),
@@ -74,15 +79,19 @@ class _NewsContainerState extends State<NewsContainer> {
             ),
             Text(
               widget.model.newsTitle,
-              style: Theme.of(context).textTheme.button!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context)
+                  .textTheme
+                  .button!
+                  .copyWith(fontWeight: FontWeight.bold, fontSize: 12),
               overflow: TextOverflow.ellipsis,
             ),
             SizedBox(
               height: 10,
             ),
-            Text(widget.model.newsContent),
+            Text(
+              widget.model.newsContent,
+              style: TextStyle(fontSize: 10),
+            ),
             SizedBox(
               height: 10,
             ),
@@ -99,7 +108,7 @@ class _NewsContainerState extends State<NewsContainer> {
                         return Text(
                           '( ${widget.model.newsThanks} Thanks , ${widget.model.newsReplies} Replies )',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 8,
                             color: Colors.grey[600],
                           ),
                         );
@@ -109,7 +118,7 @@ class _NewsContainerState extends State<NewsContainer> {
                       return Text(
                         '( ${data['newsThanks']} Thanks , ${data['newsReplies']} Replies )',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 8,
                           color: Colors.grey[600],
                         ),
                       );

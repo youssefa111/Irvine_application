@@ -18,7 +18,10 @@ class ActivityScreen extends StatelessWidget {
           centerTitle: true,
           title: Text(
             'My Activity',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+            ),
           ),
         ),
         body: BlocBuilder<HomeScreenCubit, HomeScreenState>(

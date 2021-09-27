@@ -31,6 +31,7 @@ class HomeScreen extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
+            fontSize: 15,
           ),
         ),
       ),
@@ -76,8 +77,8 @@ class _ViewSectionState extends State<ViewSection> {
 
   @override
   Widget build(BuildContext context) {
-    final styleActive = TextStyle(color: Colors.black);
-    final styleHint = TextStyle(color: Colors.black54);
+    final styleActive = TextStyle(color: Colors.black, fontSize: 12);
+    final styleHint = TextStyle(color: Colors.black54, fontSize: 12);
     final style = controller.text.isEmpty ? styleHint : styleActive;
     return Column(
       children: <Widget>[

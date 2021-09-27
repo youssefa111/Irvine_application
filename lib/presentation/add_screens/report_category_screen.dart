@@ -59,7 +59,7 @@ class _ReportCategoryScreenState extends State<ReportCategoryScreen> {
 
   Widget buildSearch() => SearchWidget(
         text: query,
-        hintText: 'Search Title',
+        hintText: 'Search title',
         onChanged: searchCategory,
       );
   @override
@@ -74,8 +74,8 @@ class _ReportCategoryScreenState extends State<ReportCategoryScreen> {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          'Issue Type',
-          style: TextStyle(color: Colors.white),
+          'Issue type',
+          style: TextStyle(color: Colors.white, fontSize: 15),
         ),
       ),
       body: Padding(
@@ -137,7 +137,7 @@ class ReportCategory extends StatelessWidget {
             ),
             Text(
               iconName,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
             )
           ],
         ),

@@ -6,19 +6,33 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:like_button/like_button.dart';
+import 'package:simple_page_indicator/simple_page_indicator.dart';
 
 import '../../../business_logic/cubit/homescreen_cubit/home_screen_cubit.dart';
 import '../../../model/report_model.dart';
 
 // ignore: must_be_immutable
-class UndoContainer extends StatelessWidget {
+class UndoContainer extends StatefulWidget {
   final ReportModel model;
   final String reportID;
 
   UndoContainer({Key? key, required this.model, required this.reportID})
       : super(key: key);
 
-//  widget.key.toString().replaceAll(RegExp('\[<\'>\]'), '').replaceAll(']', '').replaceAll('[', ''),
+  @override
+  _UndoContainerState createState() => _UndoContainerState();
+}
+
+class _UndoContainerState extends State<UndoContainer> {
+  var _pageController = PageController();
+  bool showComment = false;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var userID = FirebaseAuth.instance.currentUser!.uid;
@@ -39,18 +53,19 @@ class UndoContainer extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Container(
-                    width: 20,
-                    height: 20,
+                    width: 15,
+                    height: 15,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Theme.of(context).primaryColor,
                     ),
                     child: Center(
                       child: Text(
-                        model.reporterLetter,
+                        widget.model.reporterLetter,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
+                          fontSize: 9,
                         ),
                       ),
                     ),
@@ -59,16 +74,26 @@ class UndoContainer extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    model.reporterName,
+                    widget.model.reporterName,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   Spacer(),
                   TextButton(
                       onPressed: () {
-                        HomeScreenCubit.get(context).undoPost(reportID).then(
-                            (value) => HomeScreenCubit.get(context)
+                        HomeScreenCubit.get(context)
+                            .undoPost(widget.reportID)
+                            .then((value) => HomeScreenCubit.get(context)
                                 .gethidePostsList());
                       },
-                      child: Text('Undo'))
+                      child: Text(
+                        'Undo',
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ))
                 ],
               ),
               Row(
@@ -86,17 +111,17 @@ class UndoContainer extends StatelessWidget {
                   ),
                   FittedBox(
                       child: Text(
-                    model.reportName,
+                    widget.model.reportName,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
                   )),
                   Spacer(),
                   Text(
-                    model.date,
+                    widget.model.date,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 10,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -105,63 +130,58 @@ class UndoContainer extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
-              model.reportImage != null
+              widget.model.reportImage != null
                   ? Container(
-                      height: 220,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Container(
-                                    height: 200,
-                                    width:
-                                        MediaQuery.of(context).size.width * .9,
-                                    child: FadeInImage.assetNetwork(
-                                      placeholder: 'assets/loading.gif',
-                                      image: model.reportImage![index],
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    widthFactor: 9.5,
-                                    child: Container(
-                                      height: 30,
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.black87,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        '${index + 1}/${model.reportImage!.length}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
+                      height: 260,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: PageView.builder(
+                                controller: _pageController,
+                                itemBuilder: (context, index) => ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: Container(
+                                        height: 245,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                .9,
+                                        child: FadeInImage.assetNetwork(
+                                          placeholder:
+                                              'assets/images/loading.gif',
+                                          image:
+                                              widget.model.reportImage![index],
+                                          fit: BoxFit.fill,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        itemCount: model.reportImage!.length,
+                                itemCount: widget.model.reportImage!.length),
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          SimplePageIndicator(
+                            itemCount: widget.model.reportImage!.length,
+                            controller: _pageController,
+                            maxSize: 6,
+                            minSize: 3,
+                            indicatorColor: Theme.of(context).primaryColor,
+                            space: 14,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                        ],
                       ),
                     )
                   : SizedBox(
                       height: 10,
                     ),
-              Text(model.reportContent),
+              Text(
+                widget.model.reportContent,
+                style: TextStyle(fontSize: 10),
+              ),
               SizedBox(
-                height: 5,
+                height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -169,15 +189,15 @@ class UndoContainer extends StatelessWidget {
                   StreamBuilder<DocumentSnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('posts')
-                          .doc(reportID)
+                          .doc(widget.reportID)
                           .snapshots(),
                       builder: (BuildContext context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return Text(
-                            '( ${model.reportLikes} Agrees , ${model.reportDislikes} Disagrees , ${model.reportComments} Comments )',
+                            '( ${widget.model.reportLikes} Agrees , ${widget.model.reportDislikes} Disagrees , ${widget.model.reportComments} Comments )',
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: 8,
                               color: Colors.grey[600],
                             ),
                           );
@@ -187,7 +207,7 @@ class UndoContainer extends StatelessWidget {
                         return Text(
                           '( ${data['reportLikes']} Agrees , ${data['reportDislikes']} Disagrees , ${data['reportComments']} Comments )',
                           style: TextStyle(
-                            fontSize: 13,
+                            fontSize: 8,
                             color: Colors.grey[600],
                           ),
                         );
@@ -203,7 +223,7 @@ class UndoContainer extends StatelessWidget {
               StreamBuilder<DocumentSnapshot?>(
                 stream: FirebaseFirestore.instance
                     .collection('posts')
-                    .doc(reportID)
+                    .doc(widget.reportID)
                     .snapshots(),
                 builder: (BuildContext context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -219,26 +239,30 @@ class UndoContainer extends StatelessWidget {
                                   isLiked
                                       ? FontAwesomeIcons.solidThumbsUp
                                       : FontAwesomeIcons.thumbsUp,
-                                  size: 16,
+                                  size: 14,
                                 );
                               },
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
                                     .interactAgree(
-                                  key
+                                  widget.key
                                       .toString()
                                       .replaceAll(RegExp('\[<\'>\]'), '')
                                       .replaceAll(']', '')
                                       .replaceAll('[', ''),
                                 );
                               },
-                              isLiked: model.reactItem == null ||
-                                      (model.reactItem != null &&
-                                          !model.reactItem.containsKey(userID))
+                              isLiked: widget.model.reactItem == null ||
+                                      (widget.model.reactItem != null &&
+                                          !widget.model.reactItem
+                                              .containsKey(userID))
                                   ? false
-                                  : model.reactItem[userID]['isLiked'],
+                                  : widget.model.reactItem[userID]['isLiked'],
                             ),
-                            Text('Agree'),
+                            Text(
+                              'Agree',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                         Row(
@@ -250,26 +274,31 @@ class UndoContainer extends StatelessWidget {
                                   isLiked
                                       ? FontAwesomeIcons.solidThumbsDown
                                       : FontAwesomeIcons.thumbsDown,
-                                  size: 16,
+                                  size: 14,
                                 );
                               },
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
                                     .interactDisagree(
-                                  key
+                                  widget.key
                                       .toString()
                                       .replaceAll(RegExp('\[<\'>\]'), '')
                                       .replaceAll(']', '')
                                       .replaceAll('[', ''),
                                 );
                               },
-                              isLiked: model.reactItem == null ||
-                                      (model.reactItem != null &&
-                                          !model.reactItem.containsKey(userID))
+                              isLiked: widget.model.reactItem == null ||
+                                      (widget.model.reactItem != null &&
+                                          !widget.model.reactItem
+                                              .containsKey(userID))
                                   ? false
-                                  : model.reactItem[userID]['isDisliked'],
+                                  : widget.model.reactItem[userID]
+                                      ['isDisliked'],
                             ),
-                            Text('Disagree'),
+                            Text(
+                              'Disagree',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                         InkWell(
@@ -280,7 +309,7 @@ class UndoContainer extends StatelessWidget {
                               children: <Widget>[
                                 FaIcon(
                                   FontAwesomeIcons.comment,
-                                  size: 16,
+                                  size: 14,
                                 ),
                                 SizedBox(
                                   width: 5,
@@ -301,7 +330,7 @@ class UndoContainer extends StatelessWidget {
                     children: <Widget>[
                       InkWell(
                         onTap: () => HomeScreenCubit.get(context)
-                            .interactAgree(reportID),
+                            .interactAgree(widget.reportID),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -320,25 +349,28 @@ class UndoContainer extends StatelessWidget {
                                           data['reactItem'][userID]['isLiked']
                                       ? Colors.green
                                       : Colors.black,
-                                  size: 16,
+                                  size: 14,
                                 );
                               },
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
-                                    .interactAgree(reportID);
+                                    .interactAgree(widget.reportID);
                               },
                               isLiked: data['reactItem'] != null &&
                                       data['reactItem'].containsKey(userID)
                                   ? data['reactItem'][userID]['isLiked']
                                   : false,
                             ),
-                            Text('Agree'),
+                            Text(
+                              'Agree',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                       ),
                       InkWell(
                         onTap: () => HomeScreenCubit.get(context)
-                            .interactDisagree(reportID),
+                            .interactDisagree(widget.reportID),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -359,36 +391,46 @@ class UndoContainer extends StatelessWidget {
                                               ['isDisliked']
                                       ? Colors.red[900]
                                       : Colors.black,
-                                  size: 16,
+                                  size: 14,
                                 );
                               },
                               onTap: (bool x) {
                                 return HomeScreenCubit.get(context)
-                                    .interactDisagree(reportID);
+                                    .interactDisagree(widget.reportID);
                               },
                               isLiked: data['reactItem'] != null &&
                                       data['reactItem'].containsKey(userID)
                                   ? data['reactItem'][userID]['isDisliked']
                                   : false,
                             ),
-                            Text('Disagree'),
+                            Text(
+                              'Disagree',
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ],
                         ),
                       ),
                       InkWell(
-                        onTap: () => HomeScreenCubit.get(context).showComment(),
+                        onTap: () {
+                          setState(() {
+                            showComment = !showComment;
+                          });
+                        },
                         child: Container(
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               FaIcon(
                                 FontAwesomeIcons.comment,
-                                size: 16,
+                                size: 14,
                               ),
                               SizedBox(
                                 width: 5,
                               ),
-                              Text('Comment'),
+                              Text(
+                                'Comment',
+                                style: TextStyle(fontSize: 12),
+                              ),
                             ],
                           ),
                         ),
@@ -399,12 +441,26 @@ class UndoContainer extends StatelessWidget {
               ),
               BlocBuilder<HomeScreenCubit, HomeScreenState>(
                 builder: (context, state) {
-                  if (HomeScreenCubit.get(context).isCommentShown)
-                    return CommentSection(
-                      postKey: reportID,
-                      commentList: model.commentList == null
-                          ? null
-                          : model.commentList.values.toList(),
+                  if (showComment)
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: CommentSection(
+                        key: ValueKey(
+                          widget.key
+                              .toString()
+                              .replaceAll(RegExp('\[<\'>\]'), '')
+                              .replaceAll(']', '')
+                              .replaceAll('[', ''),
+                        ),
+                        postKey: widget.key
+                            .toString()
+                            .replaceAll(RegExp('\[<\'>\]'), '')
+                            .replaceAll(']', '')
+                            .replaceAll('[', ''),
+                        commentList: widget.model.commentList == null
+                            ? null
+                            : widget.model.commentList.values.toList(),
+                      ),
                     );
                   return Container();
                 },

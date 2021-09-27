@@ -53,12 +53,6 @@ class _CommentSectionState extends State<CommentSection> {
                             ),
                             fillColor: Colors.grey[200],
                             filled: true,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                color: Colors.black,
-                              ),
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
                           ),
                         ),
                       ),
@@ -83,7 +77,11 @@ class _CommentSectionState extends State<CommentSection> {
                 ),
               ),
               widget.commentList == null
-                  ? Center(child: Text('There is no Comment yet!'))
+                  ? Center(
+                      child: Text(
+                      'There is no comment yet!',
+                      style: TextStyle(fontSize: 11),
+                    ))
                   : ListView.separated(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -92,51 +90,52 @@ class _CommentSectionState extends State<CommentSection> {
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
                         ),
-                        child: Container(
-                          height: 100,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        widget.commentList![index]
-                                            .split(':')[0]
-                                            .toString()[0],
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                Container(
+                                  width: 12,
+                                  height: 12,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      widget.commentList![index]
+                                          .split(':')[0]
+                                          .toString()[0],
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontSize: 7,
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 5,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  widget.commentList![index].split(':')[0],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
                                   ),
-                                  Text(
-                                    widget.commentList![index].split(':')[0],
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                widget.commentList![index].split(':')[1],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              widget.commentList![index].split(':')[1],
+                              style: TextStyle(fontSize: 10),
+                            ),
+                          ],
                         ),
                       ),
                       separatorBuilder: (context, index) => SizedBox(
@@ -168,12 +167,6 @@ class _CommentSectionState extends State<CommentSection> {
                           ),
                           fillColor: Colors.grey[200],
                           filled: true,
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black,
-                            ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
                         ),
                       ),
                     ),
@@ -197,7 +190,11 @@ class _CommentSectionState extends State<CommentSection> {
               ),
             ),
             x == null
-                ? Center(child: Text('There is no Comment yet!'))
+                ? Center(
+                    child: Text(
+                    'There is no comment yet!',
+                    style: TextStyle(fontSize: 11),
+                  ))
                 : ListView.separated(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
@@ -213,8 +210,8 @@ class _CommentSectionState extends State<CommentSection> {
                           Row(
                             children: [
                               Container(
-                                width: 20,
-                                height: 20,
+                                width: 12,
+                                height: 12,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: Theme.of(context).primaryColor,
@@ -225,6 +222,7 @@ class _CommentSectionState extends State<CommentSection> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
+                                      fontSize: 7,
                                     ),
                                   ),
                                 ),
@@ -234,15 +232,21 @@ class _CommentSectionState extends State<CommentSection> {
                               ),
                               Text(
                                 x[index].split(':')[0],
-                                style: Theme.of(context).textTheme.bodyText1,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 11,
+                                ),
                               ),
                             ],
                           ),
                           SizedBox(
-                            height: 10,
+                            height: 5,
                           ),
                           Text(
                             x[index].split(':')[1],
+                            style: TextStyle(
+                              fontSize: 10,
+                            ),
                           ),
                         ],
                       ),

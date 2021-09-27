@@ -127,7 +127,7 @@ Widget drawerSetting({
           style: Theme.of(context)
               .textTheme
               .subtitle1!
-              .copyWith(fontWeight: FontWeight.w700),
+              .copyWith(fontWeight: FontWeight.w700, fontSize: 12),
         ),
       ),
     );

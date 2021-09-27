@@ -57,7 +57,7 @@ class _NewsScreenState extends State<NewsScreen> {
               centerTitle: true,
               title: Text(
                 'Add News',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white, fontSize: 15),
               ),
               actions: [
                 TextButton(
@@ -95,8 +95,11 @@ class _NewsScreenState extends State<NewsScreen> {
                   },
                   child: Text(
                     'Submit',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 11),
                   ),
+                ),
+                SizedBox(
+                  width: 10,
                 ),
               ],
             ),
@@ -125,9 +128,7 @@ class _NewsScreenState extends State<NewsScreen> {
                               Text(
                                 'Title',
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
+                                    fontWeight: FontWeight.bold, fontSize: 13),
                               ),
                               SizedBox(
                                 height: 15,
@@ -136,6 +137,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                 maxLength: 100,
                                 controller: titleTextEditing,
                                 decoration: InputDecoration(
+                                  hintStyle: TextStyle(fontSize: 11),
                                   hintText: 'Enter News Title...',
                                   border: OutlineInputBorder(),
                                 ),
@@ -152,7 +154,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                 'Description',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                                  fontSize: 13,
                                 ),
                               ),
                               SizedBox(
@@ -169,6 +171,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                   maxLines: 5,
                                   maxLength: 200,
                                   decoration: InputDecoration(
+                                      hintStyle: TextStyle(fontSize: 11),
                                       hintText: 'Enter News Description...',
                                       border: OutlineInputBorder()),
                                   validator: (String? valid) {
