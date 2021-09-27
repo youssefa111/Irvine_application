@@ -38,42 +38,51 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: <Widget>[
                   Text(
                     'Login',
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                   ),
                   SizedBox(
                     height: 25,
                   ),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      labelText: "E-mail",
-                      border: OutlineInputBorder(),
+                  Container(
+                    width: MediaQuery.of(context).size.width * .8,
+                    child: TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        labelText: "E-mail",
+                        labelStyle: TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (valid) {
+                        if (valid!.isEmpty) {
+                          return 'Please Enter your E-mail';
+                        } else if (!valid.contains("@")) {
+                          return "Please Enter a right form for email";
+                        }
+                      },
                     ),
-                    validator: (valid) {
-                      if (valid!.isEmpty) {
-                        return 'Please Enter your E-mail';
-                      } else if (!valid.contains("@")) {
-                        return "Please Enter a right form for email";
-                      }
-                    },
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      border: OutlineInputBorder(),
+                  Container(
+                    width: MediaQuery.of(context).size.width * .8,
+                    child: TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        labelStyle: TextStyle(fontSize: 12),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (valid) {
+                        if (valid!.isEmpty) {
+                          return 'Please Enter your password';
+                        }
+                      },
                     ),
-                    validator: (valid) {
-                      if (valid!.isEmpty) {
-                        return 'Please Enter your password';
-                      }
-                    },
                   ),
                   SizedBox(
                     height: 35,
@@ -109,8 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         'Forgot Password ?',
                         style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            fontWeight: FontWeight.bold, fontSize: 12),
                       ),
                     ),
                   ),
@@ -126,9 +134,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       child: Text(
                         'Don\'t have an Account or SignUp ?',
-                        style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                              color: Colors.grey[600],
-                            ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle2!
+                            .copyWith(color: Colors.grey[600], fontSize: 12),
                       ),
                     ),
                   )

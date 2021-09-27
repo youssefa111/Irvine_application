@@ -24,21 +24,26 @@ Widget myTextFormField({
   required String labelText,
   required IconData prefixIcon,
   bool obscureText = false,
+  required BuildContext context,
 }) =>
-    TextFormField(
-      obscureText: obscureText,
-      controller: controller,
-      keyboardType: keyboardType,
-      validator: (value) {
-        if (value!.isEmpty) {
-          return validMessage;
-        }
-        return null;
-      },
-      decoration: InputDecoration(
-        labelText: labelText,
-        prefixIcon: Icon(prefixIcon),
-        border: OutlineInputBorder(),
+    Container(
+      width: MediaQuery.of(context).size.width * .8,
+      child: TextFormField(
+        obscureText: obscureText,
+        controller: controller,
+        keyboardType: keyboardType,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return validMessage;
+          }
+          return null;
+        },
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: TextStyle(fontSize: 12),
+          prefixIcon: Icon(prefixIcon),
+          border: OutlineInputBorder(),
+        ),
       ),
     );
 
@@ -57,10 +62,10 @@ Widget myTextButton({
             gradient: linearGradient, borderRadius: BorderRadius.circular(8)),
         child: Text(
           text,
-          style: Theme.of(context)
-              .textTheme
-              .subtitle1!
-              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.subtitle1!.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
         ),
       ),
     );
