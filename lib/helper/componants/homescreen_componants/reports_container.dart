@@ -530,8 +530,8 @@ class _OptionsDialogState extends State<OptionsDialog> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
+                  Container(
+                    height: MediaQuery.of(context).size.height * .07,
                     child: InteractButton(
                         func: () => HomeScreenCubit.get(context)
                           ..hidePost(widget.reprotID, context)
@@ -545,7 +545,7 @@ class _OptionsDialogState extends State<OptionsDialog> {
                       Spacer(),
                       TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Theme.of(context).primaryColor,
                         ),
                         onPressed: () => Navigator.of(context).pop(),
                         child: Text(
@@ -582,23 +582,29 @@ class InteractButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (InkWell(
-      onTap: () => func!(),
-      child: Container(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            FaIcon(
-              icon,
-              size: 18,
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Text(iconName)
-          ],
+    return Material(
+      elevation: 1.5,
+      borderRadius: BorderRadius.circular(12),
+      child: (InkWell(
+        onTap: () => func!(),
+        child: Container(
+          child: Row(
+            children: <Widget>[
+              SizedBox(
+                width: 5,
+              ),
+              FaIcon(
+                icon,
+                size: 18,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              Text(iconName)
+            ],
+          ),
         ),
-      ),
-    ));
+      )),
+    );
   }
 }

@@ -23,12 +23,14 @@ class NewsModel {
     required this.iconLetter,
     required this.newsThanks,
     required this.newsReplies,
-    this.containerCategory = 0,
+    required this.containerCategory,
     required this.timestamp,
     required this.isReply,
     this.loveItem,
     this.replyList,
   });
+
+  int get category => containerCategory;
 
   Map<String, dynamic> toMap() {
     return {

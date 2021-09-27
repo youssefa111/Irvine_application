@@ -27,7 +27,7 @@ class _FilterDialogState extends State<FilterDialog> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
             ),
-            height: MediaQuery.of(context).size.height * .35,
+            height: MediaQuery.of(context).size.height * .3,
             width: MediaQuery.of(context).size.width * .5,
             child: Padding(
               padding: const EdgeInsets.all(8.0),

@@ -68,6 +68,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         : AddCubit.get(context)
                             .addNews(
                               newsModel: NewsModel(
+                                containerCategory: 0,
                                 reporterName: userData.name,
                                 newsTitle: titleTextEditing.text,
                                 newsContent: newsTextEditing.text,

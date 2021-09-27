@@ -53,6 +53,8 @@ class ReportModel {
     };
   }
 
+  int get category => containerCategory;
+
   factory ReportModel.fromMap(Map<String, dynamic> map) {
     return ReportModel(
         reporterName: map['reporterName'],

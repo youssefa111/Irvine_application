@@ -37,8 +37,6 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
   //==================== HomeData Function ==========================
   List dataList = [];
   List filterList = [];
-  List newsList = [];
-  List reportsList = [];
   Future<void> getHomeData() async {
     dataList = [];
     emit(HomeScreenLoading());
@@ -62,23 +60,11 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
             newsID: e.id,
             key: ValueKey(e.id),
           ));
-          newsList.add(NewsContainer(
-            model: NewsModel.fromMap(data),
-            newsID: e.id,
-            key: ValueKey(e.id),
-          ));
         } else if ((data['containerCategory'] == 1 &&
                 userData['hidePostsList'] == null) ||
             (data['containerCategory'] == 1 &&
                 !userData['hidePostsList'].values.toList().contains(e.id))) {
           dataList.add(
-            NewReportContainer(
-              model: ReportModel.fromMap(data),
-              reportID: e.id,
-              key: ValueKey(e.id),
-            ),
-          );
-          reportsList.add(
             NewReportContainer(
               model: ReportModel.fromMap(data),
               reportID: e.id,
@@ -124,10 +110,15 @@ class HomeScreenCubit extends Cubit<HomeScreenState> {
       dataList = [...filterList];
       emit(HomeScreenSucess());
     } else if (index == 2) {
-      dataList = [...reportsList];
+      dataList = filterList
+          .where((element) => element.model.containerCategory == 1)
+          .toList();
       emit(FilteredSucessfully());
     } else if (index == 3) {
-      dataList = [...newsList];
+      dataList = filterList
+          .where((element) => element.model.containerCategory == 0)
+          .toList();
+
       emit(FilteredSucessfully());
     } else {
       print('error');
