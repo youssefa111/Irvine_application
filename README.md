@@ -15,7 +15,7 @@ its an application is responsble for reportings issues that faced on the street 
 - Registration and Login
 - Add an issue
 - Add news
-- Searh for Category of an issue
+- Search for Category of an issue
 - Share posts with others
 - Interact with posts
 - Chat with other users on the post
